@@ -1,1 +1,0 @@
-define(["../../core"],function(e){"use strict";return e.now()});
