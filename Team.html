@@ -1,0 +1,64 @@
+<div class="mdl-grid">
+
+  <div class="mdl-cell mdl-cell--12-col" id="team-cards">
+  </div>
+
+  <div class="mdl-cell mdl-cell--12-col">
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" id="add-card">
+      Add team member
+    </button>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    // load team
+    $(r.settings.Team.members).each(function(i, o) {
+      $('#team-cards').append($(r.ui.teamMemberEl(o.id, o.name, o.title, o.bg, o.text)));
+    });
+
+    // add team member
+    $('#Team #add-card').click(function() {
+      setTimeout(function() {
+        $('#Team #add-card').prop('disabled', true);
+
+        $('#team-cards').append($(r.ui.newTeamMemberEl));
+
+        $('.mdl-card.adding *[data-input]').each(function(i) {
+          $(this).html(r.ui.input($(this).data('input')));
+          window.componentHandler.upgradeDom();
+        });
+
+        $('.mdl-card.adding input[type=text]').on('change keyup', function() {
+          $('.mdl-card.adding input[type=text]').each(function() {
+            if ($(this).val() != '') {
+              $('.adding .save-data').prop('disabled', false);
+            } else {
+              $('.adding .save-data').prop('disabled', true);
+            }
+          })
+        });
+        $('.mdl-card.adding input:first').focus();
+      }, 1)
+    });
+    // remove team member
+    $('#team-cards .mdl-card button.remove').on('mousedown', function(e) {
+      $('.adding').remove();
+      setTimeout(function() {
+        var confirmRemove = confirm('Are you sure you want to remove ' + $(e.target).closest('.mdl-card').find('.card-name').text() + '?');
+        if (confirmRemove) {
+          r.helper.remove($('#team-cards .mdl-card').index($(e.target).closest('.mdl-card')), r.settings.Team.members);
+          $('#team-cards .mdl-card button.remove')[0].click();
+        };
+      }, 1)
+    })
+
+    // handler for click outside adding team member card
+    $('body').on('click', function(e) {
+      if (($(e.target).closest('.adding').length + $(e.target).closest('#Team #add-card:not(:disabled) *').length) !== 1) {
+        $('#Team #add-card').prop('disabled', false);
+        $('.adding').remove();
+      }
+    })
+  });
+
+</script>

@@ -1,0 +1,175 @@
+.mdl-navigation__link.mdl-tabs__tab {
+  height: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  text-transform: inherit;
+}
+.mdl-tabs.is-upgraded .mdl-navigation__link.mdl-tabs__tab.is-active {
+  color: #fff
+}
+.mdl-tabs.is-upgraded .mdl-navigation__link.mdl-tabs__tab.is-active:after {
+  height: 100%;
+  z-index: -1;
+}
+.mdl-card {
+  width: 200px;
+  height: 200px;
+  background-position: center;
+  background-size: cover;
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  background-color: rgba(0, 0, 0, .4);
+}
+.mdl-card__actions.details {
+  padding: 16px;
+  background: rgba(0, 0, 0, .4);
+}
+.mdl-card__actions.details span {
+  width: 100%;
+  display: inline-block;
+  font-size: 14px;
+}
+.mdl-card__actions.details span:first-of-type {
+  font-weight: bold;
+  font-size: inherit;
+}
+.mdl-card.adding div {
+  background: #fff;
+}
+.mdl-card.adding .details .bottom {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.mdl-card.adding .details .bottom .upload {
+  background-size: cover;
+  background-color: rgba(158, 158, 158, .2);
+  background-position: center center;
+}
+.mdl-card button.remove {
+  opacity: 0;
+  -webkit-transition: opacity .5s;
+  transition: opacity .5s;
+}
+.mdl-card:hover button.remove {
+  opacity: 1;
+}
+#Company_Logo {
+  max-width: 400px;
+}
+.roster .mdl-cell {
+  width: calc(100% / 6);
+  padding: 10px;
+  text-align: center;
+  position: relative;
+}
+.roster.weekends .mdl-cell {
+  width: calc(100% / 8);
+}
+.roster .roster-header .mdl-cell {
+  text-align: center;
+}
+.roster .team-member {
+  padding: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: flex-end;
+  -ms-flex-align: flex-end;
+  align-items: flex-end;
+  text-align: left;
+  border: 0;
+}
+.roster-body .mdl-cell {
+  outline: 1px solid rgba(0, 0, 0, .1);
+}
+.roster-body .mdl-textfield {
+  margin: -10px 0;
+}
+.roster-body .mdl-button {
+  padding: 0 5px;
+  min-width: 0;
+  opacity: .15;
+  -webkit-transition: opacity .3s;
+  transition: opacity .3s;
+  font-size: 13px;
+}
+.roster-body .team-member {
+  position: relative;
+  overflow: hidden;
+}
+.roster-body .team-member img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: auto;
+  z-index: -1;
+}
+.roster-body .team-member img.fit-height {
+  width: auto;
+  height: 100%;
+}
+.roster-body .mdl-cell:hover .mdl-button {
+  opacity: 1;
+}
+.roster-body .mdl-cell.master-copy-time {
+  background: rgba(160, 195, 255, .25);
+  outline: 2px dashed #4285f4;
+  z-index: 2;
+}
+.roster-body .mdl-cell.master-copy-time .mdl-button,
+.roster-body .mdl-cell .mdl-button.done-time {
+  display: none;
+}
+.roster-body .mdl-cell.master-copy-time .mdl-button.done-time {
+  display: inline-block;
+}
+.roster.ready .copy-time,
+.roster.ready .paste-time,
+.roster.ready .done-time,
+.roster.ready .mdl-textfield--floating-label label {
+  display: none;
+}
+.roster.ready .mdl-textfield--floating-label {
+  padding: 0;
+  margin: 0;
+}
+.roster.ready .mdl-textfield--floating-label input {
+  border-bottom-color: transparent;
+  pointer-events: none;
+  font-size: 20px;
+  text-align: center;
+}
+.roster.ready:not(.weekends) .weekend {
+  display: none;
+}
+.roster.ready .mdl-textfield--floating-label:not(.is-dirty) {
+  display: none;
+}
+.roster.ready .mdl-textfield--floating-label:first-of-type:not(.is-dirty) {
+  display: block;
+  height: 100%;
+  min-height: 5.4em;
+  max-width: none;
+  width: auto;
+}
+.roster.ready .mdl-textfield--floating-label:first-of-type:not(.is-dirty):after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  content: 'RDO';
+  font-size: 2em;
+  color: rgba(0, 0, 0, 0.06);
+}
+.roster.ready .mdl-textfield--floating-label:first-of-type.is-dirty:after {
+  content: '';
+  height: 1em;
+  display: inline-block;
+  border: 1px solid #555;
+}

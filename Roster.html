@@ -1,0 +1,91 @@
+<div class="mdl-grid">
+  <div class="mdl-cell mdl-cell--12-col header">
+    <div class="mdl-grid mdl-grid--no-spacing">
+    </div>
+  </div>
+  <div class="mdl-cell mdl-cell--12-col roster ready">
+  </div>
+  <div class="mdl-cell mdl-cell--12-col">
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent edit-roster">Edit Roster</button>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+
+    var papa = $('section#Roster');
+    $('.header .mdl-grid', papa).append(r.ui.headerEl(r.settings.Company));
+
+    $('.roster', papa).append(r.ui.templateEl(r.settings.Team.members));
+    $('.roster .mdl-cell input.time', papa).timepicker({
+      minTime: '6:00am',
+      maxTime: '8:00pm',
+      timeFormat: 'g:i a'
+    });
+    $('.roster .mdl-cell input.time', papa).on('change', function() {
+      if (this.value !== '') {
+        $(this).parents('.mdl-textfield').addClass('is-dirty');
+      } else {
+        $(this).parents('.is-dirty').removeClass('is-dirty');
+      }
+    })
+    $('.roster .mdl-cell input.time.start', papa).on('change', function() {
+      $(this).parents('.mdl-cell').find('input.end').timepicker('option', {
+        'scrollDefault': (parseInt(this.value.split(':')[0]) + 8) + this.value.split(':')[1],
+        'minTime': this.value,
+        'showDuration': true
+      });
+    });
+
+    $(papa).on('click', 'button.copy-time', function() {
+      r.helper.setCopyTime(this);
+    }).on('click', 'button.paste-time', function() {
+      var times = r.helper.getCopyTime('.master-copy-time');
+      $(this).parent('.mdl-cell').find('input.start').val(times[0]).trigger('change');
+      $(this).parent('.mdl-cell').find('input.end').val(times[1]).trigger('change');
+    }).on('click', 'button.done-time', function() {
+      $('.master-copy-time', papa).removeClass('master-copy-time');
+    });
+
+
+    $('.edit-roster', papa).click(function() {
+      function edit(e) {
+        $(e).text('Save Roster').removeClass('save-data');
+        $('.roster', papa).removeClass('ready');
+      };
+
+      function save(e) {
+        $('.master-copy-time', papa).removeClass('master-copy-time');
+
+        $(e).text('Edit Roster').addClass('save-data');
+        $('.roster', papa).addClass('ready');
+      };
+      $(this).text() === 'Edit Roster' ? edit(this) : save(this);
+      setTimeout(fitTeamImage(), 5)
+
+      if ($('.roster.ready', papa).length === 0 || $('.weekend .is-dirty', papa).length > 0) {
+        $('.roster', papa).addClass('weekends');
+      } else {
+        $('.roster', papa).removeClass('weekends');
+      }
+    })
+
+
+    function fitTeamImage() {
+      $('.roster-body .team-member img').each(function() {
+        var thisRatio = $(this).height() / $(this).width(),
+          parentRatio = $(this).parents('.team-member').height() / $(this).parents('.team-member').width();
+        if (thisRatio <= parentRatio) {
+          $(this).addClass('fit-height');
+        } else {
+          $(this).removeClass('fit-height');
+        }
+      })
+    }
+    fitTeamImage();
+
+    $(window).resize(function() {
+      fitTeamImage();
+    })
+  })
+
+</script>

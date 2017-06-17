@@ -1,0 +1,52 @@
+<div class="mdl-grid">
+
+  <div class="mdl-cell mdl-cell--12-col" id="templates-cards">
+    <h2>Coming Soon</h2>
+  </div>
+
+  <div class="mdl-cell mdl-cell--12-col">
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled id="add-card">
+      Add template
+    </button>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    // load templates
+    $(r.settings.Templates.members).each(function(i, o) {
+      $('#templates-cards').append($(r.ui.templatesMemberEl(o.name, o.title, o.bg)));
+    });
+
+    // add templates member
+    $('#Templates #add-card').click(function() {
+      setTimeout(function() {
+        $('#Templates #add-card').prop('disabled', true);
+
+        $('#templates-cards').append($(r.ui.newtemplatesMemberEl));
+
+        $('.mdl-card.adding *[data-input]').each(function(i) {
+          $(this).html(r.ui.input($(this).data('input')));
+          window.componentHandler.upgradeDom();
+        });
+        $('.mdl-card.adding input:first').focus();
+      }, 1)
+    });
+    // remove templates member
+    $('#templates-cards .mdl-card button.remove').on('mousedown', function(e) {
+      var confirmRemove = confirm('Are you sure you want to remove ' + $(e.target).closest('.mdl-card').find('.card-name').text() + '?');
+      if (confirmRemove) {
+        r.helper.remove($('#templates-cards .mdl-card').index($(e.target).closest('.mdl-card')), r.settings.Templates);
+        $('#templates-cards .mdl-card button.remove')[0].click();
+      };
+    })
+
+    // handler for click outside adding templates member card
+    $('body').on('click', function(e) {
+      if (($(e.target).closest('.adding').length + $(e.target).closest('#Templates #add-card:not(:disabled) *').length) !== 1) {
+        $('#Templates #add-card').prop('disabled', false);
+        $('.adding').remove();
+      }
+    })
+  });
+
+</script>
