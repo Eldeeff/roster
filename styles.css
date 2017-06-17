@@ -77,7 +77,7 @@ li.ui-timepicker-selected .ui-timepicker-duration,
 }
 .mdl-card {
   width: 200px;
-  height: 200px;
+  min-height: 200px;
   background-position: center;
   background-size: cover;
   float: left;
@@ -148,7 +148,7 @@ li.ui-timepicker-selected .ui-timepicker-duration,
 .roster-body .mdl-cell {
   outline: 1px solid rgba(0, 0, 0, .1);
 }
-.roster-body .mdl-textfield {
+.mdl-textfield {
   margin: -10px 0;
 }
 .roster-body .mdl-button {
@@ -208,7 +208,7 @@ li.ui-timepicker-selected .ui-timepicker-duration,
   font-size: 20px;
   text-align: center;
 }
-.roster.ready:not(.weekends) .weekend {
+.roster:not(.weekends) .weekend {
   display: none;
 }
 .roster.ready .mdl-textfield--floating-label:not(.is-dirty) {

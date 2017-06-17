@@ -48,6 +48,7 @@
 
 
     $('.edit-roster', papa).click(function() {
+
       function edit(e) {
         $(e).text('Save Roster').removeClass('save-data');
         $('.roster', papa).removeClass('ready');
@@ -60,26 +61,33 @@
         $('.roster', papa).addClass('ready');
       };
       $(this).text() === 'Edit Roster' ? edit(this) : save(this);
-      setTimeout(fitTeamImage(), 5)
-
-      if ($('.roster.ready', papa).length === 0 || $('.weekend .is-dirty', papa).length > 0) {
-        $('.roster', papa).addClass('weekends');
-      } else {
-        $('.roster', papa).removeClass('weekends');
-      }
+      fitTeamImage();
+      checkForWeekends();
     })
 
+    function checkForWeekends() {
+      setTimeout(function() {
+        if ($('.weekend .is-dirty', papa).length + $('.roster:not(.ready)', papa).length > 0) {
+          $('.roster', papa).addClass('weekends');
+        } else {
+          $('.roster', papa).removeClass('weekends');
+        }
+      }, 0)
+    }
+    checkForWeekends();
 
     function fitTeamImage() {
-      $('.roster-body .team-member img').each(function() {
-        var thisRatio = $(this).height() / $(this).width(),
-          parentRatio = $(this).parents('.team-member').height() / $(this).parents('.team-member').width();
-        if (thisRatio <= parentRatio) {
-          $(this).addClass('fit-height');
-        } else {
-          $(this).removeClass('fit-height');
-        }
-      })
+      setTimeout(function() {
+        $('.roster-body .team-member img').each(function() {
+          var thisRatio = $(this).height() / $(this).width(),
+            parentRatio = $(this).parents('.team-member').height() / $(this).parents('.team-member').width();
+          if (thisRatio <= parentRatio) {
+            $(this).addClass('fit-height');
+          } else {
+            $(this).removeClass('fit-height');
+          }
+        })
+      }, 0)
     }
     fitTeamImage();
 
