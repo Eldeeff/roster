@@ -1,0 +1,16 @@
+{
+  "combineOnSave": true,
+  "combine": [{
+    "files": [
+      "css/timepicker.css",
+      "css/roster.css"
+    ],
+    "output": "min/styles.css"
+  }, {
+    "files": [
+      "js/timepicker.min.js",
+      "js/roster.js"
+    ],
+    "output": "min/scripts.js"
+  }]
+}
