@@ -1,10 +1,1289 @@
 /*!
  * jquery-timepicker v1.11.11 - A jQuery timepicker plugin inspired by Google Calendar. It supports both mouse and keyboard navigation.
- * Copyright (c) 2017 Jon Thornton - http://jonthornton.github.com/jquery-timepicker/
+ * Copyright (c) 2015 Jon Thornton - http://jonthornton.github.com/jquery-timepicker/
  * License: MIT
  */
 
-!function(a){"object"==typeof exports&&exports&&"object"==typeof module&&module&&module.exports===exports?a(require("jquery")):"function"==typeof define&&define.amd?define(["jquery"],a):a(jQuery)}(function(a){function b(a){var b=a[0];return b.offsetWidth>0&&b.offsetHeight>0}function c(b){if(b.minTime&&(b.minTime=t(b.minTime)),b.maxTime&&(b.maxTime=t(b.maxTime)),b.durationTime&&"function"!=typeof b.durationTime&&(b.durationTime=t(b.durationTime)),"now"==b.scrollDefault)b.scrollDefault=function(){return b.roundingFunction(t(new Date),b)};else if(b.scrollDefault&&"function"!=typeof b.scrollDefault){var c=b.scrollDefault;b.scrollDefault=function(){return b.roundingFunction(t(c),b)}}else b.minTime&&(b.scrollDefault=function(){return b.roundingFunction(b.minTime,b)});if("string"===a.type(b.timeFormat)&&b.timeFormat.match(/[gh]/)&&(b._twelveHourTime=!0),b.showOnFocus===!1&&-1!=b.showOn.indexOf("focus")&&b.showOn.splice(b.showOn.indexOf("focus"),1),b.disableTimeRanges.length>0){for(var d in b.disableTimeRanges)b.disableTimeRanges[d]=[t(b.disableTimeRanges[d][0]),t(b.disableTimeRanges[d][1])];b.disableTimeRanges=b.disableTimeRanges.sort(function(a,b){return a[0]-b[0]});for(var d=b.disableTimeRanges.length-1;d>0;d--)b.disableTimeRanges[d][0]<=b.disableTimeRanges[d-1][1]&&(b.disableTimeRanges[d-1]=[Math.min(b.disableTimeRanges[d][0],b.disableTimeRanges[d-1][0]),Math.max(b.disableTimeRanges[d][1],b.disableTimeRanges[d-1][1])],b.disableTimeRanges.splice(d,1))}return b}function d(b){var c=b.data("timepicker-settings"),d=b.data("timepicker-list");if(d&&d.length&&(d.remove(),b.data("timepicker-list",!1)),c.useSelect){d=a("<select />",{"class":"ui-timepicker-select"});var g=d}else{d=a("<ul />",{"class":"ui-timepicker-list"});var g=a("<div />",{"class":"ui-timepicker-wrapper",tabindex:-1});g.css({display:"none",position:"absolute"}).append(d)}if(c.noneOption)if(c.noneOption===!0&&(c.noneOption=c.useSelect?"Time...":"None"),a.isArray(c.noneOption)){for(var i in c.noneOption)if(parseInt(i,10)==i){var k=e(c.noneOption[i],c.useSelect);d.append(k)}}else{var k=e(c.noneOption,c.useSelect);d.append(k)}if(c.className&&g.addClass(c.className),(null!==c.minTime||null!==c.durationTime)&&c.showDuration){"function"==typeof c.step?"function":c.step;g.addClass("ui-timepicker-with-duration"),g.addClass("ui-timepicker-step-"+c.step)}var l=c.minTime;"function"==typeof c.durationTime?l=t(c.durationTime()):null!==c.durationTime&&(l=c.durationTime);var n=null!==c.minTime?c.minTime:0,o=null!==c.maxTime?c.maxTime:n+v-1;n>o&&(o+=v),o===v-1&&"string"===a.type(c.timeFormat)&&c.show2400&&(o=v);var p=c.disableTimeRanges,w=0,x=p.length,z=c.step;"function"!=typeof z&&(z=function(){return c.step});for(var i=n,A=0;o>=i;A++,i+=60*z(A)){var B=i,C=s(B,c);if(c.useSelect){var D=a("<option />",{value:C});D.text(C)}else{var D=a("<li />");D.addClass(v/2>B%v?"ui-timepicker-am":"ui-timepicker-pm"),D.data("time",u(B,c)),D.text(C)}if((null!==c.minTime||null!==c.durationTime)&&c.showDuration){var E=r(i-l,c.step);if(c.useSelect)D.text(D.text()+" ("+E+")");else{var F=a("<span />",{"class":"ui-timepicker-duration"});F.text(" ("+E+")"),D.append(F)}}x>w&&(B>=p[w][1]&&(w+=1),p[w]&&B>=p[w][0]&&B<p[w][1]&&(c.useSelect?D.prop("disabled",!0):D.addClass("ui-timepicker-disabled"))),d.append(D)}if(g.data("timepicker-input",b),b.data("timepicker-list",g),c.useSelect)b.val()&&d.val(f(t(b.val()),c)),d.on("focus",function(){a(this).data("timepicker-input").trigger("showTimepicker")}),d.on("blur",function(){a(this).data("timepicker-input").trigger("hideTimepicker")}),d.on("change",function(){m(b,a(this).val(),"select")}),m(b,d.val(),"initial"),b.hide().after(d);else{var G=c.appendTo;"string"==typeof G?G=a(G):"function"==typeof G&&(G=G(b)),G.append(g),j(b,d),d.on("mousedown click","li",function(c){b.off("focus.timepicker"),b.on("focus.timepicker-ie-hack",function(){b.off("focus.timepicker-ie-hack"),b.on("focus.timepicker",y.show)}),h(b)||b[0].focus(),d.find("li").removeClass("ui-timepicker-selected"),a(this).addClass("ui-timepicker-selected"),q(b)&&(b.trigger("hideTimepicker"),d.on("mouseup.timepicker click.timepicker","li",function(a){d.off("mouseup.timepicker click.timepicker"),g.hide()}))})}}function e(b,c){var d,e,f;return"object"==typeof b?(d=b.label,e=b.className,f=b.value):"string"==typeof b?d=b:a.error("Invalid noneOption value"),c?a("<option />",{value:f,"class":e,text:d}):a("<li />",{"class":e,text:d}).data("time",String(f))}function f(a,b){return a=b.roundingFunction(a,b),null!==a?s(a,b):void 0}function g(b){if(b.target!=window){var c=a(b.target);c.closest(".ui-timepicker-input").length||c.closest(".ui-timepicker-wrapper").length||(y.hide(),a(document).unbind(".ui-timepicker"),a(window).unbind(".ui-timepicker"))}}function h(a){var b=a.data("timepicker-settings");return(window.navigator.msMaxTouchPoints||"ontouchstart"in document)&&b.disableTouchKeyboard}function i(b,c,d){if(!d&&0!==d)return!1;var e=b.data("timepicker-settings"),f=!1,d=e.roundingFunction(d,e);return c.find("li").each(function(b,c){var e=a(c);if("number"==typeof e.data("time"))return e.data("time")==d?(f=e,!1):void 0}),f}function j(a,b){b.find("li").removeClass("ui-timepicker-selected");var c=a.data("timepicker-settings"),d=t(l(a),c);if(null!==d){var e=i(a,b,d);if(e){var f=e.offset().top-b.offset().top;(f+e.outerHeight()>b.outerHeight()||0>f)&&b.scrollTop(b.scrollTop()+e.position().top-e.outerHeight()),(c.forceRoundTime||e.data("time")===d)&&e.addClass("ui-timepicker-selected")}}}function k(b,c){if("timepicker"!=c){var d=a(this);if(""===this.value)return void m(d,null,c);if(!d.is(":focus")||b&&"change"==b.type){var e=d.data("timepicker-settings"),f=t(this.value,e);if(null===f)return void d.trigger("timeFormatError");var g=!1;if(null!==e.minTime&&null!==e.maxTime&&(f<e.minTime||f>e.maxTime)&&(g=!0),a.each(e.disableTimeRanges,function(){return f>=this[0]&&f<this[1]?(g=!0,!1):void 0}),e.forceRoundTime){var h=e.roundingFunction(f,e);h!=f&&(f=h,c=null)}var i=s(f,e);g?(m(d,i,"error")||b&&"change"==b.type)&&d.trigger("timeRangeError"):m(d,i,c)}}}function l(a){return a.is("input")?a.val():a.data("ui-timepicker-value")}function m(a,b,c){if(a.is("input")){a.val(b);var d=a.data("timepicker-settings");d.useSelect&&"select"!=c&&"initial"!=c&&a.data("timepicker-list").val(f(t(b),d))}return a.data("ui-timepicker-value")!=b?(a.data("ui-timepicker-value",b),"select"==c?a.trigger("selectTime").trigger("changeTime").trigger("change","timepicker"):-1==["error","initial"].indexOf(c)&&a.trigger("changeTime"),!0):(a.trigger("selectTime"),!1)}function n(a){switch(a.keyCode){case 13:case 9:return;default:a.preventDefault()}}function o(c){var d=a(this),e=d.data("timepicker-list");if(!e||!b(e)){if(40!=c.keyCode)return!0;y.show.call(d.get(0)),e=d.data("timepicker-list"),h(d)||d.focus()}switch(c.keyCode){case 13:return q(d)&&(k.call(d.get(0),{type:"change"}),y.hide.apply(this)),c.preventDefault(),!1;case 38:var f=e.find(".ui-timepicker-selected");return f.length?f.is(":first-child")||(f.removeClass("ui-timepicker-selected"),f.prev().addClass("ui-timepicker-selected"),f.prev().position().top<f.outerHeight()&&e.scrollTop(e.scrollTop()-f.outerHeight())):(e.find("li").each(function(b,c){return a(c).position().top>0?(f=a(c),!1):void 0}),f.addClass("ui-timepicker-selected")),!1;case 40:return f=e.find(".ui-timepicker-selected"),0===f.length?(e.find("li").each(function(b,c){return a(c).position().top>0?(f=a(c),!1):void 0}),f.addClass("ui-timepicker-selected")):f.is(":last-child")||(f.removeClass("ui-timepicker-selected"),f.next().addClass("ui-timepicker-selected"),f.next().position().top+2*f.outerHeight()>e.outerHeight()&&e.scrollTop(e.scrollTop()+f.outerHeight())),!1;case 27:e.find("li").removeClass("ui-timepicker-selected"),y.hide();break;case 9:y.hide();break;default:return!0}}function p(c){var d=a(this),e=d.data("timepicker-list"),f=d.data("timepicker-settings");if(!e||!b(e)||f.disableTextInput)return!0;if("paste"===c.type||"cut"===c.type)return void setTimeout(function(){f.typeaheadHighlight?j(d,e):e.hide()},0);switch(c.keyCode){case 96:case 97:case 98:case 99:case 100:case 101:case 102:case 103:case 104:case 105:case 48:case 49:case 50:case 51:case 52:case 53:case 54:case 55:case 56:case 57:case 65:case 77:case 80:case 186:case 8:case 46:f.typeaheadHighlight?j(d,e):e.hide()}}function q(a){var b=a.data("timepicker-settings"),c=a.data("timepicker-list"),d=null,e=c.find(".ui-timepicker-selected");return e.hasClass("ui-timepicker-disabled")?!1:(e.length&&(d=e.data("time")),null!==d&&("string"!=typeof d&&(d=s(d,b)),m(a,d,"select")),!0)}function r(a,b){a=Math.abs(a);var c,d,e=Math.round(a/60),f=[];return 60>e?f=[e,w.mins]:(c=Math.floor(e/60),d=e%60,30==b&&30==d&&(c+=w.decimal+5),f.push(c),f.push(1==c?w.hr:w.hrs),30!=b&&d&&(f.push(d),f.push(w.mins))),f.join(" ")}function s(b,c){if("number"!=typeof b)return null;var d=parseInt(b%60),e=parseInt(b/60%60),f=parseInt(b/3600%24),g=new Date(1970,0,2,f,e,d,0);if(isNaN(g.getTime()))return null;if("function"===a.type(c.timeFormat))return c.timeFormat(g);for(var h,i,j="",k=0;k<c.timeFormat.length;k++)switch(i=c.timeFormat.charAt(k)){case"a":j+=g.getHours()>11?w.pm:w.am;break;case"A":j+=g.getHours()>11?w.PM:w.AM;break;case"g":h=g.getHours()%12,j+=0===h?"12":h;break;case"G":h=g.getHours(),b===v&&(h=c.show2400?24:0),j+=h;break;case"h":h=g.getHours()%12,0!==h&&10>h&&(h="0"+h),j+=0===h?"12":h;break;case"H":h=g.getHours(),b===v&&(h=c.show2400?24:0),j+=h>9?h:"0"+h;break;case"i":var e=g.getMinutes();j+=e>9?e:"0"+e;break;case"s":d=g.getSeconds(),j+=d>9?d:"0"+d;break;case"\\":k++,j+=c.timeFormat.charAt(k);break;default:j+=i}return j}function t(a,b){if(""===a||null===a)return null;if("object"==typeof a)return 3600*a.getHours()+60*a.getMinutes()+a.getSeconds();if("string"!=typeof a)return a;a=a.toLowerCase().replace(/[\s\.]/g,""),("a"==a.slice(-1)||"p"==a.slice(-1))&&(a+="m");var c="("+w.am.replace(".","")+"|"+w.pm.replace(".","")+"|"+w.AM.replace(".","")+"|"+w.PM.replace(".","")+")?",d=new RegExp("^"+c+"([0-9]?[0-9])\\W?([0-5][0-9])?\\W?([0-5][0-9])?"+c+"$"),e=a.match(d);if(!e)return null;var f=parseInt(1*e[2],10),g=e[1]||e[5],h=f,i=1*e[3]||0,j=1*e[4]||0;if(12>=f&&g){var k=g==w.pm||g==w.PM;h=12==f?k?12:0:f+(k?12:0)}else if(b){var l=3600*f+60*i+j;if(l>=v+(b.show2400?1:0)){if(b.wrapHours===!1)return null;h=f%24}}var m=3600*h+60*i+j;if(12>f&&!g&&b&&b._twelveHourTime&&b.scrollDefault){var n=m-b.scrollDefault();0>n&&n>=v/-2&&(m=(m+v/2)%v)}return m}function u(a,b){return a==v&&b.show2400?a:a%v}var v=86400,w={am:"am",pm:"pm",AM:"AM",PM:"PM",decimal:".",mins:"mins",hr:"hr",hrs:"hrs"},x={appendTo:"body",className:null,closeOnWindowScroll:!1,disableTextInput:!1,disableTimeRanges:[],disableTouchKeyboard:!1,durationTime:null,forceRoundTime:!1,maxTime:null,minTime:null,noneOption:!1,orientation:"l",roundingFunction:function(a,b){if(null===a)return null;if("number"!=typeof b.step)return a;var c=a%(60*b.step),d=b.minTime||0;return c-=d%(60*b.step),c>=30*b.step?a+=60*b.step-c:a-=c,u(a,b)},scrollDefault:null,selectOnBlur:!1,show2400:!1,showDuration:!1,showOn:["click","focus"],showOnFocus:!0,step:30,stopScrollPropagation:!1,timeFormat:"g:ia",typeaheadHighlight:!0,useSelect:!1,wrapHours:!0},y={init:function(b){return this.each(function(){var e=a(this),f=[];for(var g in x)e.data(g)&&(f[g]=e.data(g));var h=a.extend({},x,b,f);if(h.lang&&(w=a.extend(w,h.lang)),h=c(h),e.data("timepicker-settings",h),e.addClass("ui-timepicker-input"),h.useSelect)d(e);else{if(e.prop("autocomplete","off"),h.showOn)for(var i in h.showOn)e.on(h.showOn[i]+".timepicker",y.show);e.on("change.timepicker",k),e.on("keydown.timepicker",o),e.on("keyup.timepicker",p),h.disableTextInput&&e.on("keydown.timepicker",n),e.on("cut.timepicker",p),e.on("paste.timepicker",p),k.call(e.get(0),null,"initial")}})},show:function(c){var e=a(this),f=e.data("timepicker-settings");if(c&&c.preventDefault(),f.useSelect)return void e.data("timepicker-list").focus();h(e)&&e.blur();var k=e.data("timepicker-list");if(!e.prop("readonly")&&(k&&0!==k.length&&"function"!=typeof f.durationTime||(d(e),k=e.data("timepicker-list")),!b(k))){e.data("ui-timepicker-value",e.val()),j(e,k),y.hide(),k.show();var m={};f.orientation.match(/r/)?m.left=e.offset().left+e.outerWidth()-k.outerWidth()+parseInt(k.css("marginLeft").replace("px",""),10):m.left=e.offset().left+parseInt(k.css("marginLeft").replace("px",""),10);var n;n=f.orientation.match(/t/)?"t":f.orientation.match(/b/)?"b":e.offset().top+e.outerHeight(!0)+k.outerHeight()>a(window).height()+a(window).scrollTop()?"t":"b","t"==n?(k.addClass("ui-timepicker-positioned-top"),m.top=e.offset().top-k.outerHeight()+parseInt(k.css("marginTop").replace("px",""),10)):(k.removeClass("ui-timepicker-positioned-top"),m.top=e.offset().top+e.outerHeight()+parseInt(k.css("marginTop").replace("px",""),10)),k.offset(m);var o=k.find(".ui-timepicker-selected");if(!o.length){var p=t(l(e));null!==p?o=i(e,k,p):f.scrollDefault&&(o=i(e,k,f.scrollDefault()))}if((!o.length||o.hasClass("ui-timepicker-disabled"))&&(o=k.find("li:not(.ui-timepicker-disabled):first")),o&&o.length){var q=k.scrollTop()+o.position().top-o.outerHeight();k.scrollTop(q)}else k.scrollTop(0);return f.stopScrollPropagation&&a(document).on("wheel.ui-timepicker",".ui-timepicker-wrapper",function(b){b.preventDefault();var c=a(this).scrollTop();a(this).scrollTop(c+b.originalEvent.deltaY)}),a(document).on("touchstart.ui-timepicker mousedown.ui-timepicker",g),a(window).on("resize.ui-timepicker",g),f.closeOnWindowScroll&&a(document).on("scroll.ui-timepicker",g),e.trigger("showTimepicker"),this}},hide:function(c){var d=a(this),e=d.data("timepicker-settings");return e&&e.useSelect&&d.blur(),a(".ui-timepicker-wrapper").each(function(){var c=a(this);if(b(c)){var d=c.data("timepicker-input"),e=d.data("timepicker-settings");e&&e.selectOnBlur&&q(d),c.hide(),d.trigger("hideTimepicker")}}),this},option:function(b,e){return"string"==typeof b&&"undefined"==typeof e?a(this).data("timepicker-settings")[b]:this.each(function(){var f=a(this),g=f.data("timepicker-settings"),h=f.data("timepicker-list");"object"==typeof b?g=a.extend(g,b):"string"==typeof b&&(g[b]=e),g=c(g),f.data("timepicker-settings",g),k.call(f.get(0),{type:"change"},"initial"),h&&(h.remove(),f.data("timepicker-list",!1)),g.useSelect&&d(f)})},getSecondsFromMidnight:function(){return t(l(this))},getTime:function(a){var b=this,c=l(b);if(!c)return null;var d=t(c);if(null===d)return null;a||(a=new Date);var e=new Date(a);return e.setHours(d/3600),e.setMinutes(d%3600/60),e.setSeconds(d%60),e.setMilliseconds(0),e},isVisible:function(){var a=this,c=a.data("timepicker-list");return!(!c||!b(c))},setTime:function(a){var b=this,c=b.data("timepicker-settings");if(c.forceRoundTime)var d=f(t(a),c);else var d=s(t(a),c);return a&&null===d&&c.noneOption&&(d=a),b.val(d),k.call(b.get(0),{type:"change"},"initial"),b.data("timepicker-list")&&j(b,b.data("timepicker-list")),this},remove:function(){var a=this;if(a.hasClass("ui-timepicker-input")){var b=a.data("timepicker-settings");return a.removeAttr("autocomplete","off"),a.removeClass("ui-timepicker-input"),a.removeData("timepicker-settings"),a.off(".timepicker"),a.data("timepicker-list")&&a.data("timepicker-list").remove(),b.useSelect&&a.show(),a.removeData("timepicker-list"),this}}};a.fn.timepicker=function(b){return this.length?y[b]?this.hasClass("ui-timepicker-input")?y[b].apply(this,Array.prototype.slice.call(arguments,1)):this:"object"!=typeof b&&b?void a.error("Method "+b+" does not exist on jQuery.timepicker"):y.init.apply(this,arguments):this}});
+
+(function (factory) {
+    if (typeof exports === "object" && exports &&
+        typeof module === "object" && module && module.exports === exports) {
+        // Browserify. Attach to jQuery module.
+        factory(require("jquery"));
+    } else if (typeof define === 'function' && define.amd) {
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
+	} else {
+		// Browser globals
+		factory(jQuery);
+	}
+}(function ($) {
+	var _ONE_DAY = 86400;
+	var _lang = {
+		am: 'am',
+		pm: 'pm',
+		AM: 'AM',
+		PM: 'PM',
+		decimal: '.',
+		mins: 'mins',
+		hr: 'hr',
+		hrs: 'hrs'
+	};
+
+	var _DEFAULTS = {
+		appendTo: 'body',
+		className: null,
+		closeOnWindowScroll: false,
+		disableTextInput: false,
+		disableTimeRanges: [],
+		disableTouchKeyboard: false,
+		durationTime: null,
+		forceRoundTime: false,
+		maxTime: null,
+		minTime: null,
+		noneOption: false,
+		orientation: 'l',
+		roundingFunction: function(seconds, settings) {
+			if (seconds === null) {
+				return null;
+			} else if (typeof settings.step !== "number") {
+				// TODO: nearest fit irregular steps
+				return seconds;
+			} else {
+				var offset = seconds % (settings.step*60); // step is in minutes
+
+				var start = settings.minTime || 0;
+
+                // adjust offset by start mod step so that the offset is aligned not to 00:00 but to the start
+                offset -= start % (settings.step * 60);
+
+				if (offset >= settings.step*30) {
+					// if offset is larger than a half step, round up
+					seconds += (settings.step*60) - offset;
+				} else {
+					// round down
+					seconds -= offset;
+				}
+
+				return _moduloSeconds(seconds, settings);
+			}
+		},
+		scrollDefault: null,
+		selectOnBlur: false,
+		show2400: false,
+		showDuration: false,
+		showOn: ['click', 'focus'],
+		showOnFocus: true,
+		step: 30,
+		stopScrollPropagation: false,
+		timeFormat: 'g:ia',
+		typeaheadHighlight: true,
+		useSelect: false,
+		wrapHours: true
+	};
+
+	var methods = {
+		init: function(options)
+		{
+			return this.each(function()
+			{
+				var self = $(this);
+
+				// pick up settings from data attributes
+				var attributeOptions = [];
+				for (var key in _DEFAULTS) {
+					if (self.data(key))  {
+						attributeOptions[key] = self.data(key);
+					}
+				}
+
+				var settings = $.extend({}, _DEFAULTS, options, attributeOptions);
+
+				if (settings.lang) {
+					_lang = $.extend(_lang, settings.lang);
+				}
+
+				settings = _parseSettings(settings);
+				self.data('timepicker-settings', settings);
+				self.addClass('ui-timepicker-input');
+
+				if (settings.useSelect) {
+					_render(self);
+				} else {
+					self.prop('autocomplete', 'off');
+					if (settings.showOn) {
+						for (var i in settings.showOn) {
+							self.on(settings.showOn[i]+'.timepicker', methods.show);
+						}
+					}
+					self.on('change.timepicker', _formatValue);
+					self.on('keydown.timepicker', _keydownhandler);
+					self.on('keyup.timepicker', _keyuphandler);
+					if (settings.disableTextInput) {
+						self.on('keydown.timepicker', _disableTextInputHandler);
+					}
+                    			self.on('cut.timepicker', _keyuphandler);
+                    			self.on('paste.timepicker', _keyuphandler);
+
+					_formatValue.call(self.get(0), null, 'initial');
+				}
+			});
+		},
+
+		show: function(e)
+		{
+			var self = $(this);
+			var settings = self.data('timepicker-settings');
+
+			if (e) {
+				e.preventDefault();
+			}
+
+			if (settings.useSelect) {
+				self.data('timepicker-list').focus();
+				return;
+			}
+
+			if (_hideKeyboard(self)) {
+				// block the keyboard on mobile devices
+				self.blur();
+			}
+
+			var list = self.data('timepicker-list');
+
+			// check if input is readonly
+			if (self.prop('readonly')) {
+				return;
+			}
+
+			// check if list needs to be rendered
+			if (!list || list.length === 0 || typeof settings.durationTime === 'function') {
+				_render(self);
+				list = self.data('timepicker-list');
+			}
+
+			if (_isVisible(list)) {
+				return;
+			}
+
+			self.data('ui-timepicker-value', self.val());
+			_setSelected(self, list);
+
+			// make sure other pickers are hidden
+			methods.hide();
+
+			// position the dropdown relative to the input
+			list.show();
+			var listOffset = {};
+
+			if (settings.orientation.match(/r/)) {
+				// right-align the dropdown
+				listOffset.left = self.offset().left + self.outerWidth() - list.outerWidth() + parseInt(list.css('marginLeft').replace('px', ''), 10);
+			} else {
+				// left-align the dropdown
+				listOffset.left = self.offset().left + parseInt(list.css('marginLeft').replace('px', ''), 10);
+			}
+
+			var verticalOrientation;
+			if (settings.orientation.match(/t/)) {
+				verticalOrientation = 't';
+			} else if (settings.orientation.match(/b/)) {
+				verticalOrientation = 'b';
+			} else if ((self.offset().top + self.outerHeight(true) + list.outerHeight()) > $(window).height() + $(window).scrollTop()) {
+				verticalOrientation = 't';
+			} else {
+				verticalOrientation = 'b';
+			}
+
+			if (verticalOrientation == 't') {
+				// position the dropdown on top
+				list.addClass('ui-timepicker-positioned-top');
+				listOffset.top = self.offset().top - list.outerHeight() + parseInt(list.css('marginTop').replace('px', ''), 10);
+			} else {
+				// put it under the input
+				list.removeClass('ui-timepicker-positioned-top');
+				listOffset.top = self.offset().top + self.outerHeight() + parseInt(list.css('marginTop').replace('px', ''), 10);
+			}
+
+			list.offset(listOffset);
+
+			// position scrolling
+			var selected = list.find('.ui-timepicker-selected');
+
+			if (!selected.length) {
+				var timeInt = _time2int(_getTimeValue(self));
+				if (timeInt !== null) {
+					selected = _findRow(self, list, timeInt);
+				} else if (settings.scrollDefault) {
+					selected = _findRow(self, list, settings.scrollDefault());
+				}
+			}
+
+			// if not found or disabled, intelligently find first selectable element
+			if (!selected.length || selected.hasClass('ui-timepicker-disabled')) {
+				selected = list.find('li:not(.ui-timepicker-disabled):first');
+			}
+
+			if (selected && selected.length) {
+				var topOffset = list.scrollTop() + selected.position().top - selected.outerHeight();
+				list.scrollTop(topOffset);
+			} else {
+				list.scrollTop(0);
+			}
+
+			// prevent scroll propagation
+			if(settings.stopScrollPropagation) {
+				$(document).on('wheel.ui-timepicker', '.ui-timepicker-wrapper', function(e){
+					e.preventDefault();
+					var currentScroll = $(this).scrollTop();
+					$(this).scrollTop(currentScroll + e.originalEvent.deltaY);
+				});
+			}
+
+			// attach close handlers
+			$(document).on('touchstart.ui-timepicker mousedown.ui-timepicker', _closeHandler);
+			$(window).on('resize.ui-timepicker', _closeHandler);
+			if (settings.closeOnWindowScroll) {
+				$(document).on('scroll.ui-timepicker', _closeHandler);
+			}
+
+			self.trigger('showTimepicker');
+
+			return this;
+		},
+
+		hide: function(e)
+		{
+			var self = $(this);
+			var settings = self.data('timepicker-settings');
+
+			if (settings && settings.useSelect) {
+				self.blur();
+			}
+
+			$('.ui-timepicker-wrapper').each(function() {
+				var list = $(this);
+				if (!_isVisible(list)) {
+					return;
+				}
+
+				var self = list.data('timepicker-input');
+				var settings = self.data('timepicker-settings');
+
+				if (settings && settings.selectOnBlur) {
+					_selectValue(self);
+				}
+
+				list.hide();
+				self.trigger('hideTimepicker');
+			});
+
+			return this;
+		},
+
+		option: function(key, value)
+		{
+			if (typeof key == 'string' && typeof value == 'undefined') {
+				return $(this).data('timepicker-settings')[key];
+			}
+
+			return this.each(function(){
+				var self = $(this);
+				var settings = self.data('timepicker-settings');
+				var list = self.data('timepicker-list');
+
+				if (typeof key == 'object') {
+					settings = $.extend(settings, key);
+				} else if (typeof key == 'string') {
+					settings[key] = value;
+				}
+
+				settings = _parseSettings(settings);
+
+				self.data('timepicker-settings', settings);
+
+				_formatValue.call(self.get(0), {'type':'change'}, 'initial');
+
+				if (list) {
+					list.remove();
+					self.data('timepicker-list', false);
+				}
+
+				if (settings.useSelect) {
+					_render(self);
+				}
+			});
+		},
+
+		getSecondsFromMidnight: function()
+		{
+			return _time2int(_getTimeValue(this));
+		},
+
+		getTime: function(relative_date)
+		{
+			var self = this;
+
+			var time_string = _getTimeValue(self);
+			if (!time_string) {
+				return null;
+			}
+
+			var offset = _time2int(time_string);
+			if (offset === null) {
+				return null;
+			}
+
+			if (!relative_date) {
+				relative_date = new Date();
+			}
+
+			// construct a Date from relative date, and offset's time
+			var time = new Date(relative_date);
+			time.setHours(offset / 3600);
+			time.setMinutes(offset % 3600 / 60);
+			time.setSeconds(offset % 60);
+			time.setMilliseconds(0);
+
+			return time;
+		},
+
+		isVisible: function() {
+			var self = this;
+			var list = self.data('timepicker-list');
+			return !!(list && _isVisible(list));
+		},
+
+		setTime: function(value)
+		{
+			var self = this;
+			var settings = self.data('timepicker-settings');
+
+			if (settings.forceRoundTime) {
+				var prettyTime = _roundAndFormatTime(_time2int(value), settings)
+			} else {
+				var prettyTime = _int2time(_time2int(value), settings);
+			}
+
+			if (value && prettyTime === null && settings.noneOption) {
+				prettyTime = value;
+			}
+
+			self.val(prettyTime);
+			_formatValue.call(self.get(0), {'type':'change'}, 'initial');
+
+			if (self.data('timepicker-list')) {
+				_setSelected(self, self.data('timepicker-list'));
+			}
+
+			return this;
+		},
+
+		remove: function()
+		{
+			var self = this;
+
+			// check if this element is a timepicker
+			if (!self.hasClass('ui-timepicker-input')) {
+				return;
+			}
+
+			var settings = self.data('timepicker-settings');
+			self.removeAttr('autocomplete', 'off');
+			self.removeClass('ui-timepicker-input');
+			self.removeData('timepicker-settings');
+			self.off('.timepicker');
+
+			// timepicker-list won't be present unless the user has interacted with this timepicker
+			if (self.data('timepicker-list')) {
+				self.data('timepicker-list').remove();
+			}
+
+			if (settings.useSelect) {
+				self.show();
+			}
+
+			self.removeData('timepicker-list');
+
+			return this;
+		}
+	};
+
+	// private methods
+
+	function _isVisible(elem)
+	{
+		var el = elem[0];
+		return el.offsetWidth > 0 && el.offsetHeight > 0;
+	}
+
+	function _parseSettings(settings)
+	{
+		if (settings.minTime) {
+			settings.minTime = _time2int(settings.minTime);
+		}
+
+		if (settings.maxTime) {
+			settings.maxTime = _time2int(settings.maxTime);
+		}
+
+		if (settings.durationTime && typeof settings.durationTime !== 'function') {
+			settings.durationTime = _time2int(settings.durationTime);
+		}
+
+		if (settings.scrollDefault == 'now') {
+			settings.scrollDefault = function() {
+				return settings.roundingFunction(_time2int(new Date()), settings);
+			}
+		} else if (settings.scrollDefault && typeof settings.scrollDefault != 'function') {
+			var val = settings.scrollDefault;
+			settings.scrollDefault = function() {
+				return settings.roundingFunction(_time2int(val), settings);
+			}
+		} else if (settings.minTime) {
+			settings.scrollDefault = function() {
+				return settings.roundingFunction(settings.minTime, settings);
+			}
+		}
+
+		if ($.type(settings.timeFormat) === "string" && settings.timeFormat.match(/[gh]/)) {
+			settings._twelveHourTime = true;
+		}
+
+		if (settings.showOnFocus === false && settings.showOn.indexOf('focus') != -1) {
+			settings.showOn.splice(settings.showOn.indexOf('focus'), 1);
+		}
+
+		if (settings.disableTimeRanges.length > 0) {
+			// convert string times to integers
+			for (var i in settings.disableTimeRanges) {
+				settings.disableTimeRanges[i] = [
+					_time2int(settings.disableTimeRanges[i][0]),
+					_time2int(settings.disableTimeRanges[i][1])
+				];
+			}
+
+			// sort by starting time
+			settings.disableTimeRanges = settings.disableTimeRanges.sort(function(a, b){
+				return a[0] - b[0];
+			});
+
+			// merge any overlapping ranges
+			for (var i = settings.disableTimeRanges.length-1; i > 0; i--) {
+				if (settings.disableTimeRanges[i][0] <= settings.disableTimeRanges[i-1][1]) {
+					settings.disableTimeRanges[i-1] = [
+						Math.min(settings.disableTimeRanges[i][0], settings.disableTimeRanges[i-1][0]),
+						Math.max(settings.disableTimeRanges[i][1], settings.disableTimeRanges[i-1][1])
+					];
+					settings.disableTimeRanges.splice(i, 1);
+				}
+			}
+		}
+
+		return settings;
+	}
+
+	function _render(self)
+	{
+		var settings = self.data('timepicker-settings');
+		var list = self.data('timepicker-list');
+
+		if (list && list.length) {
+			list.remove();
+			self.data('timepicker-list', false);
+		}
+
+		if (settings.useSelect) {
+			list = $('<select />', { 'class': 'ui-timepicker-select' });
+			var wrapped_list = list;
+		} else {
+			list = $('<ul />', { 'class': 'ui-timepicker-list' });
+
+			var wrapped_list = $('<div />', { 'class': 'ui-timepicker-wrapper', 'tabindex': -1 });
+			wrapped_list.css({'display':'none', 'position': 'absolute' }).append(list);
+		}
+
+		if (settings.noneOption) {
+			if (settings.noneOption === true) {
+				settings.noneOption = (settings.useSelect) ? 'Time...' : 'None';
+			}
+
+			if ($.isArray(settings.noneOption)) {
+				for (var i in settings.noneOption) {
+					if (parseInt(i, 10) == i){
+						var noneElement = _generateNoneElement(settings.noneOption[i], settings.useSelect);
+						list.append(noneElement);
+					}
+				}
+			} else {
+				var noneElement = _generateNoneElement(settings.noneOption, settings.useSelect);
+				list.append(noneElement);
+			}
+		}
+
+		if (settings.className) {
+			wrapped_list.addClass(settings.className);
+		}
+
+		if ((settings.minTime !== null || settings.durationTime !== null) && settings.showDuration) {
+			var stepval = typeof settings.step == 'function' ? 'function' : settings.step;
+			wrapped_list.addClass('ui-timepicker-with-duration');
+			wrapped_list.addClass('ui-timepicker-step-'+settings.step);
+		}
+
+		var durStart = settings.minTime;
+		if (typeof settings.durationTime === 'function') {
+			durStart = _time2int(settings.durationTime());
+		} else if (settings.durationTime !== null) {
+			durStart = settings.durationTime;
+		}
+		var start = (settings.minTime !== null) ? settings.minTime : 0;
+		var end = (settings.maxTime !== null) ? settings.maxTime : (start + _ONE_DAY - 1);
+
+		if (end < start) {
+			// make sure the end time is greater than start time, otherwise there will be no list to show
+			end += _ONE_DAY;
+		}
+
+		if (end === _ONE_DAY-1 && $.type(settings.timeFormat) === "string" && settings.show2400) {
+			// show a 24:00 option when using military time
+			end = _ONE_DAY;
+		}
+
+		var dr = settings.disableTimeRanges;
+		var drCur = 0;
+		var drLen = dr.length;
+
+		var stepFunc = settings.step;
+		if (typeof stepFunc != 'function') {
+			stepFunc = function() {
+				return settings.step;
+			}
+		}
+
+		for (var i=start, j=0; i <= end; j++, i += stepFunc(j)*60) {
+			var timeInt = i;
+			var timeString = _int2time(timeInt, settings);
+
+			if (settings.useSelect) {
+				var row = $('<option />', { 'value': timeString });
+				row.text(timeString);
+			} else {
+				var row = $('<li />');
+				row.addClass((timeInt % _ONE_DAY) < (_ONE_DAY / 2) ? 'ui-timepicker-am' : 'ui-timepicker-pm');
+				row.data('time', _moduloSeconds(timeInt, settings));
+				row.text(timeString);
+			}
+
+			if ((settings.minTime !== null || settings.durationTime !== null) && settings.showDuration) {
+				var durationString = _int2duration(i - durStart, settings.step);
+				if (settings.useSelect) {
+					row.text(row.text()+' ('+durationString+')');
+				} else {
+					var duration = $('<span />', { 'class': 'ui-timepicker-duration' });
+					duration.text(' ('+durationString+')');
+					row.append(duration);
+				}
+			}
+
+			if (drCur < drLen) {
+				if (timeInt >= dr[drCur][1]) {
+					drCur += 1;
+				}
+
+				if (dr[drCur] && timeInt >= dr[drCur][0] && timeInt < dr[drCur][1]) {
+					if (settings.useSelect) {
+						row.prop('disabled', true);
+					} else {
+						row.addClass('ui-timepicker-disabled');
+					}
+				}
+			}
+
+			list.append(row);
+		}
+
+		wrapped_list.data('timepicker-input', self);
+		self.data('timepicker-list', wrapped_list);
+
+		if (settings.useSelect) {
+			if (self.val()) {
+				list.val(_roundAndFormatTime(_time2int(self.val()), settings));
+			}
+
+			list.on('focus', function(){
+				$(this).data('timepicker-input').trigger('showTimepicker');
+			});
+			list.on('blur', function(){
+				$(this).data('timepicker-input').trigger('hideTimepicker');
+			});
+			list.on('change', function(){
+				_setTimeValue(self, $(this).val(), 'select');
+			});
+
+			_setTimeValue(self, list.val(), 'initial');
+			self.hide().after(list);
+		} else {
+			var appendTo = settings.appendTo;
+			if (typeof appendTo === 'string') {
+				appendTo = $(appendTo);
+			} else if (typeof appendTo === 'function') {
+				appendTo = appendTo(self);
+			}
+			appendTo.append(wrapped_list);
+			_setSelected(self, list);
+
+			list.on('mousedown click', 'li', function(e) {
+
+				// hack: temporarily disable the focus handler
+				// to deal with the fact that IE fires 'focus'
+				// events asynchronously
+				self.off('focus.timepicker');
+				self.on('focus.timepicker-ie-hack', function(){
+					self.off('focus.timepicker-ie-hack');
+					self.on('focus.timepicker', methods.show);
+				});
+
+				if (!_hideKeyboard(self)) {
+					self[0].focus();
+				}
+
+				// make sure only the clicked row is selected
+				list.find('li').removeClass('ui-timepicker-selected');
+				$(this).addClass('ui-timepicker-selected');
+
+				if (_selectValue(self)) {
+					self.trigger('hideTimepicker');
+
+					list.on('mouseup.timepicker click.timepicker', 'li', function(e) {
+						list.off('mouseup.timepicker click.timepicker');
+						wrapped_list.hide();
+					});
+				}
+			});
+		}
+	}
+
+	function _generateNoneElement(optionValue, useSelect)
+	{
+		var label, className, value;
+
+		if (typeof optionValue == 'object') {
+			label = optionValue.label;
+			className = optionValue.className;
+			value = optionValue.value;
+		} else if (typeof optionValue == 'string') {
+			label = optionValue;
+		} else {
+			$.error('Invalid noneOption value');
+		}
+
+		if (useSelect) {
+			return $('<option />', {
+					'value': value,
+					'class': className,
+					'text': label
+				});
+		} else {
+			return $('<li />', {
+					'class': className,
+					'text': label
+				}).data('time', String(value));
+		}
+	}
+
+	function _roundAndFormatTime(seconds, settings)
+	{
+		seconds = settings.roundingFunction(seconds, settings);
+		if (seconds !== null) {
+			return _int2time(seconds, settings);
+		}
+	}
+
+	// event handler to decide whether to close timepicker
+	function _closeHandler(e)
+	{
+		if (e.target == window) {
+			// mobile Chrome fires focus events against window for some reason
+			return;
+		}
+
+		var target = $(e.target);
+
+		if (target.closest('.ui-timepicker-input').length || target.closest('.ui-timepicker-wrapper').length) {
+			// active timepicker was focused. ignore
+			return;
+		}
+
+		methods.hide();
+		$(document).unbind('.ui-timepicker');
+		$(window).unbind('.ui-timepicker');
+	}
+
+	function _hideKeyboard(self)
+	{
+		var settings = self.data('timepicker-settings');
+		return ((window.navigator.msMaxTouchPoints || 'ontouchstart' in document) && settings.disableTouchKeyboard);
+	}
+
+	function _findRow(self, list, value)
+	{
+		if (!value && value !== 0) {
+			return false;
+		}
+
+		var settings = self.data('timepicker-settings');
+		var out = false;
+		var value = settings.roundingFunction(value, settings);
+
+		// loop through the menu items
+		list.find('li').each(function(i, obj) {
+			var jObj = $(obj);
+			if (typeof jObj.data('time') != 'number') {
+				return;
+			}
+
+			if (jObj.data('time') == value) {
+				out = jObj;
+				return false;
+			}
+		});
+
+		return out;
+	}
+
+	function _setSelected(self, list)
+	{
+		list.find('li').removeClass('ui-timepicker-selected');
+
+		var settings = self.data('timepicker-settings');
+		var timeValue = _time2int(_getTimeValue(self), settings);
+		if (timeValue === null) {
+			return;
+		}
+
+		var selected = _findRow(self, list, timeValue);
+		if (selected) {
+
+			var topDelta = selected.offset().top - list.offset().top;
+
+			if (topDelta + selected.outerHeight() > list.outerHeight() || topDelta < 0) {
+				list.scrollTop(list.scrollTop() + selected.position().top - selected.outerHeight());
+			}
+
+			if (settings.forceRoundTime || selected.data('time') === timeValue) {
+				selected.addClass('ui-timepicker-selected');
+			}
+		}
+	}
+
+
+	function _formatValue(e, origin)
+	{
+		if (origin == 'timepicker') {
+			return;
+		}
+
+		var self = $(this);
+
+		if (this.value === '') {
+			_setTimeValue(self, null, origin);
+			return;
+		}
+
+		if (self.is(':focus') && (!e || e.type != 'change')) {
+			return;
+		}
+
+		var settings = self.data('timepicker-settings');
+		var seconds = _time2int(this.value, settings);
+
+		if (seconds === null) {
+			self.trigger('timeFormatError');
+			return;
+		}
+
+		var rangeError = false;
+		// check that the time in within bounds
+		if ((settings.minTime !== null && settings.maxTime !== null)
+			&& (seconds < settings.minTime || seconds > settings.maxTime)) {
+			rangeError = true;
+		}
+
+		// check that time isn't within disabled time ranges
+		$.each(settings.disableTimeRanges, function(){
+			if (seconds >= this[0] && seconds < this[1]) {
+				rangeError = true;
+				return false;
+			}
+		});
+
+		if (settings.forceRoundTime) {
+			var roundSeconds = settings.roundingFunction(seconds, settings);
+			if (roundSeconds != seconds) {
+				seconds = roundSeconds;
+				origin = null;
+			}
+		}
+
+		var prettyTime = _int2time(seconds, settings);
+
+		if (rangeError) {
+			if (_setTimeValue(self, prettyTime, 'error') || e && e.type == 'change') {
+				self.trigger('timeRangeError');
+			}
+		} else {
+			_setTimeValue(self, prettyTime, origin);
+		}
+	}
+
+	function _getTimeValue(self)
+	{
+		if (self.is('input')) {
+			return self.val();
+		} else {
+			// use the element's data attributes to store values
+			return self.data('ui-timepicker-value');
+		}
+	}
+
+	function _setTimeValue(self, value, source)
+	{
+		if (self.is('input')) {
+			self.val(value);
+
+			var settings = self.data('timepicker-settings');
+			if (settings.useSelect && source != 'select' && source != 'initial') {
+				self.data('timepicker-list').val(_roundAndFormatTime(_time2int(value), settings));
+			}
+		}
+
+		if (self.data('ui-timepicker-value') != value) {
+			self.data('ui-timepicker-value', value);
+			if (source == 'select') {
+				self.trigger('selectTime').trigger('changeTime').trigger('change', 'timepicker');
+			} else if (['error', 'initial'].indexOf(source) == -1) {
+				self.trigger('changeTime');
+			}
+
+			return true;
+		} else {
+			self.trigger('selectTime');
+			return false;
+		}
+	}
+
+	/*
+	*  Filter freeform input
+	*/
+	function _disableTextInputHandler(e)
+	{
+		switch (e.keyCode) {
+			case 13: // return
+			case 9: //tab
+				return;
+
+			default:
+				e.preventDefault();
+		}
+	}
+
+	/*
+	*  Keyboard navigation via arrow keys
+	*/
+	function _keydownhandler(e)
+	{
+		var self = $(this);
+		var list = self.data('timepicker-list');
+
+		if (!list || !_isVisible(list)) {
+			if (e.keyCode == 40) {
+				// show the list!
+				methods.show.call(self.get(0));
+				list = self.data('timepicker-list');
+				if (!_hideKeyboard(self)) {
+					self.focus();
+				}
+			} else {
+				return true;
+			}
+		}
+
+		switch (e.keyCode) {
+
+			case 13: // return
+				if (_selectValue(self)) {
+					_formatValue.call(self.get(0), {'type':'change'});
+					methods.hide.apply(this);
+				}
+
+				e.preventDefault();
+				return false;
+
+			case 38: // up
+				var selected = list.find('.ui-timepicker-selected');
+
+				if (!selected.length) {
+					list.find('li').each(function(i, obj) {
+						if ($(obj).position().top > 0) {
+							selected = $(obj);
+							return false;
+						}
+					});
+					selected.addClass('ui-timepicker-selected');
+
+				} else if (!selected.is(':first-child')) {
+					selected.removeClass('ui-timepicker-selected');
+					selected.prev().addClass('ui-timepicker-selected');
+
+					if (selected.prev().position().top < selected.outerHeight()) {
+						list.scrollTop(list.scrollTop() - selected.outerHeight());
+					}
+				}
+
+				return false;
+
+			case 40: // down
+				selected = list.find('.ui-timepicker-selected');
+
+				if (selected.length === 0) {
+					list.find('li').each(function(i, obj) {
+						if ($(obj).position().top > 0) {
+							selected = $(obj);
+							return false;
+						}
+					});
+
+					selected.addClass('ui-timepicker-selected');
+				} else if (!selected.is(':last-child')) {
+					selected.removeClass('ui-timepicker-selected');
+					selected.next().addClass('ui-timepicker-selected');
+
+					if (selected.next().position().top + 2*selected.outerHeight() > list.outerHeight()) {
+						list.scrollTop(list.scrollTop() + selected.outerHeight());
+					}
+				}
+
+				return false;
+
+			case 27: // escape
+				list.find('li').removeClass('ui-timepicker-selected');
+				methods.hide();
+				break;
+
+			case 9: //tab
+				methods.hide();
+				break;
+
+			default:
+				return true;
+		}
+	}
+
+	/*
+	*	Time typeahead
+	*/
+	function _keyuphandler(e)
+	{
+		var self = $(this);
+		var list = self.data('timepicker-list');
+		var settings = self.data('timepicker-settings');
+
+		if (!list || !_isVisible(list) || settings.disableTextInput) {
+			return true;
+		}
+
+		if (e.type === 'paste' || e.type === 'cut') {
+		    	setTimeout(function () {
+				if (settings.typeaheadHighlight) {
+			    		_setSelected(self, list);
+				} else {
+			    		list.hide();
+				}
+		    	}, 0);
+		    	return;
+		}
+
+		switch (e.keyCode) {
+
+			case 96: // numpad numerals
+			case 97:
+			case 98:
+			case 99:
+			case 100:
+			case 101:
+			case 102:
+			case 103:
+			case 104:
+			case 105:
+			case 48: // numerals
+			case 49:
+			case 50:
+			case 51:
+			case 52:
+			case 53:
+			case 54:
+			case 55:
+			case 56:
+			case 57:
+			case 65: // a
+			case 77: // m
+			case 80: // p
+			case 186: // colon
+			case 8: // backspace
+			case 46: // delete
+				if (settings.typeaheadHighlight) {
+					_setSelected(self, list);
+				} else {
+					list.hide();
+				}
+				break;
+		}
+	}
+
+	function _selectValue(self)
+	{
+		var settings = self.data('timepicker-settings');
+		var list = self.data('timepicker-list');
+		var timeValue = null;
+
+		var cursor = list.find('.ui-timepicker-selected');
+
+		if (cursor.hasClass('ui-timepicker-disabled')) {
+			return false;
+		}
+
+		if (cursor.length) {
+			// selected value found
+			timeValue = cursor.data('time');
+		}
+
+		if (timeValue !== null) {
+			if (typeof timeValue != 'string') {
+				timeValue = _int2time(timeValue, settings);
+			}
+
+			_setTimeValue(self, timeValue, 'select');
+		}
+
+		return true;
+	}
+
+	function _int2duration(seconds, step)
+	{
+		seconds = Math.abs(seconds);
+		var minutes = Math.round(seconds/60),
+			duration = [],
+			hours, mins;
+
+		if (minutes < 60) {
+			// Only show (x mins) under 1 hour
+			duration = [minutes, _lang.mins];
+		} else {
+			hours = Math.floor(minutes/60);
+			mins = minutes%60;
+
+			// Show decimal notation (eg: 1.5 hrs) for 30 minute steps
+			if (step == 30 && mins == 30) {
+				hours += _lang.decimal + 5;
+			}
+
+			duration.push(hours);
+			duration.push(hours == 1 ? _lang.hr : _lang.hrs);
+
+			// Show remainder minutes notation (eg: 1 hr 15 mins) for non-30 minute steps
+			// and only if there are remainder minutes to show
+			if (step != 30 && mins) {
+				duration.push(mins);
+				duration.push(_lang.mins);
+			}
+		}
+
+		return duration.join(' ');
+	}
+
+	function _int2time(timeInt, settings)
+	{
+		if (typeof timeInt != 'number') {
+			return null;
+		}
+
+		var seconds = parseInt(timeInt%60)
+			, minutes = parseInt((timeInt/60)%60)
+			, hours = parseInt((timeInt/(60*60))%24);
+
+		var time = new Date(1970, 0, 2, hours, minutes, seconds, 0);
+
+		if (isNaN(time.getTime())) {
+			return null;
+		}
+
+		if ($.type(settings.timeFormat) === "function") {
+			return settings.timeFormat(time);
+		}
+
+		var output = '';
+		var hour, code;
+		for (var i=0; i<settings.timeFormat.length; i++) {
+
+			code = settings.timeFormat.charAt(i);
+			switch (code) {
+
+				case 'a':
+					output += (time.getHours() > 11) ? _lang.pm : _lang.am;
+					break;
+
+				case 'A':
+					output += (time.getHours() > 11) ? _lang.PM : _lang.AM;
+					break;
+
+				case 'g':
+					hour = time.getHours() % 12;
+					output += (hour === 0) ? '12' : hour;
+					break;
+
+				case 'G':
+					hour = time.getHours();
+					if (timeInt === _ONE_DAY) hour = settings.show2400 ? 24 : 0;
+					output += hour;
+					break;
+
+				case 'h':
+					hour = time.getHours() % 12;
+
+					if (hour !== 0 && hour < 10) {
+						hour = '0'+hour;
+					}
+
+					output += (hour === 0) ? '12' : hour;
+					break;
+
+				case 'H':
+					hour = time.getHours();
+					if (timeInt === _ONE_DAY) hour = settings.show2400 ? 24 : 0;
+					output += (hour > 9) ? hour : '0'+hour;
+					break;
+
+				case 'i':
+					var minutes = time.getMinutes();
+					output += (minutes > 9) ? minutes : '0'+minutes;
+					break;
+
+				case 's':
+					seconds = time.getSeconds();
+					output += (seconds > 9) ? seconds : '0'+seconds;
+					break;
+
+				case '\\':
+					// escape character; add the next character and skip ahead
+					i++;
+					output += settings.timeFormat.charAt(i);
+					break;
+
+				default:
+					output += code;
+			}
+		}
+
+		return output;
+	}
+
+	function _time2int(timeString, settings)
+	{
+		if (timeString === '' || timeString === null) return null;
+		if (typeof timeString == 'object') {
+			return timeString.getHours()*3600 + timeString.getMinutes()*60 + timeString.getSeconds();
+		}
+		if (typeof timeString != 'string') {
+			return timeString;
+		}
+
+		timeString = timeString.toLowerCase().replace(/[\s\.]/g, '');
+
+		// if the last character is an "a" or "p", add the "m"
+		if (timeString.slice(-1) == 'a' || timeString.slice(-1) == 'p') {
+			timeString += 'm';
+		}
+
+		var ampmRegex = '(' +
+			_lang.am.replace('.', '')+'|' +
+			_lang.pm.replace('.', '')+'|' +
+			_lang.AM.replace('.', '')+'|' +
+			_lang.PM.replace('.', '')+')?';
+
+		// try to parse time input
+		var pattern = new RegExp('^'+ampmRegex+'([0-9]?[0-9])\\W?([0-5][0-9])?\\W?([0-5][0-9])?'+ampmRegex+'$');
+
+		var time = timeString.match(pattern);
+		if (!time) {
+			return null;
+		}
+
+		var hour = parseInt(time[2]*1, 10);
+		var ampm = time[1] || time[5];
+		var hours = hour;
+		var minutes = ( time[3]*1 || 0 );
+		var seconds = ( time[4]*1 || 0 );
+
+		if (hour <= 12 && ampm) {
+			var isPm = (ampm == _lang.pm || ampm == _lang.PM);
+
+			if (hour == 12) {
+				hours = isPm ? 12 : 0;
+			} else {
+				hours = (hour + (isPm ? 12 : 0));
+			}
+		} else if (settings) {
+			var t = hour * 3600 + minutes * 60 + seconds;
+			if (t >= _ONE_DAY + (settings.show2400 ? 1 : 0)) {
+				if (settings.wrapHours === false) {
+					return null;
+				}
+
+				hours = hour % 24;
+			}
+		}
+
+		var timeInt = hours*3600 + minutes*60 + seconds;
+
+		// if no am/pm provided, intelligently guess based on the scrollDefault
+		if (hour < 12 && !ampm && settings && settings._twelveHourTime && settings.scrollDefault) {
+			var delta = timeInt - settings.scrollDefault();
+			if (delta < 0 && delta >= _ONE_DAY / -2) {
+				timeInt = (timeInt + (_ONE_DAY / 2)) % _ONE_DAY;
+			}
+		}
+
+		return timeInt;
+	}
+
+	function _pad2(n) {
+		return ("0" + n).slice(-2);
+	}
+
+	function _moduloSeconds(seconds, settings) {
+		if (seconds == _ONE_DAY && settings.show2400) {
+			return seconds;
+		}
+
+		return seconds%_ONE_DAY;
+	}
+
+	// Plugin entry
+	$.fn.timepicker = function(method)
+	{
+		if (!this.length) return this;
+		if (methods[method]) {
+			// check if this element is a timepicker
+			if (!this.hasClass('ui-timepicker-input')) {
+				return this;
+			}
+			return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+		}
+		else if(typeof method === "object" || !method) { return methods.init.apply(this, arguments); }
+		else { $.error("Method "+ method + " does not exist on jQuery.timepicker"); }
+	};
+}));
 
 var r = {
   settings: {
