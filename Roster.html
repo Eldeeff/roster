@@ -80,7 +80,7 @@
       setTimeout(function() {
         $('.roster-body .team-member img').each(function() {
           var thisRatio = $(this).height() / $(this).width(),
-            parentRatio = $(this).parents('.team-member').height() / $(this).parents('.team-member').width();
+            parentRatio = $(this).parents('.avatar').height() / $(this).parents('.avatar').width();
           if (thisRatio <= parentRatio) {
             $(this).addClass('fit-height');
           } else {

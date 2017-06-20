@@ -1337,11 +1337,12 @@ var r = {
       template += weekTemp + '</div>';
       for (var member in team) {
         var tm = team[member];
-        if (tm.text != '' && tm.bg.match(/#[0-9a-f]{6}/g)) {
-          cardDetail = 'style="color:' + tm.text + ';background:none;"';
-        } else {
-          cardDetail = 'style="color:#ffffff"';
-        }
+        // FOR COVER IMAGE
+        //        if (tm.text != '' && tm.bg.match(/#[0-9a-f]{6}/g)) {
+        //          cardDetail = 'style="color:' + tm.text + ';background:none;"';
+        //        } else {
+        //          cardDetail = 'style="color:#ffffff"';
+        //        }
         var papa = this;
         var cellWeek = '';
         $(weekTemp).each(function () {
@@ -1350,10 +1351,17 @@ var r = {
             start = r.settings.Roster[tm.id][$(this).text()].start;
             finish = r.settings.Roster[tm.id][$(this).text()].finish;
           }
-          $(this).html(papa.input('Start', undefined, 'time start', start) + papa.input('Finish', undefined, 'time end', finish) + '<button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_paste</i> Paste</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">check_circle</i> Done</button>');
+          var inline = function () {
+            if (start.length > 0 && finish.length > 0) {
+              return start + ' &mdash; ' + finish;
+            } else {
+              return (start + ' ' + finish).trim();
+            }
+          }
+          $(this).html('<span class="ready-time">' + inline() + '</span>' + papa.input('Start', undefined, 'time start', start) + papa.input('Finish', undefined, 'time end', finish) + '<button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_paste</i> Paste</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">check_circle</i> Done</button>');
           cellWeek += this.outerHTML;
         });
-        var body = $('<div class="mdl-grid roster-body mdl-grid--no-spacing" id="' + tm.id + '"><div class="mdl-cell team-member"><div class="mdl-card__actions details" ' + cardDetail + '><span class="card-name">' + tm.name + '</span></div></div>' + cellWeek + '</div>');
+        var body = $('<div class="mdl-grid roster-body mdl-grid--no-spacing" id="' + tm.id + '"><div class="mdl-cell team-member"><div class="mdl-card__actions details"><span class="card-name">' + tm.name + '</span><span class="card-title">' + tm.title + '</span></div></div>' + cellWeek + '</div>');
         if (tm.bg.match(/(#......)/)) {
           var c = document.createElement('canvas');
           var ctx = c.getContext('2d');
@@ -1362,9 +1370,9 @@ var r = {
           ctx.fillStyle = tm.bg;
           ctx.fillRect(0, 0, c.width, c.height);
           colourImage = c.toDataURL();
-          $('.team-member', body).append('<img src="' + colourImage + '">');
+          $('.team-member', body).prepend('<div class="avatar"><img src="' + colourImage + '"></div>');
         } else {
-          $('.team-member', body).append('<img src="' + tm.bg.split('url("')[1].split('")')[0] + '">');
+          $('.team-member', body).prepend('<div class="avatar"><img src="' + tm.bg.split('url("')[1].split('")')[0] + '"></div>');
         }
         template += body[0].outerHTML;
       }
@@ -1467,6 +1475,7 @@ $('a', r.ui.menu).click(function () {
   }
 });
 
+// MDI Upgrade and create inputs
 $(document).ajaxComplete(function () {
   $('*[data-input]').each(function () {
     $(this).html(r.ui.input($(this).data('input')));
