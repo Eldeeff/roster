@@ -65,10 +65,14 @@ var r = {
             finish = r.settings.Roster[tm.id][$(this).text()].finish;
           }
           var inline = function () {
-            if (start.length > 0 && finish.length > 0) {
-              return start + ' &mdash; ' + finish;
+            if (start && finish) {
+              if (start.length > 0 && finish.length > 0) {
+                return start + ' &mdash; ' + finish;
+              } else {
+                return (start + ' ' + finish).trim();
+              }
             } else {
-              return (start + ' ' + finish).trim();
+              return '';
             }
           }
           $(this).html('<span class="ready-time">' + inline() + '</span>' + papa.input('Start', undefined, 'time start', start) + papa.input('Finish', undefined, 'time end', finish) + '<button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_paste</i> Paste</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">check_circle</i> Done</button>');
