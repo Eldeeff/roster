@@ -21,19 +21,21 @@
       maxTime: '8:00pm',
       timeFormat: 'g:i a'
     });
+
     $('.roster .mdl-cell input.time', papa).on('change', function() {
       if (this.value !== '') {
         $(this).parents('.mdl-textfield').addClass('is-dirty');
       } else {
         $(this).parents('.is-dirty').removeClass('is-dirty');
       }
-    })
-    $('.roster .mdl-cell input.time.start', papa).on('change', function() {
-      $(this).parents('.mdl-cell').find('input.end').timepicker('option', {
-        'scrollDefault': (parseInt(this.value.split(':')[0]) + 8) + this.value.split(':')[1],
-        'minTime': this.value,
-        'showDuration': true
-      });
+      if ($(this).hasClass('start')) {
+        $(this).parents('.mdl-textfield').next('.mdl-textfield').find('.time.end').timepicker('option', {
+          'scrollDefault': (parseInt(this.value.split(':')[0]) + 8) + this.value.split(':')[1],
+          'minTime': this.value,
+          'showDuration': true
+        });
+      }
+      updateHours();
     });
 
     $(papa).on('click', 'button.copy-time', function() {
@@ -63,7 +65,9 @@
       $(this).text() === 'Edit Roster' ? edit(this) : save(this);
       fitTeamImage();
       checkForWeekends();
-    })
+    });
+
+
 
     function checkForWeekends() {
       setTimeout(function() {
@@ -75,6 +79,34 @@
       }, 0)
     }
     checkForWeekends();
+
+    function updateHours() {
+      setTimeout(function() {
+        $('.roster .mdl-cell .is-dirty input.time.end', papa).each(function() {
+          $(this).timepicker('option', {
+            'showDuration': true
+          });
+        });
+
+        $('.roster .roster-body', papa).each(function() {
+          var hours = 0;
+          $('.mdl-cell:not(.team-member)', this).each(function() {
+            var start = $('.start', this).timepicker('getTime', new Date()),
+              end = $('.end', this).timepicker('getTime', new Date());
+            if ($('.start', this).val() != '' && $('.end', this).val() != '') {
+              hours += (Date.parse(end) - Date.parse(start)) / 1000 / 60 / 60;
+            }
+          });
+          if (hours > 0) {
+            $('.team-member .details .hours', this).prop('hidden', false).text(hours + ' hours');
+          } else {
+            $('.team-member .details .hours', this).prop('hidden', true).text();
+          }
+        });
+
+      }, 0)
+    }
+    updateHours();
 
     function fitTeamImage() {
       setTimeout(function() {

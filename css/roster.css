@@ -1,3 +1,6 @@
+.mdl-layout__content {
+  padding: 40px;
+}
 .mdl-navigation__link.mdl-tabs__tab {
   height: inherit;
   line-height: inherit;
@@ -37,6 +40,17 @@
 .mdl-card.adding div {
   background: #fff;
 }
+.mdl-card.adding .mdl-textfield {
+  padding: 5px 0 20px;
+}
+.mdl-card.adding .mdl-textfield__label {
+  top: 12px;
+}
+.mdl-card.adding .mdl-textfield--floating-label.is-focused .mdl-textfield__label,
+.mdl-card.adding .mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
+.mdl-card.adding .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+  top: -5px;
+}
 .mdl-card.adding .details .bottom {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -63,12 +77,22 @@
   padding: 10px;
   text-align: center;
   position: relative;
+  -webkit-box-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
 }
 .roster.weekends .mdl-cell {
   width: calc(100% / 8);
 }
 .roster .roster-header .mdl-cell {
   text-align: center;
+}
+.roster .team-member,
+.roster .roster-header .mdl-cell:first-of-type {
+  -webkit-box-flex: 1.75;
+  -ms-flex: 1.75;
+  flex: 1.75;
+  padding: 10px 0;
 }
 .roster .team-member {
   padding: 0;
@@ -87,6 +111,7 @@
 .roster:not(.ready) .roster-body .mdl-textfield,
 .roster.ready .roster-body .mdl-textfield.is-dirty {
   margin: -10px 0;
+  width: auto;
 }
 .roster-body .mdl-button {
   padding: 0 5px;
@@ -101,6 +126,8 @@
   overflow: hidden;
   height: 70px;
   width: 70px;
+  max-height: 6vw;
+  max-width: 6vw;
   margin: 1em 0 1em 1em;
   border-radius: 100%;
   -webkit-box-flex: 0;
@@ -124,6 +151,9 @@
 .roster-body .team-member .mdl-card__actions.details {
   color: #000;
   background: none;
+}
+.roster-body .team-member .mdl-card__actions.details .hours {
+  font-style: italic;
 }
 .roster-body .mdl-cell:hover .mdl-button {
   opacity: 1;
@@ -177,4 +207,18 @@
   content: 'RDO';
   font-size: 2em;
   color: rgba(0, 0, 0, 0.06);
+}
+@media print {
+  .mdl-grid > .mdl-cell--12-col:not(.roster):not(.header),
+  .mdl-layout__drawer,
+  .mdl-layout__drawer-button {
+    display: none;
+  }
+  .mdl-layout--fixed-drawer>.mdl-layout__content {
+    margin: 0;
+    padding: 0;
+  }
+  .ready-time:after {
+    color: rgba(0, 0, 0, .06) !important;
+  }
 }
