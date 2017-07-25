@@ -1298,7 +1298,11 @@ var r = {
     Team: {
       members: []
     },
-    Templates: []
+    Templates: [{
+      'avatar': true,
+      'title': true,
+      'hours': false
+    }]
   },
   ui: {
     snackbar: $('.mdl-snackbar'),
@@ -1307,11 +1311,30 @@ var r = {
     page: $('#page'),
     pageEl: '<section class="mdl-tabs__panel" id=""><div class="page-content"></div></section>',
     spinnerEl: '<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>',
-    input: function (label, type, clas, value) {
-      var type = type || 'text';
-      var clas = ' ' + clas || '';
-      var value = value || '';
-      return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input' + clas + '" type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '">' + String(label) + '</label></div>';
+    input: function (input) {
+      var label = input.data('input') || '';
+      var type = input.data('type') || 'text';
+      var clas = input.data('class') || '';
+      var value = input.data('value') || '';
+      var req = input.data('required') || false;
+      var checked = input.data('checked') || false;
+      if (req) {
+        req = 'required';
+      } else {
+        req = '';
+      }
+      if (checked) {
+        checked = 'checked';
+      } else {
+        checked = '';
+      }
+      switch (type) {
+        case 'checkbox':
+          return '<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><input class="mdl-switch__input ' + clas + '"' + checked + ' type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><span class="mdl-switch__label">' + String(label) + '</span></label>';
+          break;
+        default:
+          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + clas + '" ' + req + ' type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '">' + String(label) + '</label></div>';
+      }
     },
     teamMemberEl: function (id, name, title, bg, text) {
       if (text != '' && bg.match(/#[0-9a-f]{6}/g)) {
@@ -1321,10 +1344,10 @@ var r = {
       }
       return $('<div class="team-member mdl-card mdl-shadow--2dp" id="' + id + '"><button class="remove save-data mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Remove ' + name + '</button><div class="mdl-card__title mdl-card--expand"></div><div class="mdl-card__actions details" ' + cardDetail + '><span class="card-name">' + name + '</span><span class="card-title">' + title + '</span></div></div>').css('background', 'center/cover ' + bg);
     },
-    newTeamMemberEl: '<div class="team-member adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-name" data-input="Name"></div><div class="card-email" data-input="Email" data-type="email"></div><div class="card-title" data-input="Title"></div><div class="bottom"><input type="file" hidden /><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button><div class="mdl-layout-spacer"></div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>',
-    templateEl: function (team) {
-      var template = '<div class="mdl-grid roster-header mdl-grid--no-spacing">';
-      template += '<div class="mdl-cell">Team Member</div>';
+    newTeamMemberEl: '<div class="team-member adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-name" data-input="Name" required="true"></div><div class="card-title" data-input="Title" required="true"></div><div class="card-email" data-input="Email" data-type="email"></div><div class="bottom"><input type="file" hidden /><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button><div class="mdl-layout-spacer"></div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>',
+    rosterEl: function (team) {
+      var rosterRow = '<div class="mdl-grid roster-header mdl-grid--no-spacing">';
+      rosterRow += '<div class="mdl-cell">Team Member</div>';
       var weekTemp = '';
       var week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
       for (var day in week) {
@@ -1334,10 +1357,10 @@ var r = {
           weekTemp += ('<div class="mdl-cell">' + week[day] + '</div>');
         }
       }
-      template += weekTemp + '</div>';
+      rosterRow += weekTemp + '</div>';
       for (var member in team) {
         var tm = team[member];
-        // FOR COVER IMAGE
+        // FOR COVER IMAGE - Add to Templates
         //        if (tm.text != '' && tm.bg.match(/#[0-9a-f]{6}/g)) {
         //          cardDetail = 'style="color:' + tm.text + ';background:none;"';
         //        } else {
@@ -1362,29 +1385,43 @@ var r = {
               return '';
             }
           }
-          $(this).html('<span class="ready-time">' + inline() + '</span>' + papa.input('Start', undefined, 'time start', start) + papa.input('Finish', undefined, 'time end', finish) + '<button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_paste</i> Paste</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">check_circle</i> Done</button>');
+          $(this).html('<span class="ready-time">' + inline() + '</span><div data-class="time start" data-input="Start" data-value="' + start + '"></div><div data-class="time end" data-input="Finish" data-value="' + finish + '"></div><button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_paste</i> Paste</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">check_circle</i> Done</button>');
           cellWeek += this.outerHTML;
         });
-        var body = $('<div class="mdl-grid roster-body mdl-grid--no-spacing" id="' + tm.id + '"><div class="mdl-cell team-member"><div class="mdl-card__actions details"><span class="card-name">' + tm.name + '</span><span class="card-title">' + tm.title + '</span><span class="hours" hidden></span></div></div>' + cellWeek + '</div>');
-        if (tm.bg.match(/(#......)/)) {
-          var c = document.createElement('canvas');
-          var ctx = c.getContext('2d');
-          c.width = 1;
-          c.height = 1;
-          ctx.fillStyle = tm.bg;
-          ctx.fillRect(0, 0, c.width, c.height);
-          colourImage = c.toDataURL();
-          $('.team-member', body).prepend('<div class="avatar"><img src="' + colourImage + '"></div>');
-        } else {
-          $('.team-member', body).prepend('<div class="avatar"><img src="' + tm.bg.split('url("')[1].split('")')[0] + '"></div>');
+        var body = $('<div class="mdl-grid roster-body mdl-grid--no-spacing" id="' + tm.id + '"><div class="mdl-cell team-member"><div class="mdl-card__actions details"><span class="card-name">' + tm.name + '</span></div></div>' + cellWeek + '</div>');
+
+        if (r.settings.Templates[0].title) {
+          $('.team-member .details', body).append('<span class="card-title">' + tm.title + '</span>');
         }
-        template += body[0].outerHTML;
+        if (r.settings.Templates[0].hours) {
+          $('.team-member .details', body).append('<span class="hours" hidden></span>');
+        }
+        if (r.settings.Templates[0].avatar) {
+          if (tm.bg.match(/(#......)/)) {
+            var c = document.createElement('canvas');
+            var ctx = c.getContext('2d');
+            c.width = 1;
+            c.height = 1;
+            ctx.fillStyle = tm.bg;
+            ctx.fillRect(0, 0, c.width, c.height);
+            colourImage = c.toDataURL();
+            $('.team-member', body).prepend('<div class="avatar"><img src="' + colourImage + '"></div>');
+          } else {
+            $('.team-member', body).prepend('<div class="avatar"><img src="' + tm.bg.split('url("')[1].split('")')[0] + '"></div>');
+          }
+        }
+        rosterRow += body[0].outerHTML;
       }
-      return template;
+      return rosterRow;
     },
     headerEl: function (company) {
       return '<div class="company"><h3>' + company.name + '</h3><h4>' + company.slogan + '</h4></div><div class="mdl-layout-spacer"></div><div class="logo"><img class="mdl-logo" src="' + company.logo + '" height="100"></div>'
-    }
+    },
+    templateEl: function (template) {
+      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent">Save & Activate</button></div></div></div>'
+    },
+    newTemplateEl: '<div class="template adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox"></div><div class="card-title" data-input="Title" data-type="checkbox"></div><div class="card-hours" data-input="Hours" data-type="checkbox"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>'
+
 
   },
   o: function (obj) {
@@ -1481,9 +1518,13 @@ $('a', r.ui.menu).click(function () {
 
 // MDI Upgrade and create inputs
 $(document).ajaxComplete(function () {
-  $('*[data-input]').each(function () {
-    $(this).html(r.ui.input($(this).data('input')));
-    $('input', $(this)).val(r.helper.get($(this).data('input')));
+  $('*[data-input]').each(function (i, e) {
+    if ($(e).parents('.roster').length) {
+      $(e).replaceWith(r.ui.input($(e)));
+    } else {
+      $(e).html(r.ui.input($(e)));
+    }
+    $('input', $(e)).val(r.helper.get($(e).data('input')));
   });
   var event = new Event('mdl-done');
   $('body').trigger('mdl-done');
@@ -1522,6 +1563,15 @@ $('body').on('click', '.save-data', function () {
   if ($(parent).attr('id') === 'Team' && $('.team-member.adding').length === 1) {
     r.helper.addMember($('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'));
   }
+
+  if ($(parent).attr('id') === 'Templates') {
+    r.settings.Templates = [{
+      'avatar': $('#Templates .template .card-avatar input[type=checkbox]').prop('checked'),
+      'title': $('#Templates .template .card-title input[type=checkbox]').prop('checked'),
+      'hours': $('#Templates .template .card-hours input[type=checkbox]').prop('checked')
+    }];
+  }
+
   r.helper.set('settings', r.settings);
 
   r.helper.toast('Saved ' + $(parent).attr('id') + ' details');

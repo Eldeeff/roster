@@ -24,32 +24,52 @@
   margin-bottom: 20px;
   background-color: rgba(0, 0, 0, .4);
 }
-.mdl-card__actions.details {
+.mdl-card .mdl-card__actions.details {
   padding: 16px;
   background: rgba(0, 0, 0, .4);
 }
-.mdl-card__actions.details span {
+.mdl-card.template,
+.mdl-card.template .mdl-card__actions.details {
+  background: #eee;
+  min-height: 200px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+}
+.mdl-card__actions.details > span {
   width: 100%;
   display: inline-block;
   font-size: 14px;
 }
-.mdl-card__actions.details span:first-of-type {
+.mdl-card__actions.details > span:first-of-type {
   font-weight: bold;
   font-size: inherit;
 }
-.mdl-card.adding div {
+.mdl-card.adding .mdl-card__actions.details {
   background: #fff;
 }
 .mdl-card.adding .mdl-textfield {
-  padding: 5px 0 20px;
+  padding: 5px 0;
+}
+.adding .mdl-card__actions > div:not(.bottom),
+.template .mdl-card__actions > div:not(.bottom) {
+  margin: 0 0 10px;
 }
 .mdl-card.adding .mdl-textfield__label {
   top: 12px;
+  bottom: 5px;
 }
 .mdl-card.adding .mdl-textfield--floating-label.is-focused .mdl-textfield__label,
 .mdl-card.adding .mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
 .mdl-card.adding .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
   top: -5px;
+}
+.mdl-card.adding .mdl-textfield__label:after {
+  bottom: 0;
 }
 .mdl-card.adding .details .bottom {
   display: -webkit-box;

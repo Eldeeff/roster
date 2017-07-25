@@ -1,20 +1,23 @@
 <div class="mdl-grid">
 
   <div class="mdl-cell mdl-cell--12-col" id="templates-cards">
-    <h2>Coming Soon</h2>
+    <h2>Activate Templates</h2>
+    <p>More options to come soon</p>
   </div>
 
   <div class="mdl-cell mdl-cell--12-col">
+    <!--
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" disabled id="add-card">
       Add template
     </button>
+-->
   </div>
 </div>
 <script>
   $(document).ready(function() {
     // load templates
-    $(r.settings.Templates.members).each(function(i, o) {
-      $('#templates-cards').append($(r.ui.templatesMemberEl(o.name, o.title, o.bg)));
+    $(r.settings.Templates).each(function(i, o) {
+      $('#templates-cards').append($(r.ui.templateEl(o)));
     });
 
     // add templates member
@@ -22,13 +25,12 @@
       setTimeout(function() {
         $('#Templates #add-card').prop('disabled', true);
 
-        $('#templates-cards').append($(r.ui.newtemplatesMemberEl));
+        $('#templates-cards').append($(r.ui.newTemplateEl));
 
-        $('.mdl-card.adding *[data-input]').each(function(i) {
-          $(this).html(r.ui.input($(this).data('input')));
+        $('.mdl-card.adding *[data-input]').each(function(i, e) {
+          $(e).html(r.ui.input($(e)));
           window.componentHandler.upgradeDom();
         });
-        $('.mdl-card.adding input:first').focus();
       }, 1)
     });
     // remove templates member

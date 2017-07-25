@@ -23,13 +23,13 @@
 
         $('#team-cards').append($(r.ui.newTeamMemberEl));
 
-        $('.mdl-card.adding *[data-input]').each(function(i) {
-          $(this).html(r.ui.input($(this).data('input'), $(this).data('type')));
+        $('.mdl-card.adding *[data-input]').each(function(i, e) {
+          $(e).html(r.ui.input($(e)));
           window.componentHandler.upgradeDom();
         });
 
         $('.mdl-card.adding .mdl-js-textfield').on('change keyup', function() {
-          if ($('.mdl-card.adding .is-invalid').length === 0 && $('.mdl-card.adding .is-dirty').length === $('.mdl-card.adding .mdl-js-textfield').length) {
+          if ($('.mdl-card.adding .is-invalid').length === 0 && $('.mdl-card.adding required .is-dirty').length === $('.mdl-card.adding required .mdl-js-textfield').length) {
             $('.adding .save-data').prop('disabled', false);
           } else {
             $('.adding .save-data').prop('disabled', true);
