@@ -3,7 +3,7 @@ $.getJSON('js/mdlPalette.json').done(function (data) {
 })
 
 if (r.helper.get('settings')) {
-  r.settings = r.helper.get('settings');
+  $.extend(true, r.settings, r.helper.get('settings'));
 }
 
 for (var i = 0; i < r.o(r.settings).length; i++) {
@@ -28,21 +28,6 @@ $('a', r.ui.menu).click(function () {
     $(a.attr('href'), r.ui.page).find('.page-content').append(r.ui.spinnerEl).load(a.attr('href').split('#')[1] + '.html');
     window.componentHandler.upgradeDom();
   }
-});
-
-// MDI Upgrade and create inputs
-$(document).ajaxComplete(function () {
-  $('*[data-input]').each(function (i, e) {
-    if ($(e).parents('.roster').length) {
-      $(e).replaceWith(r.ui.input($(e)));
-    } else {
-      $(e).html(r.ui.input($(e)));
-    }
-    $('input', $(e)).val(r.helper.get($(e).data('input')));
-  });
-  var event = new Event('mdl-done');
-  $('body').trigger('mdl-done');
-  window.componentHandler.upgradeDom();
 });
 
 
@@ -82,7 +67,8 @@ $('body').on('click', '.save-data', function () {
     r.settings.Templates = [{
       'avatar': $('#Templates .template .card-avatar input[type=checkbox]').prop('checked'),
       'title': $('#Templates .template .card-title input[type=checkbox]').prop('checked'),
-      'hours': $('#Templates .template .card-hours input[type=checkbox]').prop('checked')
+      'hours': $('#Templates .template .card-hours input[type=checkbox]').prop('checked'),
+      'defaultWorkingHours': $('#Templates .template .card-working-hours input').val()
     }];
   }
 
@@ -111,4 +97,24 @@ $('body').on('click', 'button.upload', function () {
     }
     reader.readAsDataURL(this.files[0]);
   });
+});
+
+
+
+
+// MDI Upgrade and create inputs
+$(document).ajaxComplete(function () {
+  $('*[data-input]').each(function (i, e) {
+    if ($(e).parents('.roster').length) {
+      $(e).replaceWith(r.ui.input($(e)));
+    } else {
+      $(e).html(r.ui.input($(e)));
+    }
+    if ($(e).data('value')) {
+      $('input', $(e)).val($(e).data('value'));
+    }
+  });
+  var event = new Event('mdl-done');
+  $('body').trigger('mdl-done');
+  window.componentHandler.upgradeDom();
 });

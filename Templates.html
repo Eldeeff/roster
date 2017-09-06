@@ -20,6 +20,16 @@
       $('#templates-cards').append($(r.ui.templateEl(o)));
     });
 
+    setTimeout(function() {
+      $('.mdl-card.template .is-upgraded').on('change keyup', function() {
+        if ($('.mdl-card.template .is-invalid').length === 0 && $('.mdl-card.template [required=true] .is-dirty').length === $('.mdl-card.template [required=true] .mdl-js-textfield').length) {
+          $('.template .save-data').prop('disabled', false);
+        } else {
+          $('.template .save-data').prop('disabled', true);
+        }
+      });
+    }, 0)
+
     // add templates member
     $('#Templates #add-card').click(function() {
       setTimeout(function() {

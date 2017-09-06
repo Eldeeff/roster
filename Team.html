@@ -29,7 +29,7 @@
         });
 
         $('.mdl-card.adding .mdl-js-textfield').on('change keyup', function() {
-          if ($('.mdl-card.adding .is-invalid').length === 0 && $('.mdl-card.adding required .is-dirty').length === $('.mdl-card.adding required .mdl-js-textfield').length) {
+          if ($('.mdl-card.adding .is-invalid').length === 0 && $('.mdl-card.adding [required=true] .is-dirty').length === $('.mdl-card.adding [required=true] .mdl-js-textfield').length) {
             $('.adding .save-data').prop('disabled', false);
           } else {
             $('.adding .save-data').prop('disabled', true);

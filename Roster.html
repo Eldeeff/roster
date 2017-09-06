@@ -32,12 +32,11 @@
         }
         if ($(this).hasClass('start')) {
           $(this).parents('.mdl-textfield').next('.mdl-textfield').find('.time.end').timepicker('option', {
-            'scrollDefault': (parseInt(this.value.split(':')[0]) + 8) + this.value.split(':')[1],
+            'scrollDefault': (parseInt(this.value.split(':')[0]) + parseInt(r.settings.Templates[0].defaultWorkingHours)) + this.value.split(':')[1],
             'minTime': this.value,
             'showDuration': true
           });
         }
-        updateHours();
       });
 
       $(papa).on('click', 'button.copy-time', function() {

@@ -14,7 +14,8 @@ var r = {
     Templates: [{
       'avatar': true,
       'title': true,
-      'hours': false
+      'hours': false,
+      'defaultWorkingHours': 8
     }]
   },
   ui: {
@@ -45,6 +46,9 @@ var r = {
         case 'checkbox':
           return '<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><input class="mdl-switch__input ' + clas + '"' + checked + ' type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><span class="mdl-switch__label">' + String(label) + '</span></label>';
           break;
+        case 'number':
+          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + clas + '" ' + req + ' min="1" max="12" type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '">' + String(label) + '</label></div>';
+          break;
         default:
           return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + clas + '" ' + req + ' type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '">' + String(label) + '</label></div>';
       }
@@ -61,8 +65,8 @@ var r = {
     rosterEl: function (team) {
       var rosterRow = '<div class="mdl-grid roster-header mdl-grid--no-spacing">';
       rosterRow += '<div class="mdl-cell">Team Member</div>';
-      var weekTemp = '';
-      var week = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+      var weekTemp = '',
+        week = r.helper.week;
       for (var day in week) {
         if (week[day] === 'Saturday' || week[day] === 'Sunday') {
           weekTemp += ('<div class="mdl-cell weekend">' + week[day] + '</div>');
@@ -82,7 +86,8 @@ var r = {
         var papa = this;
         var cellWeek = '';
         $(weekTemp).each(function () {
-          var start, finish = '';
+          var start = '',
+            finish = '';
           if (r.settings.Roster[tm.id]) {
             start = r.settings.Roster[tm.id][$(this).text()].start;
             finish = r.settings.Roster[tm.id][$(this).text()].finish;
@@ -98,7 +103,7 @@ var r = {
               return '';
             }
           }
-          $(this).html('<span class="ready-time">' + inline() + '</span><div data-class="time start" data-input="Start" data-value="' + start + '"></div><div data-class="time end" data-input="Finish" data-value="' + finish + '"></div><button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">content_paste</i> Paste</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect"><i class="material-icons">check_circle</i> Done</button>');
+          $(this).html('<span class="ready-time">' + inline() + '</span><div data-class="time start" data-input="Start" data-value="' + start + '"></div><div data-class="time end" data-input="Finish" data-value="' + finish + '"></div><button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">content_paste</i> Paste</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">check_circle</i> Done</button>');
           cellWeek += this.outerHTML;
         });
         var body = $('<div class="mdl-grid roster-body mdl-grid--no-spacing" id="' + tm.id + '"><div class="mdl-cell team-member"><div class="mdl-card__actions details"><span class="card-name">' + tm.name + '</span></div></div>' + cellWeek + '</div>');
@@ -131,7 +136,7 @@ var r = {
       return '<div class="company"><h3>' + company.name + '</h3><h4>' + company.slogan + '</h4></div><div class="mdl-layout-spacer"></div><div class="logo"><img class="mdl-logo" src="' + company.logo + '" height="100"></div>'
     },
     templateEl: function (template) {
-      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent">Save & Activate</button></div></div></div>'
+      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="card-working-hours" data-type="number" required="true" data-input="Default Working Hours" data-value="' + template.defaultWorkingHours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save & Activate</button></div></div></div>'
     },
     newTemplateEl: '<div class="template adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox"></div><div class="card-title" data-input="Title" data-type="checkbox"></div><div class="card-hours" data-input="Hours" data-type="checkbox"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>'
 
@@ -141,15 +146,17 @@ var r = {
     return Object.keys(obj);
   },
   helper: {
+    week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     addMember: function (name, email, title, bg) {
-      var text = "#ffffff";
+      var text = "#ffffff",
+        id = Date.now();
       if (bg === 'none') {
         var palette = r.helper.randomPalette();
         bg = palette.colour;
         text = palette.text;
       }
       r.settings.Team.members.push({
-        'id': Date.now(),
+        'id': id,
         'name': name,
         'title': title,
         'email': email,
