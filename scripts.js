@@ -1313,31 +1313,37 @@ var r = {
     pageEl: '<section class="mdl-tabs__panel" id=""><div class="page-content"></div></section>',
     spinnerEl: '<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>',
     input: function (input) {
-      var label = input.data('input') || '';
-      var type = input.data('type') || 'text';
-      var clas = input.data('class') || '';
-      var value = input.data('value') || '';
-      var req = input.data('required') || false;
-      var checked = input.data('checked') || false;
-      if (req) {
-        req = 'required';
+      var _label = input.data('input') || '';
+      var _type = input.data('type') || 'text';
+      var _class = input.data('class') || '';
+      var _value = input.data('value') || '';
+      var _min = input.data('min') || '';
+      var _max = input.data('max') || '';
+      var _step = input.data('step') || 1;
+      var _required = input.data('required') || false;
+      var _checked = input.data('checked') || false;
+      if (_required) {
+        _required = 'required';
       } else {
-        req = '';
+        _required = '';
       }
-      if (checked) {
-        checked = 'checked';
+      if (_checked) {
+        _checked = 'checked';
       } else {
-        checked = '';
+        _checked = '';
       }
-      switch (type) {
+      switch (_type) {
         case 'checkbox':
-          return '<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><input class="mdl-switch__input ' + clas + '"' + checked + ' type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><span class="mdl-switch__label">' + String(label) + '</span></label>';
+          return '<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><input class="mdl-switch__input ' + _class + '"' + _checked + ' type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><span class="mdl-switch__label">' + String(_label) + '</span></label>';
           break;
         case 'number':
-          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + clas + '" ' + req + ' min="1" max="12" type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '">' + String(label) + '</label></div>';
+          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + _class + '" ' + _required + ' min="' + _min + '" max="' + _max + '" type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label></div>';
+          break;
+        case 'range':
+          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label><input class="mdl-textfield__input ' + _class + '" ' + _required + ' min="' + _min + '" max="' + _max + '" type="number" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><input class="mdl-slider mdl-js-slider ' + _class + '" ' + _required + ' min="' + _min + '" max="' + _max + '" step="' + _step + '" type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"></div>';
           break;
         default:
-          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + clas + '" ' + req + ' type="' + type + '" value="' + value + '" id="' + encodeURIComponent(label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(label).replace(/%20/g, '_') + '">' + String(label) + '</label></div>';
+          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + _class + '" ' + _required + ' type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label></div>';
       }
     },
     teamMemberEl: function (id, name, title, bg, text) {
@@ -1423,7 +1429,7 @@ var r = {
       return '<div class="company"><h3>' + company.name + '</h3><h4>' + company.slogan + '</h4></div><div class="mdl-layout-spacer"></div><div class="logo"><img class="mdl-logo" src="' + company.logo + '" height="100"></div>'
     },
     templateEl: function (template) {
-      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="card-working-hours" data-type="number" required="true" data-input="Default Working Hours" data-value="' + template.defaultWorkingHours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save & Activate</button></div></div></div>'
+      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="card-working-hours" data-type="range" data-min="1" data-max="12" required="true" data-input="Default Working Hours" data-value="' + template.defaultWorkingHours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save & Activate</button></div></div></div>'
     },
     newTemplateEl: '<div class="template adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox"></div><div class="card-title" data-input="Title" data-type="checkbox"></div><div class="card-hours" data-input="Hours" data-type="checkbox"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>'
 

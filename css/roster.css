@@ -40,6 +40,31 @@
   -ms-flex-direction: column;
   flex-direction: column;
 }
+.mdl-card.template div[data-type='range'] {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+.mdl-card.template div[data-type='range'] .mdl-textfield__label {
+  width: 20%;
+  overflow: visible;
+}
+.mdl-card.template div[data-type='range'] .mdl-textfield__input {
+  width: 20%;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+.mdl-card.template div[data-type='range'] .mdl-slider__container {
+  width: 100%;
+  margin: 0 -10%;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+}
 .mdl-card__actions.details > span {
   width: 100%;
   display: inline-block;

@@ -28,6 +28,23 @@
           $('.template .save-data').prop('disabled', true);
         }
       });
+
+
+      $('.mdl-card.template div[data-type="range"] input').on('input keyup mouseup', function() {
+        var _value = this.value;
+        var papa = $(this).parents('div[data-type="range"]');
+        if (_value < papa.data('min') || _value > papa.data('max')) papa.find('.mdl-textfield').removeClass('is-invalid');
+        if (_value < papa.data('min')) _value = papa.data('min');
+        if (_value > papa.data('max')) _value = papa.data('max');
+        papa.find('input').each(function() {
+          if ($(this).hasClass('mdl-slider')) {
+            this.MaterialSlider.change(_value);
+            if (papa.find('.mdl-textfield.is-invalid')) papa.find('.mdl-textfield').removeClass('is-invalid');
+          } else {
+            this.value = _value;
+          }
+        })
+      });
     }, 0)
 
     // add templates member
