@@ -65,9 +65,56 @@ var r = {
       } else {
         cardDetail = 'style="color:#ffffff"'
       }
-      return $('<div class="team-member mdl-card mdl-shadow--2dp" id="' + id + '"><button class="remove save-data mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Remove ' + name + '</button><div class="mdl-card__title mdl-card--expand"></div><div class="mdl-card__actions details" ' + cardDetail + '><span class="card-name">' + name + '</span><span class="card-title">' + title + '</span></div></div>').css('background', 'center/cover ' + bg);
+      return $('<div class="team-member mdl-card mdl-shadow--2dp" id="' + id + '"><div class="mdl-card__menu"><button class="edit mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"><i class="material-icons">edit</i></button><button class="remove save-data mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"><i class="material-icons">delete</i></button></div><div class="mdl-card__title mdl-card--expand"></div><div class="mdl-card__actions details" ' + cardDetail + '><span class="card-name">' + name + '</span><span class="card-title">' + title + '</span></div></div>').css('background', 'center/cover ' + bg);
     },
-    newTeamMemberEl: '<div class="team-member adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-name" data-input="Name" required="true"></div><div class="card-title" data-input="Title" required="true"></div><div class="card-email" data-input="Email" data-type="email"></div><div class="bottom"><input type="file" hidden /><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button><div class="mdl-layout-spacer"></div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>',
+    editTeamMember: function (id) {
+      var papa = this.newTeamMemberEl();
+
+      var findTeamMember = r.helper.find(id, 'id', r.settings.Team.members);
+
+      if (findTeamMember) {
+        var member = findTeamMember;
+
+        $(papa).attr('id', member.id);
+        $(papa).find('#Name').parent()[0].MaterialTextfield.change(member.name);
+        $(papa).find('#Title').parent()[0].MaterialTextfield.change(member.title);
+        $(papa).find('#Email').parent()[0].MaterialTextfield.change(member.email);
+        if (member.bg.indexOf('url(') === 0) {
+          $(papa).find('.upload').css('background-image', member.bg).text('');
+        }
+
+      } else {
+
+        $('#Team #add-card').prop('disabled', false);
+        $('.adding').remove();
+        r.helper.toast('Selected member not found :(');
+
+      }
+      return papa;
+    },
+    newTeamMemberEl: function () {
+      $('#Team #add-card').prop('disabled', true);
+
+      var papa = $('<div class="team-member adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-name" data-input="Name" required="true"></div><div class="card-title" data-input="Title" required="true"></div><div class="card-email" data-input="Email" data-type="email"></div><div class="bottom"><input type="file" hidden /><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button><div class="mdl-layout-spacer"></div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>');
+
+      $('body').append(papa);
+
+      $('*[data-input]', papa).each(function (i, e) {
+        $(e).html(r.ui.input($(e)));
+        window.componentHandler.upgradeDom();
+      });
+
+      $('.mdl-js-textfield', papa).on('change keyup', function () {
+        if ($('.is-invalid', papa).length === 0 && $('[required=true] .is-dirty', papa).length === $('[required=true] .mdl-js-textfield', papa).length) {
+          $('.save-data', papa).prop('disabled', false);
+        } else {
+          $('.save-data', papa).prop('disabled', true);
+        }
+      });
+      $('input:first', papa).focus();
+
+      return papa;
+    },
     rosterEl: function (team) {
       var rosterRow = '<div class="mdl-grid roster-header mdl-grid--no-spacing">';
       rosterRow += '<div class="mdl-cell">Team Member</div>';
@@ -153,9 +200,16 @@ var r = {
   },
   helper: {
     week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    addMember: function (name, email, title, bg) {
-      var text = "#ffffff",
+    addMember: function (name, email, title, bg, id) {
+      var id = id || undefined;
+      if (id) {
+        var memberIndex = r.settings.Team.members.indexOf(r.helper.find(id, 'id', r.settings.Team.members));
+        this.remove(memberIndex, r.settings.Team.members);
+      } else {
         id = Date.now();
+      }
+
+      var text = "#ffffff";
       if (bg === 'none') {
         var palette = r.helper.randomPalette();
         bg = palette.colour;
@@ -170,8 +224,16 @@ var r = {
         'text': text || ''
       });
     },
+    editMember: function (id, name, email, title, bg) {
+      this.addMember(name, email, title, bg, id);
+    },
     remove: function (i, where) {
       where.splice(i, 1);
+    },
+    find: function (what, inside, where) {
+      return where.find(function (obj) {
+        return obj[inside] == what;
+      })
     },
     setCopyTime: function (e) {
       $('.master-copy-time').removeClass('master-copy-time');

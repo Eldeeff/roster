@@ -106,12 +106,12 @@
   background-color: rgba(158, 158, 158, .2);
   background-position: center center;
 }
-.mdl-card button.remove {
+.mdl-card .mdl-card__menu {
   opacity: 0;
   -webkit-transition: opacity .5s;
   transition: opacity .5s;
 }
-.mdl-card:hover button.remove {
+.mdl-card:hover .mdl-card__menu {
   opacity: 1;
 }
 #Company_Logo {
