@@ -8,28 +8,37 @@ if (r.helper.get('settings')) {
 
 for (var i = 0; i < r.o(r.settings).length; i++) {
   // Create Links
-  r.ui.menu.append($(r.ui.menuEl).text(r.o(r.settings)[i]).attr('href', '#' + r.o(r.settings)[i]));
+  r.ui.menu.append($(r.ui.menuItem).text(r.o(r.settings)[i]).attr('href', '#' + r.o(r.settings)[i]));
 
   // Create Pages
-  r.ui.page.append($(r.ui.pageEl).attr('id', r.o(r.settings)[i]));
+  r.ui.page.append($(r.ui.pageTab).attr('id', r.o(r.settings)[i]));
 }
 
 // Mark current/landing page as active based of URL
 if (window.location.hash.length === 0) {
   window.location.hash = 'Roster';
 }
-$('> a[href="' + window.location.hash + '"]', r.ui.menu).addClass('is-active');
-$('> section' + window.location.hash, r.ui.page).addClass('is-active').find('.page-content').append(r.ui.spinnerEl).load('pages/' + window.location.hash.split('#')[1] + '.html');
 
 // Bind page loads
 $('a', r.ui.menu).click(function () {
   var a = $(this);
+  var pageName = a.attr('href').split('#')[1];
   if (a.attr('href') != window.location.hash) {
-    window.location.hash = a.attr('href').split('#')[1];
-    $(a.attr('href'), r.ui.page).find('.page-content').append(r.ui.spinnerEl).load('pages/' + a.attr('href').split('#')[1] + '.html');
-    window.componentHandler.upgradeDom();
+    window.location.hash = pageName;
   }
 });
+$(window).on('load hashchange', function () {
+
+  var pageName = window.location.hash;
+  r.ui.updateTitle(pageName.split('#')[1]);
+  $('> a', r.ui.menu).removeClass('is-active');
+  $('> a[href="' + pageName + '"]', r.ui.menu).addClass('is-active');
+
+  $('> section', r.ui.page).removeClass('is-active');
+  $('> section' + pageName, r.ui.page).addClass('is-active').find('.page-content').append(r.ui.loadingSpinner).load('pages/' + pageName.split('#')[1] + '.html');
+
+  window.componentHandler.upgradeDom();
+})
 
 
 
@@ -87,7 +96,7 @@ $('body').on('click', '.save-data', function () {
     btn.prop('disabled', false);
   });
 
-  $('section.is-active').find('.page-content').html('').append(r.ui.spinnerEl).load('pages/' + $('section.is-active').attr('id') + '.html');
+  $('section.is-active').find('.page-content').html('').append(r.ui.loadingSpinner).load('pages/' + $('section.is-active').attr('id') + '.html');
 });
 
 $('body').on('click', 'button.upload', function () {

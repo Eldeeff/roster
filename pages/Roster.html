@@ -13,9 +13,9 @@
   $(document).ready(function() {
 
     var papa = $('section#Roster');
-    $('.header .mdl-grid', papa).append(r.ui.headerEl(r.settings.Company));
+    $('.header .mdl-grid', papa).append(r.ui.rosterHeader(r.settings.Company));
 
-    $('.roster', papa).append(r.ui.rosterEl(r.settings.Team.members));
+    $('.roster', papa).append(r.ui.rosterGrid(r.settings.Team.members));
 
     setTimeout(function() {
       $('.roster .mdl-cell input.time', papa).timepicker({

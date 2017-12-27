@@ -17,7 +17,7 @@
   $(document).ready(function() {
     // load templates
     $(r.settings.Templates).each(function(i, o) {
-      $('#templates-cards').append($(r.ui.templateEl(o)));
+      $('#templates-cards').append($(r.ui.templateCard(o)));
     });
 
     setTimeout(function() {
@@ -52,7 +52,7 @@
       setTimeout(function() {
         $('#Templates #add-card').prop('disabled', true);
 
-        $('#templates-cards').append($(r.ui.newTemplateEl));
+        $('#templates-cards').append($(r.ui.newTemplateCard));
 
         $('.mdl-card.adding *[data-input]').each(function(i, e) {
           $(e).html(r.ui.input($(e)));

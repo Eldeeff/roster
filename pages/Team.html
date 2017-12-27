@@ -13,24 +13,25 @@
   $(document).ready(function() {
     // load team
     $(r.settings.Team.members).each(function(i, o) {
-      $('#team-cards').append($(r.ui.teamMemberEl(o.id, o.name, o.title, o.bg, o.text)));
+      $('#team-cards').append($(r.ui.teamMemberCard(o.id, o.name, o.title, o.bg, o.text)));
     });
 
     // add team member
     $('#Team #add-card').click(function() {
       setTimeout(function() {
-        $('#team-cards').append(r.ui.newTeamMemberEl());
+        $('#team-cards').append(r.ui.newTeamMemberCard());
       }, 1)
     });
 
     // edit team member
     $('#team-cards .mdl-card button.edit').on('click', function(e) {
       $('.adding').remove();
-
-      var clickedID = $(this).parents('.mdl-card').attr('id');
+      var cardParent = $(this).parents('.mdl-card');
+      var clickedID = cardParent.attr('id');
 
       setTimeout(function() {
-        $('#team-cards').append(r.ui.editTeamMember(clickedID));
+        cardParent.hide();
+        cardParent.after(r.ui.editTeamMember(clickedID));
       }, 1)
     })
 
@@ -51,6 +52,7 @@
       if (($(e.target).closest('.adding').length + $(e.target).closest('#Team #add-card:not(:disabled) *').length) !== 1) {
         $('#Team #add-card').prop('disabled', false);
         $('.adding').remove();
+        $('.mdl-card').show();
       }
     })
   });
