@@ -326,6 +326,9 @@ li.ui-timepicker-selected .ui-timepicker-duration,
   font-size: 2em;
   color: rgba(0, 0, 0, 0.06);
 }
+.team-member.sortable-ghost {
+  opacity: .2;
+}
 @media print {
   .mdl-grid > .mdl-cell--12-col:not(.roster):not(.header),
   .mdl-layout__drawer,
