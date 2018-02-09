@@ -1,0 +1,29 @@
+{
+  "name": "roster",
+  "version": "1.0.0",
+  "description": "Roster app made simple and free",
+  "main": "index.html",
+  "scripts": {
+    "mincss": "minify node_modules/timepicker/jquery.timepicker.css css/roster.css -o min/styles.min.css",
+    "minjs": "minify node_modules/timepicker/jquery.timepicker.js js/settings.js js/roster.js -o min/scripts.min.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Eldeeff/Roster.git"
+  },
+  "keywords": [
+    "roster",
+    "rostering",
+    "management"
+  ],
+  "author": "Luke Flego",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Eldeeff/Roster/issues"
+  },
+  "homepage": "https://github.com/Eldeeff/Roster#readme",
+  "dependencies": {
+    "timepicker": "^1.11.12",
+    "minify": "^3.0.3"
+  }
+}
