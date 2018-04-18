@@ -70,11 +70,11 @@ $('body').on('click', '.save-data', function () {
   }
 
   if ($(parent).attr('id') === 'Team') {
-    // ADD
+    // ADD NEW
     if ($('.team-member.adding:not([id])').length === 1) {
       r.helper.addMember($('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'));
     }
-    // EDIT
+    // EDIT EXISTING
     if ($('.team-member.adding[id]').length === 1) {
       r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'));
     }
