@@ -1,7 +1,7 @@
 {
   "events": {
-    "start": "http-server",
     "restart": "npm run mincss && npm run minjs"
   },
-  "ext": "js css html"
+  "ignore": ["min/"],
+  "ext": "js css html json"
 }
