@@ -1,5 +1,14 @@
+body {
+  background: #fafafa;
+}
+
 .mdl-layout__content {
   padding: 40px;
+}
+
+.mdl-layout__drawer {
+  background-color: rgba(0, 0, 0, .9);
+  color: rgba(255, 255, 255, .9);
 }
 
 .mdl-navigation__link.mdl-tabs__tab {
@@ -9,8 +18,12 @@
   text-transform: inherit;
 }
 
+.mdl-layout__drawer .mdl-navigation .mdl-navigation__link:hover {
+  background-color: rgba(255, 255, 255, .1);
+}
+
 .mdl-tabs.is-upgraded .mdl-navigation__link.mdl-tabs__tab.is-active {
-  color: #fff
+  color: #fff;
 }
 
 .mdl-tabs.is-upgraded .mdl-navigation__link.mdl-tabs__tab.is-active:after {
@@ -36,7 +49,7 @@
 
 .mdl-card.template,
 .mdl-card.template .mdl-card__actions.details {
-  background: #eee;
+  background: #fff;
   min-height: 200px;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -307,6 +320,18 @@
   content: 'RDO';
   font-size: 2em;
   color: rgba(0, 0, 0, 0.06);
+}
+
+.team-member.handle {
+  cursor: -webkit-grab;
+}
+
+.team-member.handle.sortable-chosen {
+  cursor: -webkit-grabbing;
+}
+
+.team-member.handle .mdl-card__menu {
+  display: none;
 }
 
 .team-member.sortable-ghost {

@@ -1,29 +1,29 @@
 <div class="mdl-grid mdl-grid-vertical">
 
+  <div class="mdl-cell mdl-cell--12-col">
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary">
+      Save
+    </button>
+  </div>
   <div class="mdl-cell mdl-cell--12-col" data-input="Company Name">
   </div>
   <div class="mdl-cell mdl-cell--12-col" data-input="Company Slogan">
   </div>
   <div class="mdl-cell mdl-cell--12-col">
-    <input type="file" hidden><img src="" id="Company_Logo" hidden>
+    <input type="file" hidden>
+    <img src="" id="Company_Logo" hidden>
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload">
       Upload Company Logo
     </button>
   </div>
-  <div class="mdl-cell mdl-cell--12-col">
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent">
-      Save
-    </button>
-  </div>
 </div>
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     // load company
-    $('body').on('mdl-done', function() {
+    $('body').on('mdl-done', function () {
       $('#Company_Name').val(r.settings.Company.name);
       $('#Company_Slogan').val(r.settings.Company.slogan);
       $('#Company_Logo').attr('src', r.settings.Company.logo).removeAttr('hidden');
     });
   });
-
 </script>

@@ -40,7 +40,14 @@ $(window).on('load hashchange', function () {
   window.componentHandler.upgradeDom();
 })
 
-
+$('body').on('submit', function (e) {
+  if ($(e.target).find('.save-data:not(:disabled)').length) {
+    $(e.target).find('.save-data:not(:disabled)').click();
+  } else {
+    var form = $(e.target);
+    form.find(':not(.is-dirty) > input:not(:disabled)').focus();
+  }
+});
 
 $('body').on('click', '.save-data', function () {
   var btn = $(this),
@@ -70,13 +77,17 @@ $('body').on('click', '.save-data', function () {
   }
 
   if ($(parent).attr('id') === 'Team') {
-    // ADD NEW
     if ($('.team-member.adding:not([id])').length === 1) {
+      // ADD NEW
       r.helper.addMember($('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'));
-    }
-    // EDIT EXISTING
-    if ($('.team-member.adding[id]').length === 1) {
-      r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'));
+    } else if ($('.team-member.adding[id]').length === 1) {
+      // EDIT EXISTING
+      r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'), $('.team-member.adding').data('id'));
+    } else {
+      // EDIT ALL EXISTING
+      $('.team-member[id]').each(function(){
+        r.helper.reorderMember($(this).attr('id'), $(this).data('id'));
+      })
     }
   }
 
@@ -100,10 +111,14 @@ $('body').on('click', '.save-data', function () {
   $('section.is-active').find('.page-content').html('').append(r.ui.loadingSpinner).load('pages/' + $('section.is-active').attr('id') + '.html');
 });
 
-$('body').on('click', 'button.upload', function () {
+$('body').on('click', 'button.upload', function (e) {
   var $this = $(this),
     inputFile = $this.siblings('input[type=file]');
-  inputFile[0].click();
+  if($(this).is(':focus') || $(e.target).parents('button.upload').is(':focus') || $(this).is(':hover') || $(e.target).parents('button.upload').is(':hover')){
+    inputFile.removeProp('disabled');
+    $this.siblings('.save-data').prop('disabled',true);
+  }
+  inputFile.click();
   inputFile.off().on('change', function () {
     var reader = new FileReader();
     reader.onload = function (e) {
@@ -114,6 +129,7 @@ $('body').on('click', 'button.upload', function () {
       }
     }
     reader.readAsDataURL(this.files[0]);
+    $this.siblings('.save-data').prop('disabled',false);
   });
 });
 

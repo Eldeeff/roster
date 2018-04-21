@@ -49,7 +49,7 @@ var r = {
           return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label><input class="mdl-textfield__input ' + _class + '" ' + _required + ' min="' + _min + '" max="' + _max + '" type="number" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><input class="mdl-slider mdl-js-slider ' + _class + '" ' + _required + ' min="' + _min + '" max="' + _max + '" step="' + _step + '" type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"></div>';
           break;
         default:
-          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + _class + '" ' + _required + ' type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label></div>';
+          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + _class + '" ' + _required + ' type="' + _type + '" value="' + _value + '" autocomplete="' + encodeURIComponent(_label) + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '" minlength="2"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label></div>';
       }
     },
     updateTitle: function (titleText) {
@@ -62,7 +62,7 @@ var r = {
       } else {
         cardDetail = 'style="color:#ffffff"'
       }
-      return $('<div class="team-member mdl-card mdl-shadow--2dp" id="' + id + '"><div class="mdl-card__menu"><button class="edit mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"><i class="material-icons">edit</i></button><button class="remove save-data mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"><i class="material-icons">delete</i></button></div><div class="mdl-card__title mdl-card--expand"></div><div class="mdl-card__actions details" ' + cardDetail + '><span class="card-name">' + name + '</span><span class="card-title">' + title + '</span></div></div>').css('background', 'center/cover ' + bg);
+      return $('<div class="team-member mdl-card mdl-shadow--2dp" id="' + id + '"><div class="mdl-card__menu"><button class="edit mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"><i class="material-icons">edit</i></button><button class="remove save-data mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"><i class="material-icons">delete</i></button></div><div class="mdl-card__title mdl-card--expand"></div><div class="mdl-card__actions details" ' + cardDetail + '><span class="card-name">' + name + '</span><span class="card-title">' + title + '</span></div></div>').css('background', 'center/cover ' + bg);
     },
     editTeamMember: function (id) {
       var papa = this.newTeamMemberCard();
@@ -83,6 +83,7 @@ var r = {
       } else {
 
         $('#Team #add-card').prop('disabled', false);
+        $('#Team #reorder').prop('disabled', false);
         $('.adding').remove();
         r.helper.toast('Selected member not found :(');
 
@@ -91,8 +92,9 @@ var r = {
     },
     newTeamMemberCard: function () {
       $('#Team #add-card').prop('disabled', true);
+      $('#Team #reorder').prop('disabled', true);
 
-      var papa = $('<div class="team-member adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-name" data-input="Name" required="true"></div><div class="card-title" data-input="Title" required="true"></div><div class="card-email" data-input="Email" data-type="email"></div><div class="bottom"><input type="file" hidden /><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button><div class="mdl-layout-spacer"></div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>');
+      var papa = $('<div class="team-member adding mdl-card mdl-shadow--2dp"><form action=""><div class="mdl-card__actions details"><div class="card-name" data-input="Name" data-required="true"></div><div class="card-title" data-input="Title" data-required="true"></div><div class="card-email" data-input="Email" data-type="email"></div><div class="bottom"><input type="file" hidden disabled/><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button><div class="mdl-layout-spacer"></div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save</button></div></div></form></div>');
 
       $('body').append(papa);
 
@@ -101,14 +103,18 @@ var r = {
         window.componentHandler.upgradeDom();
       });
 
+
       $('.mdl-js-textfield', papa).on('change keyup', function () {
-        if ($('.is-invalid', papa).length === 0 && $('[required=true] .is-dirty', papa).length === $('[required=true] .mdl-js-textfield', papa).length) {
+        if ($('.is-invalid', papa).length === 0 && $('.is-dirty [required=true]', papa).length === $('.mdl-js-textfield [required=true]', papa).length) {
           $('.save-data', papa).prop('disabled', false);
         } else {
           $('.save-data', papa).prop('disabled', true);
         }
       });
-      $('input:first', papa).focus();
+
+      setTimeout(function () {
+        $('input:first', papa).focus();
+      }, 1);
 
       return papa;
     },
@@ -186,9 +192,9 @@ var r = {
       return '<div class="company"><h3>' + company.name + '</h3><h4>' + company.slogan + '</h4></div><div class="mdl-layout-spacer"></div><div class="logo"><img class="mdl-logo" src="' + company.logo + '" height="100"></div>'
     },
     templateCard: function (template) {
-      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="card-break" data-input="Break" data-type="checkbox" data-checked="' + template.break+'"></div><div class="card-working-hours" data-type="range" data-min="1" data-max="12" required="true" data-input="Default Working Hours" data-value="' + template.defaultWorkingHours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save & Activate</button></div></div></div>'
+      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="card-break" data-input="Break" data-type="checkbox" data-checked="' + template.break+'"></div><div class="card-working-hours" data-type="range" data-min="1" data-max="12" data-required="true" data-input="Default Working Hours" data-value="' + template.defaultWorkingHours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save & Activate</button></div></div></div>'
     },
-    newTemplateCard: '<div class="template adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox"></div><div class="card-title" data-input="Title" data-type="checkbox"></div><div class="card-hours" data-input="Hours" data-type="checkbox"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>'
+    newTemplateCard: '<div class="template adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox"></div><div class="card-title" data-input="Title" data-type="checkbox"></div><div class="card-hours" data-input="Hours" data-type="checkbox"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save</button></div></div></div>'
 
 
   },
@@ -197,7 +203,7 @@ var r = {
   },
   helper: {
     week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    addMember: function (name, email, title, bg, id) {
+    addMember: function (name, email, title, bg, id, order) {
       var id = id || undefined;
       if (id) {
         var memberIndex = r.settings.Team.members.indexOf(r.helper.find(id, 'id', r.settings.Team.members));
@@ -214,6 +220,7 @@ var r = {
       }
       r.settings.Team.members.push({
         'id': id,
+        'order': order || String(r.settings.Team.members.length + 1),
         'name': name,
         'title': title,
         'email': email,
@@ -221,8 +228,30 @@ var r = {
         'text': text || ''
       });
     },
-    editMember: function (id, name, email, title, bg) {
-      this.addMember(name, email, title, bg, id);
+    editMember: function (id, name, email, title, bg, order) {
+      var memberIndex = r.settings.Team.members.indexOf(r.helper.find(id, 'id', r.settings.Team.members));
+      var text = "#ffffff";
+      if (bg === 'none') {
+        var palette = r.helper.randomPalette();
+        bg = palette.colour;
+        text = palette.text;
+      }
+      r.settings.Team.members[memberIndex] = {
+        'id': id,
+        'order': order || String(r.settings.Team.members.length + 1),
+        'name': name,
+        'title': title,
+        'email': email,
+        'bg': bg || '',
+        'text': text || ''
+      }
+    },
+    reorderMember: function (id, order) {
+      var memberIndex = r.settings.Team.members.indexOf(r.helper.find(id, 'id', r.settings.Team.members));
+      r.settings.Team.members[memberIndex].order = order;
+      r.settings.Team.members.sort(function(a,b){
+        return a.order > b.order;
+      })
     },
     remove: function (i, where) {
       where.splice(i, 1);
