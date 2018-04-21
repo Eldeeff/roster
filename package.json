@@ -3,7 +3,8 @@
   "css": [
     "node_modules/material-design-lite/dist/material.indigo-pink.min.css",
     "node_modules/timepicker/jquery.timepicker.css",
-    "css/roster.css"
+    "css/roster.css",
+    "css/print.css"
   ],
   "js": [
     "node_modules/material-design-lite/dist/material.min.js",
@@ -16,7 +17,7 @@
   "main": "index.js",
   "scripts": {
     "start": "http-server && nodemon",
-    "mincss": "uglifycss %npm_package_css_0% %npm_package_css_1% %npm_package_css_2% --output min/styles.min.css",
+    "mincss": "uglifycss %npm_package_css_0% %npm_package_css_1% %npm_package_css_2% %npm_package_css_3% --output min/styles.min.css",
     "minjs": "uglifyjs %npm_package_js_0% %npm_package_js_1% %npm_package_js_2% %npm_package_js_3% -o min/scripts.min.js"
   },
   "repository": {

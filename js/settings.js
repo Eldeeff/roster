@@ -15,6 +15,7 @@ var r = {
       'avatar': true,
       'title': true,
       'hours': false,
+      'break': true,
       'defaultWorkingHours': 8
     }]
   },
@@ -185,7 +186,7 @@ var r = {
       return '<div class="company"><h3>' + company.name + '</h3><h4>' + company.slogan + '</h4></div><div class="mdl-layout-spacer"></div><div class="logo"><img class="mdl-logo" src="' + company.logo + '" height="100"></div>'
     },
     templateCard: function (template) {
-      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="card-working-hours" data-type="range" data-min="1" data-max="12" required="true" data-input="Default Working Hours" data-value="' + template.defaultWorkingHours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save & Activate</button></div></div></div>'
+      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="card-break" data-input="Break" data-type="checkbox" data-checked="' + template.break+'"></div><div class="card-working-hours" data-type="range" data-min="1" data-max="12" required="true" data-input="Default Working Hours" data-value="' + template.defaultWorkingHours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save & Activate</button></div></div></div>'
     },
     newTemplateCard: '<div class="template adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox"></div><div class="card-title" data-input="Title" data-type="checkbox"></div><div class="card-hours" data-input="Hours" data-type="checkbox"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--accent" disabled>Save</button></div></div></div>'
 

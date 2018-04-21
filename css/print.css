@@ -1,0 +1,15 @@
+@media print {
+  .mdl-grid>.mdl-cell--12-col:not(.roster):not(.header),
+  .mdl-layout__drawer,
+  .mdl-layout__drawer-button,
+  .mdl-snackbar {
+    display: none;
+  }
+  .mdl-layout--fixed-drawer>.mdl-layout__content {
+    margin: 0;
+    padding: 0;
+  }
+  .ready-time:after {
+    color: rgba(0, 0, 0, .06) !important;
+  }
+}

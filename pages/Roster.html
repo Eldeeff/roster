@@ -7,6 +7,10 @@
   </div>
   <div class="mdl-cell mdl-cell--12-col">
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent edit-roster">Edit Roster</button>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent print-roster">
+      <i class="material-icons">print</i> Print</button>
+    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent email-roster">
+      <i class="material-icons">mail</i> Email</button>
   </div>
 </div>
 <script>
@@ -18,11 +22,24 @@
     $('.roster', papa).append(r.ui.rosterGrid(r.settings.Team.members));
 
     setTimeout(function () {
-      $('.roster .mdl-cell input.time', papa).timepicker({
-        minTime: '6:00am',
-        maxTime: '8:00pm',
-        timeFormat: 'g:i a'
-      });
+      $('.roster .mdl-cell input.time', papa).each(function () {
+        $(this).timepicker({
+          minTime: '6:00am',
+          maxTime: '8:00pm',
+          timeFormat: 'g:i a'
+        });
+        if ($(this).hasClass('end')) {
+          var startTime = $(this).parents('.mdl-textfield').siblings('.mdl-textfield').find('.time.start');
+          if (startTime.val() !== '') {
+            $(this).timepicker('option', {
+              'scrollDefault': (parseInt(startTime.val().split(':')[0]) + parseInt(r.settings.Templates[0].defaultWorkingHours)) +
+                startTime.val().split(':')[1],
+              'minTime': startTime.val(),
+              'showDuration': true
+            });
+          }
+        }
+      })
 
       $('.roster .mdl-cell input.time', papa).on('change', function () {
         if (this.value !== '') {
@@ -31,37 +48,50 @@
           $(this).parents('.is-dirty').removeClass('is-dirty');
         }
         if ($(this).hasClass('start')) {
-          $(this).parents('.mdl-textfield').next('.mdl-textfield').find('.time.end').timepicker('option', {
-            'scrollDefault': (parseInt(this.value.split(':')[0]) + parseInt(r.settings.Templates[0].defaultWorkingHours)) +
-              this.value.split(':')[1],
-            'minTime': this.value,
-            'showDuration': true
-          });
+          var endTime = $(this).parents('.mdl-textfield').siblings('.mdl-textfield').find('.time.end');
+          if (this.value !== '') {
+            endTime.timepicker('option', {
+              'scrollDefault': (parseInt(this.value.split(':')[0]) + parseInt(r.settings.Templates[0].defaultWorkingHours)) +
+                this.value.split(':')[1],
+              'minTime': this.value,
+              'showDuration': true
+            });
+          }
+          if (endTime.val() === '' && this.value !== '') {
+            endTime.focus();
+          }
         }
+        updateHours();
       });
 
-      function clearPlace() {
+      function clearPaste() {
         $('button.paste-time').each(function () {
-          if ($(this).text() == 'clear Clear') {
+          if ($('.master-copy-time', papa).length) {
             this.childNodes[0].textContent = 'content_paste';
             this.childNodes[1].textContent = ' Paste';
+            if ($(this).parent('.mdl-cell').hasClass('master-copy-time') === false) {
+              $(this).show();
+            } else {
+              $(this).hide();
+            }
           } else {
             this.childNodes[0].textContent = 'clear';
             this.childNodes[1].textContent = ' Clear';
+            $(this).removeAttr('style');
           }
         })
       }
 
       $(papa).on('click', 'button.copy-time', function () {
         r.helper.setCopyTime(this);
-        clearPlace();
+        clearPaste();
       }).on('click', 'button.paste-time', function () {
         var times = r.helper.getCopyTime('.master-copy-time');
-        $(this).parent('.mdl-cell').find('input.start').val(times[0]).trigger('change');
         $(this).parent('.mdl-cell').find('input.end').val(times[1]).trigger('change');
+        $(this).parent('.mdl-cell').find('input.start').val(times[0]).trigger('change');
       }).on('click', 'button.done-time', function () {
         $('.master-copy-time', papa).removeClass('master-copy-time');
-        clearPlace();
+        clearPaste();
       });
 
 
@@ -84,7 +114,14 @@
       });
     }, 0)
 
-
+    $('.print-roster').click(function () {
+      if ($('.roster', papa).hasClass('ready') == false) {
+        $('.edit-roster').click();
+      }
+      setTimeout(function () {
+        print();
+      }, 10)
+    });
 
     function checkForWeekends() {
       setTimeout(function () {
@@ -111,7 +148,11 @@
               var start = $('.start', this).timepicker('getTime', new Date()),
                 end = $('.end', this).timepicker('getTime', new Date());
               if ($('.start', this).val() != '' && $('.end', this).val() != '') {
-                hours += (Date.parse(end) - Date.parse(start)) / 1000 / 60 / 60;
+                var day = (Date.parse(end) - Date.parse(start)) / 1000 / 60 / 60;
+                if (day >= r.settings.Templates[0].defaultWorkingHours && r.settings.Templates[0].break) {
+                  day = day - .5;
+                }
+                hours += day;
               }
             });
             if (hours > 0) {

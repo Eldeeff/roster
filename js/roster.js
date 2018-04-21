@@ -85,6 +85,7 @@ $('body').on('click', '.save-data', function () {
       'avatar': $('#Templates .template .card-avatar input[type=checkbox]').prop('checked'),
       'title': $('#Templates .template .card-title input[type=checkbox]').prop('checked'),
       'hours': $('#Templates .template .card-hours input[type=checkbox]').prop('checked'),
+      'break': $('#Templates .template .card-break input[type=checkbox]').prop('checked'),
       'defaultWorkingHours': $('#Templates .template .card-working-hours input').val()
     }];
   }
