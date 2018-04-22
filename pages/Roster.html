@@ -1,7 +1,7 @@
 <div class="mdl-grid">
   <div class="mdl-cell mdl-cell--12-col">
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary edit-roster">
-      <i class="material-icons">edit</i> Edit Roster</button>
+      <i class="material-icons">edit</i> Edit Hours</button>
     <button class="mdl-button mdl-js-button mdl-js-ripple-effect print-roster">
       <i class="material-icons">print</i> Print</button>
     <button class="mdl-button mdl-js-button mdl-js-ripple-effect email-roster">
@@ -25,6 +25,7 @@
     setTimeout(function () {
       $('.roster .mdl-cell input.time', papa).each(function () {
         $(this).timepicker({
+          appendTo: $(this).parents('.mdl-textfield'),
           minTime: '6:00am',
           maxTime: '8:00pm',
           timeFormat: 'g:i a'
@@ -99,7 +100,7 @@
       $('.edit-roster', papa).click(function () {
 
         function edit(e) {
-          e.childNodes[2].textContent = " Save Roster";
+          e.childNodes[2].textContent = " Save Hours";
           $(e).removeClass('save-data');
           $('.roster', papa).removeClass('ready');
         };
@@ -107,11 +108,11 @@
         function save(e) {
           $('.master-copy-time', papa).removeClass('master-copy-time');
 
-          e.childNodes[2].textContent = " Edit Roster";
+          e.childNodes[2].textContent = " Edit Hours";
           $(e).addClass('save-data');
           $('.roster', papa).addClass('ready');
         };
-        $(this).text().trim() === 'edit Edit Roster' ? edit(this) : save(this);
+        $(this).text().trim() === 'edit Edit Hours' ? edit(this) : save(this);
         fitTeamImage();
         checkForWeekends();
       });

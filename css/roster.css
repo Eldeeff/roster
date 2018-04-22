@@ -350,5 +350,7 @@ body {
 }
 
 .ui-timepicker-wrapper {
-  max-height: 40vh;
+  max-height: 15em;
+  width: 100%;
+  text-align: left;
 }
