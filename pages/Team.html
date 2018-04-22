@@ -88,9 +88,11 @@
           $(this).addClass('handle').attr('data-id', $(this).index() + 1);
         });
       } else {
-        this.childNodes[2].textContent = ' Re-order';
-        $('#Team #add-card').prop('disabled', false);
-        $('#team-cards .team-member').removeClass('handle');
+        setTimeout(function () {
+          this.childNodes[2].textContent = ' Re-order';
+          $('#Team #add-card').prop('disabled', false);
+          $('#team-cards .team-member').removeClass('handle');
+        }, 1);
       }
     })
   });
