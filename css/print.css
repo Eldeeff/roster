@@ -20,6 +20,9 @@
   #Roster .header {
     max-height: 15vh;
   }
+  #Roster .header * {
+    margin: 0;
+  }
   #Roster .roster {
     max-height: 85vh;
   }

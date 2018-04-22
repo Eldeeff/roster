@@ -229,7 +229,7 @@ body {
   overflow: hidden;
   margin: 1em 0 1em 1em;
   border-radius: 100%;
-  flex: 1 1 5vh;
+  flex: 1 1 1em;
 }
 
 .roster-body .team-member img {
