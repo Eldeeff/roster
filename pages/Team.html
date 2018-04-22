@@ -84,7 +84,9 @@
       if (this.textContent.trim() === 'shuffle Re-order') {
         this.childNodes[2].textContent = ' Save order';
         $('#Team #add-card').prop('disabled', true);
-        $('#team-cards .team-member').addClass('handle');
+        $('#team-cards .team-member').each(function () {
+          $(this).addClass('handle').attr('data-id', $(this).index() + 1);
+        });
       } else {
         this.childNodes[2].textContent = ' Re-order';
         $('#Team #add-card').prop('disabled', false);

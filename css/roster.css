@@ -109,6 +109,10 @@ body {
   font-size: inherit;
 }
 
+.mdl-card.adding {
+  margin-bottom: 11px;
+}
+
 .mdl-card.adding .mdl-card__actions.details {
   background: #fff;
 }
@@ -160,7 +164,7 @@ body {
 }
 
 #Company_Logo {
-  max-width: 400px;
+  max-width: 200px;
 }
 
 .roster .mdl-cell {
@@ -223,36 +227,20 @@ body {
 .roster-body .team-member .avatar {
   position: relative;
   overflow: hidden;
-  height: 70px;
-  width: 70px;
-  max-height: 6vw;
-  max-width: 6vw;
   margin: 1em 0 1em 1em;
   border-radius: 100%;
-  -webkit-box-flex: 0;
-  -ms-flex: none;
-  flex: none;
+  flex: 1 1 5vh;
 }
 
 .roster-body .team-member img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
   width: 100%;
-  height: auto;
-  z-index: -1;
-}
-
-.roster-body .team-member img.fit-height {
-  width: auto;
   height: 100%;
 }
 
 .roster-body .team-member .mdl-card__actions.details {
   color: #000;
   background: none;
+  flex: 10 1;
 }
 
 .roster-body .team-member .mdl-card__actions.details .hours {
@@ -333,6 +321,19 @@ body {
 
 .team-member.handle {
   cursor: -webkit-grab;
+}
+
+.team-member.handle:before {
+  content: attr(data-id);
+  font-size: 100px;
+  line-height: 200px;
+  background: rgba(255, 255, 255, 0.2);
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  text-align: center;
 }
 
 .team-member.handle.sortable-chosen {
