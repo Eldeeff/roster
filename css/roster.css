@@ -7,8 +7,10 @@ body {
   color: rgba(255, 255, 255, .9);
 }
 
-.mdl-layout__header .mdl-navigation {
+.mdl-layout__header .mdl-navigation.mdl-tabs {
   margin-left: 4em;
+  width: auto;
+  display: flex;
 }
 
 .mdl-navigation__link.mdl-tabs__tab {
@@ -32,10 +34,6 @@ body {
 .mdl-tabs.is-upgraded .mdl-navigation__link.mdl-tabs__tab.is-active:after {
   height: 100%;
   z-index: -1;
-}
-
-.mdl-layout__content {
-  display: contents;
 }
 
 .mdl-layout__content>section {

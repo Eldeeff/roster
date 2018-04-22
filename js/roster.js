@@ -124,11 +124,47 @@ $('body').on('click', 'button.upload', function (e) {
   inputFile.off().on('change', function () {
     var reader = new FileReader();
     reader.onload = function (e) {
-      if ($this.parents('section').attr('id') === 'Company') {
-        $this.prev('#Company_Logo').attr('src', e.target.result).removeProp('hidden');
-      } else if ($this.parents('section').attr('id') === 'Team') {
-        $this.text('').css('background-image', 'url(' + e.target.result + ')');
-      }
+
+      var img = document.createElement('img');
+      img.src = e.target.result;
+
+      var section = $this.parents('section').attr('id');
+
+      setTimeout(function () {
+        var c = document.createElement('canvas');
+        var ctx = c.getContext('2d');
+        var canvasSize = 200;
+        var ratio = 1;
+
+        if (section === 'Company') {
+          // RESIZE
+          var maxWH = Math.max(img.width, img.height);
+          if (maxWH > canvasSize) {
+            ratio = canvasSize / maxWH;
+          }
+          c.width = img.width * ratio;
+          c.height = img.height * ratio;
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+          finalImg = c.toDataURL();
+
+          $this.prev('#Company_Logo').attr('src', finalImg).removeProp('hidden');
+        } else if (section === 'Team') {
+          // CROP
+          var minWH = Math.min(img.width, img.height);
+          if (minWH > canvasSize) {
+            ratio = canvasSize / minWH;
+          }
+          c.width = minWH * ratio;
+          c.height = minWH * ratio;
+          var cImgW = img.width * ratio;
+          var cImgH = img.height * ratio;
+          ctx.drawImage(img, c.width / 2 - cImgW / 2, c.height / 2 - cImgH / 2, cImgW, cImgH);
+
+          finalImg = c.toDataURL();
+          $this.text('').css('background-image', 'url(' + finalImg + ')');
+        }
+
+      }, 1)
     }
     reader.readAsDataURL(this.files[0]);
     $this.siblings('.save-data').prop('disabled', false);

@@ -1,15 +1,26 @@
 @media print {
+  * {
+    overflow: visible;
+  }
   .mdl-grid>.mdl-cell--12-col:not(.roster):not(.header),
-  .mdl-layout__drawer,
-  .mdl-layout__drawer-button,
+  .mdl-layout__header,
+  .mdl-layout__header-button,
   .mdl-snackbar {
     display: none;
   }
-  .mdl-layout--fixed-drawer>.mdl-layout__content {
+  .mdl-layout--fixed-header>.mdl-layout__content,
+  .mdl-layout__content>section {
     margin: 0;
     padding: 0;
+    size: A4;
   }
   .ready-time:after {
     color: rgba(0, 0, 0, .06) !important;
+  }
+  #Roster .header {
+    max-height: 15vh;
+  }
+  #Roster .roster {
+    max-height: 85vh;
   }
 }

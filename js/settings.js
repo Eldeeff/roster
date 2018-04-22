@@ -174,8 +174,8 @@ var r = {
           if (tm.bg.match(/(#......)/)) {
             var c = document.createElement('canvas');
             var ctx = c.getContext('2d');
-            c.width = 1;
-            c.height = 1;
+            c.width = 10;
+            c.height = 10;
             ctx.fillStyle = tm.bg;
             ctx.fillRect(0, 0, c.width, c.height);
             colourImage = c.toDataURL();
