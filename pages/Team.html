@@ -44,7 +44,7 @@
     $('#team-cards .mdl-card button.remove').on('mousedown', function (e) {
       $('.adding').remove();
       setTimeout(function () {
-        var confirmRemove = confirm('Are you sure you want to remove ' + $(e.target).closest('.mdl-card').find('.card-name').text() + '?');
+        var confirmRemove = confirm('Are you sure you want to remove "' + $(e.target).closest('.mdl-card').find('.card-name').text() + '"?');
         if (confirmRemove) {
           r.helper.remove($('#team-cards .mdl-card').index($(e.target).closest('.mdl-card')), r.settings.Team.members);
           $('#team-cards .mdl-card button.remove')[0].click();

@@ -238,7 +238,7 @@ var r = {
       }
       r.settings.Team.members[memberIndex] = {
         'id': id,
-        'order': order || String(r.settings.Team.members.length + 1),
+        'order': order || r.settings.Team.members.length + 1,
         'name': name,
         'title': title,
         'email': email,

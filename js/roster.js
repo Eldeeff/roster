@@ -85,7 +85,7 @@ $('body').on('click', '.save-data', function () {
     } else if ($('.team-member.adding[id]').length === 1) {
       // EDIT EXISTING
       r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'), $('.team-member.adding').data('id'));
-    } else {
+    } else if ($('.team-member.handle').length > 0) {
       // EDIT ALL EXISTING
       $('.team-member[id]').each(function () {
         r.helper.reorderMember($(this).attr('id'), $(this).data('id'));
