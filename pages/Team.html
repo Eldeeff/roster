@@ -31,6 +31,7 @@
     // edit team member
     $('#team-cards .mdl-card button.edit').on('click', function (e) {
       $('.adding').remove();
+      $('#Team .team-member.mdl-card').show();
       var cardParent = $(this).parents('.mdl-card');
       var clickedID = cardParent.attr('id');
 
@@ -59,7 +60,7 @@
           $('#Team #add-card').prop('disabled', false);
           $('#Team #reorder').prop('disabled', false);
           $('.adding').remove();
-          $('.mdl-card').show();
+          $('#Team .team-member.mdl-card').show();
         }
       }
     })
