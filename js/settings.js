@@ -24,7 +24,7 @@ var r = {
     menu: $('#menu'),
     menuItem: '<a class="mdl-navigation__link mdl-tabs__tab" href="#"></a>',
     page: $('#page'),
-    pageTab: '<section class="mdl-tabs__panel" id=""><div class="page-content"></div></section>',
+    pageTab: '<section class="mdl-layout__tab-panel" id=""><div class="page-content"></div></section>',
     loadingSpinner: '<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>',
     input: function (input) {
 
@@ -249,7 +249,7 @@ var r = {
     reorderMember: function (id, order) {
       var memberIndex = r.settings.Team.members.indexOf(r.helper.find(id, 'id', r.settings.Team.members));
       r.settings.Team.members[memberIndex].order = order;
-      r.settings.Team.members.sort(function(a,b){
+      r.settings.Team.members.sort(function (a, b) {
         return a.order > b.order;
       })
     },

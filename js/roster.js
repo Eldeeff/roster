@@ -2,6 +2,8 @@ $.getJSON('js/mdlPalette.json').done(function (data) {
   r.ui.palette = data;
 })
 
+
+
 if (r.helper.get('settings')) {
   $.extend(true, r.settings, r.helper.get('settings'));
 }
@@ -11,7 +13,7 @@ for (var i = 0; i < r.o(r.settings).length; i++) {
   r.ui.menu.append($(r.ui.menuItem).text(r.o(r.settings)[i]).attr('href', '#' + r.o(r.settings)[i]));
 
   // Create Pages
-  r.ui.page.append($(r.ui.pageTab).attr('id', r.o(r.settings)[i]));
+  r.ui.page.prepend($(r.ui.pageTab).attr('id', r.o(r.settings)[i]));
 }
 
 // Mark current/landing page as active based of URL
@@ -85,7 +87,7 @@ $('body').on('click', '.save-data', function () {
       r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'), $('.team-member.adding').data('id'));
     } else {
       // EDIT ALL EXISTING
-      $('.team-member[id]').each(function(){
+      $('.team-member[id]').each(function () {
         r.helper.reorderMember($(this).attr('id'), $(this).data('id'));
       })
     }
@@ -114,9 +116,9 @@ $('body').on('click', '.save-data', function () {
 $('body').on('click', 'button.upload', function (e) {
   var $this = $(this),
     inputFile = $this.siblings('input[type=file]');
-  if($(this).is(':focus') || $(e.target).parents('button.upload').is(':focus') || $(this).is(':hover') || $(e.target).parents('button.upload').is(':hover')){
+  if ($(this).is(':focus') || $(e.target).parents('button.upload').is(':focus') || $(this).is(':hover') || $(e.target).parents('button.upload').is(':hover')) {
     inputFile.removeProp('disabled');
-    $this.siblings('.save-data').prop('disabled',true);
+    $this.siblings('.save-data').prop('disabled', true);
   }
   inputFile.click();
   inputFile.off().on('change', function () {
@@ -129,7 +131,7 @@ $('body').on('click', 'button.upload', function (e) {
       }
     }
     reader.readAsDataURL(this.files[0]);
-    $this.siblings('.save-data').prop('disabled',false);
+    $this.siblings('.save-data').prop('disabled', false);
   });
 });
 

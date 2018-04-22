@@ -12,11 +12,19 @@
 </head>
 
 <body class="">
-  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-js-ripple-effect mdl-tabs mdl-js-tabs">
-    <div class="mdl-layout__drawer">
-      <span class="mdl-layout-title">Roster</span>
-      <nav class="mdl-navigation" id="menu">
-      </nav>
+  <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+    <div class="mdl-layout__header">
+      <div class="mdl-layout__header-row">
+        <span class="mdl-layout-title">Roster</span>
+        <nav class="mdl-navigation mdl-tabs mdl-js-tabs mdl-js-ripple-effect" id="menu">
+          <div id="Roster"></div>
+          <div id="Company"></div>
+          <div id="Team"></div>
+          <div id="Templates"></div>
+        </nav>
+      </div>
+    </div>
+    <main class="mdl-layout__content" id="page">
       <div class="mdl-layout-spacer"></div>
       <footer class="mdl-mini-footer">
         <div class="mdl-mini-footer__left-section">
@@ -30,8 +38,6 @@
           </ul>
         </div>
       </footer>
-    </div>
-    <main class="mdl-layout__content" id="page">
     </main>
   </div>
   <div class="mdl-snackbar mdl-js-snackbar">

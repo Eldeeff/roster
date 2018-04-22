@@ -1,6 +1,4 @@
 <div class="mdl-grid">
-
-
   <div class="mdl-cell mdl-cell--12-col">
     <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" id="add-card">
       <i class="material-icons">add</i> Add team member
@@ -73,9 +71,9 @@
         handle: '.handle', //Restricts sort start click/touch to the specified element 
         draggable: '.team-member',
         group: "team",
-        onSort: function(e){
-          $('#team-cards .team-member').each(function(){
-            $(this).attr('data-id',$(this).index()+1)
+        onSort: function (e) {
+          $('#team-cards .team-member').each(function () {
+            $(this).attr('data-id', $(this).index() + 1)
           })
           $('button#reorder').addClass('save-data');
         }
