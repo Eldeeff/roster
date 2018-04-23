@@ -8,7 +8,6 @@ body {
 }
 
 .mdl-layout__header .mdl-navigation.mdl-tabs {
-  margin-left: 4em;
   width: auto;
   display: flex;
 }
