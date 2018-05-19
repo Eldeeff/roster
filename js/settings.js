@@ -20,6 +20,9 @@ var r = {
     }]
   },
   ui: {
+    TIME_IN: 'arrow_right_alt',
+    TIME_OUT: 'arrow_left_alt',
+    TIME_SEPARATOR: '<br>',
     snackbar: $('.mdl-snackbar'),
     menu: $('#menu'),
     menuItem: '<a class="mdl-navigation__link mdl-tabs__tab" href="#"></a>',
@@ -142,24 +145,11 @@ var r = {
         var papa = this;
         var cellWeek = '';
         $(weekTemp).each(function () {
-          var start = '',
-            finish = '';
-          if (r.settings.Roster[tm.id]) {
-            start = r.settings.Roster[tm.id][$(this).text()].start;
-            finish = r.settings.Roster[tm.id][$(this).text()].finish;
-          }
-          var inline = function () {
-            if (start && finish) {
-              if (start.length > 0 && finish.length > 0) {
-                return start + ' &mdash; ' + finish;
-              } else {
-                return (start + ' ' + finish).trim();
-              }
-            } else {
-              return '';
-            }
-          }
-          $(this).html('<span class="ready-time">' + inline() + '</span><div data-class="time start" data-input="Start" data-value="' + start + '"></div><div data-class="time end" data-input="Finish" data-value="' + finish + '"></div><button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">clear</i> Clear</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">check_circle</i> Done</button>');
+          var start = r.settings.Roster[tm.id][$(this).text()].start || '',
+            finish = r.settings.Roster[tm.id][$(this).text()].finish || '';
+
+          var readyTime = r.helper.join([start, finish], r.ui.TIME_SEPARATOR);
+          $(this).html('<span class="ready-time">' + readyTime + '</span><div data-class="time start" data-input="Start" data-value="' + start + '"></div><div data-class="time end" data-input="Finish" data-value="' + finish + '"></div><button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">clear</i> Clear</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">check_circle</i> Done</button>');
           cellWeek += this.outerHTML;
         });
         var body = $('<div class="mdl-grid roster-body mdl-grid--no-spacing" id="' + tm.id + '"><div class="mdl-cell team-member"><div class="mdl-card__actions details"><span class="card-name">' + tm.name + '</span></div></div>' + cellWeek + '</div>');
@@ -251,7 +241,15 @@ var r = {
       r.settings.Team.members[memberIndex].order = order;
       r.settings.Team.members.sort(function (a, b) {
         return a.order > b.order;
-      })
+      });
+    },
+    join: function (items, separator) {
+      // remove blanks
+      var arr = items.filter(function (e) {
+        return e;
+      });
+      // join em
+      return arr.join(separator);
     },
     remove: function (i, where) {
       where.splice(i, 1);
