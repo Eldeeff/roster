@@ -44,19 +44,35 @@ var r = {
       this.required = input.data('required') ? 'required' : '';
       this.checked = input.data('checked') ? 'checked' : '';
 
+      var element;
+
       switch (this.type) {
         case 'checkbox':
-          `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="${this.labelEncoded}"><input class="mdl-switch__input ${this.class}"${this.checked} type="${this.type}" value="${this.value}" id="${this.labelEncoded}"><span class="mdl-switch__label">${this.label}</span></label>`;
+          element = `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="${this.labelEncoded}">
+                      <input class="mdl-switch__input ${this.class}"${this.checked} type="${this.type}" value="${this.value}" id="${this.labelEncoded}">
+                      <span class="mdl-switch__label">${this.label}</span>
+                    </label>`;
           break;
         case 'number':
-          `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="${this.type}" value="${this.value}" id="${this.labelEncoded}"><label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label></div>`;
+          element = `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="${this.type}" value="${this.value}" id="${this.labelEncoded}">
+                      <label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label>
+                    </div>`;
           break;
         case 'range':
-          `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label><input class="mdl-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="number" value="${this.value}" id="${this.labelEncoded}"><input class="mdl-slider mdl-js-slider ${this.class}" ${this.required} min="${this.min}" max="${this.max}" step="${this.step}" type="${this.type}" value="${this.value}" id="${this.labelEncoded}"></div>`;
+          element = `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label>
+                      <input class="mdl-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="number" value="${this.value}" id="${this.labelEncoded}">
+                      <input class="mdl-slider mdl-js-slider ${this.class}" ${this.required} min="${this.min}" max="${this.max}" step="${this.step}" type="${this.type}" value="${this.value}" id="${this.labelEncoded}">
+                    </div>`;
           break;
         default:
-          `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ${this.class}" ${this.required} type="${this.type}" value="${this.value}" autocomplete="${encodeURIComponent(this.label)}" id="${this.labelEncoded}" minlength="2"><label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label></div>`;
+          element = `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      <input class="mdl-textfield__input ${this.class}" ${this.required} type="${this.type}" value="${this.value}" autocomplete="${encodeURIComponent(this.label)}" id="${this.labelEncoded}" minlength="2">
+                      <label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label>
+                    </div>`;
       }
+      return element.replace(/\s{2,}\s/g, '');
     },
     updateTitle: function (titleText) {
       titleText != 'Roster' ? titleEnd = ' - Roster' : titleEnd = '';
