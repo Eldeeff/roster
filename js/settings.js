@@ -24,6 +24,8 @@ var r = {
     TIME_OUT: 'arrow_left_alt',
     BREAK_SHORT: 'local_cafe',
     BREAK_LONG: 'local_dining',
+    CARD_EDIT: 'edit',
+    CARD_DELETE: 'delete',
     TIME_SEPARATOR: '<br>',
     snackbar: $('.mdl-snackbar'),
     menu: $('#menu'),
@@ -79,12 +81,32 @@ var r = {
       return $('title').text(titleText + titleEnd);
     },
     teamMemberCard: function (id, name, title, bg, text) {
-      if (text != '' && bg.match(/#[0-9a-f]{6}/g)) {
-        cardDetail = 'style="color:' + text + ';background:none;"'
-      } else {
-        cardDetail = 'style="color:#ffffff"'
-      }
-      return $('<div class="team-member mdl-card mdl-shadow--2dp" id="' + id + '"><div class="mdl-card__menu"><button class="edit mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"><i class="material-icons">edit</i></button><button class="remove save-data mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary"><i class="material-icons">delete</i></button></div><div class="mdl-card__title mdl-card--expand"></div><div class="mdl-card__actions details" ' + cardDetail + '><span class="card-name">' + name + '</span><span class="card-title">' + title + '</span></div></div>').css('background', 'center/cover ' + bg);
+      var card = `
+      <div class="team-member mdl-card mdl-shadow--2dp" id="${id}">
+        <div class="mdl-card__menu">
+          <button class="edit mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+            <i class="material-icons">${r.ui.CARD_EDIT}</i>
+          </button>
+          <button class="remove save-data mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+            <i class="material-icons">${r.ui.CARD_DELETE}</i>
+          </button>
+        </div>
+        <div class="mdl-card__title mdl-card--expand"></div>
+        <div class="mdl-card__actions details">
+          <span class="card-name">${name}</span>
+          <span class="card-title">${title}</span>
+        </div>
+      </div>`;
+
+      card = $(card);
+
+      card.css('background', 'center/cover ' + bg)
+        .find('.details').css({
+          'color': text,
+          'background': bg.match(/#([0-9a-f]{3}){1,2}/gi) ? 'none' : undefined
+        });
+
+      return card;
     },
     editTeamMember: function (id) {
       var papa = this.newTeamMemberCard();
@@ -101,14 +123,11 @@ var r = {
         if (member.bg.indexOf('url(') === 0) {
           $(papa).find('.upload').css('background-image', member.bg).text('');
         }
-
       } else {
-
         $('#Team #add-card').prop('disabled', false);
         $('#Team #reorder').prop('disabled', false);
         $('.adding').remove();
         r.helper.toast('Selected member not found :(');
-
       }
       return papa;
     },
@@ -116,7 +135,23 @@ var r = {
       $('#Team #add-card').prop('disabled', true);
       $('#Team #reorder').prop('disabled', true);
 
-      var papa = $('<div class="team-member adding mdl-card mdl-shadow--2dp"><form action=""><div class="mdl-card__actions details"><div class="card-name" data-input="Name" data-required="true"></div><div class="card-title" data-input="Title" data-required="true"></div><div class="card-email" data-input="Email" data-type="email"></div><div class="bottom"><input type="file" hidden disabled/><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button><div class="mdl-layout-spacer"></div><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save</button></div></div></form></div>');
+      var card = `
+      <div class="team-member adding mdl-card mdl-shadow--2dp">
+        <form action="">
+          <div class="mdl-card__actions details">
+            <div class="card-name" data-input="Name" data-required="true"></div>
+            <div class="card-title" data-input="Title" data-required="true"></div>
+            <div class="card-email" data-input="Email" data-type="email"></div>
+            <div class="bottom">
+              <input type="file" hidden disabled/>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button>
+              <div class="mdl-layout-spacer"></div>
+              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save</button>
+            </div>
+          </div>
+        </form>
+      </div>`;
+      var papa = $(card);
 
       $('body').append(papa);
 
@@ -124,8 +159,6 @@ var r = {
         $(e).html(r.ui.input($(e)));
         window.componentHandler.upgradeDom();
       });
-
-
       $('.mdl-js-textfield', papa).on('change keyup', function () {
         if ($('.is-invalid', papa).length === 0 && $('.is-dirty [required=true]', papa).length === $('.mdl-js-textfield [required=true]', papa).length) {
           $('.save-data', papa).prop('disabled', false);
@@ -163,15 +196,41 @@ var r = {
         //        }
         var papa = this;
         var cellWeek = '';
+
         $(weekTemp).each(function () {
-          var start = r.settings.Roster[tm.id][$(this).text()].start || '',
-            finish = r.settings.Roster[tm.id][$(this).text()].finish || '';
+          var membersRoster = r.settings.Roster[tm.id];
+
+          var start = membersRoster ? membersRoster[$(this).text()].start : '',
+            finish = membersRoster ? membersRoster[$(this).text()].finish : '';
 
           var readyTime = r.helper.join([start, finish], r.ui.TIME_SEPARATOR);
-          $(this).html('<span class="ready-time">' + readyTime + '</span><div data-class="time start" data-input="Start" data-value="' + start + '"></div><div data-class="time end" data-input="Finish" data-value="' + finish + '"></div><button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">content_copy</i> Copy</button><button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">clear</i> Clear</button><button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1"><i class="material-icons">check_circle</i> Done</button>');
+          $(this).html(`
+          <span class="ready-time">${readyTime}</span>
+          <div data-class="time start" data-input="Start" data-value="${start}"></div>
+          <div data-class="time end" data-input="Finish" data-value="${finish}"></div>
+          <div class="buttons">
+            <button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1">
+              <i class="material-icons">content_copy</i> Copy
+            </button>
+            <button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1">
+              <i class="material-icons">clear</i> Clear
+            </button>
+            <button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1">
+              <i class="material-icons">check_circle</i> Done
+            </button>
+          </div>`.replace(/\s{2,}\s/g, ''));
+
           cellWeek += this.outerHTML;
         });
-        var body = $('<div class="mdl-grid roster-body mdl-grid--no-spacing" id="' + tm.id + '"><div class="mdl-cell team-member"><div class="mdl-card__actions details"><span class="card-name">' + tm.name + '</span></div></div>' + cellWeek + '</div>');
+        var body = $(`
+          <div class="mdl-grid roster-body mdl-grid--no-spacing" id="${tm.id}">
+            <div class="mdl-cell team-member">
+              <div class="mdl-card__actions details">
+                <span class="card-name">${tm.name}</span>
+              </div>
+            </div>
+            ${cellWeek}
+          </div>`);
 
         if (r.settings.Templates[0].title) {
           $('.team-member .details', body).append('<span class="card-title">' + tm.title + '</span>');
@@ -198,14 +257,44 @@ var r = {
       return rosterRow;
     },
     rosterHeader: function (company) {
-      return '<div class="company"><h3>' + company.name + '</h3><h4>' + company.slogan + '</h4></div><div class="mdl-layout-spacer"></div><div class="logo"><img class="mdl-logo" src="' + company.logo + '" height="100"></div>'
+      return `
+      <div class="company">
+        <h3>${company.name}</h3>
+        <h4>${company.slogan}</h4>
+      </div>
+      <div class="mdl-layout-spacer"></div>
+      <div class="logo">
+        <img class="mdl-logo" src="${company.logo}" height="100">
+      </div>`
     },
     templateCard: function (template) {
-      return '<div class="template mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="' + template.avatar + '"></div><div class="card-title" data-input="Title" data-type="checkbox" data-checked="' + template.title + '"></div><div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="' + template.hours + '"></div><div class="card-break" data-input="Break" data-type="checkbox" data-checked="' + template.break+'"></div><div class="card-working-hours" data-type="range" data-min="1" data-max="12" data-required="true" data-input="Default Working Hours" data-value="' + template.defaultWorkingHours + '"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save & Activate</button></div></div></div>'
+      return `
+      <div class="template mdl-card mdl-shadow--2dp">
+        <div class="mdl-card__actions details">
+          <div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="${template.avatar}"></div>
+          <div class="card-title" data-input="Title" data-type="checkbox" data-checked="${template.title}"></div>
+          <div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="${template.hours}"></div>
+          <div class="card-break" data-input="Break" data-type="checkbox" data-checked="${template.break}"></div>
+          <div class="card-working-hours" data-type="range" data-min="1" data-max="12" data-required="true" data-input="Default Working Hours" data-value="${template.defaultWorkingHours}"></div>
+          <div class="mdl-layout-spacer"></div>
+          <div class="bottom">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save & Activate</button>
+          </div>
+        </div>
+      </div>`
     },
-    newTemplateCard: '<div class="template adding mdl-card mdl-shadow--2dp"><div class="mdl-card__actions details"><div class="card-avatar" data-input="Avatar" data-type="checkbox"></div><div class="card-title" data-input="Title" data-type="checkbox"></div><div class="card-hours" data-input="Hours" data-type="checkbox"></div><div class="mdl-layout-spacer"></div><div class="bottom"><button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save</button></div></div></div>'
-
-
+    newTemplateCard: `
+    <div class="template adding mdl-card mdl-shadow--2dp">
+      <div class="mdl-card__actions details">
+        <div class="card-avatar" data-input="Avatar" data-type="checkbox"></div>
+        <div class="card-title" data-input="Title" data-type="checkbox"></div>
+        <div class="card-hours" data-input="Hours" data-type="checkbox"></div>
+        <div class="mdl-layout-spacer"></div>
+        <div class="bottom">
+          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save</button>
+        </div>
+      </div>
+    </div>`
   },
   o: function (obj) {
     return Object.keys(obj);
@@ -218,7 +307,7 @@ var r = {
         var memberIndex = r.settings.Team.members.indexOf(r.helper.find(id, 'id', r.settings.Team.members));
         this.remove(memberIndex, r.settings.Team.members);
       } else {
-        id = Date.now();
+        id = (Date.now()).toString();
       }
 
       var text = "#ffffff";
@@ -229,7 +318,7 @@ var r = {
       }
       r.settings.Team.members.push({
         'id': id,
-        'order': order || String(r.settings.Team.members.length + 1),
+        'order': order || r.settings.Team.members.length + 1,
         'name': name,
         'title': title,
         'email': email,
@@ -280,7 +369,7 @@ var r = {
     },
     setCopyTime: function (e) {
       $('.master-copy-time').removeClass('master-copy-time');
-      $(e).parent('.mdl-cell').addClass('master-copy-time');
+      $(e).parents('.mdl-cell:first').addClass('master-copy-time');
     },
     getCopyTime: function (e) {
       var result = [];

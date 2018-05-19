@@ -71,7 +71,7 @@
           if ($('.master-copy-time', papa).length) {
             this.childNodes[0].textContent = 'content_paste';
             this.childNodes[1].textContent = ' Paste';
-            if ($(this).parent('.mdl-cell').hasClass('master-copy-time') === false) {
+            if ($(this).parents('.mdl-cell:first').hasClass('master-copy-time') === false) {
               $(this).show();
             } else {
               $(this).hide();
@@ -89,8 +89,8 @@
         clearPaste();
       }).on('click', 'button.paste-time', function () {
         var times = r.helper.getCopyTime('.master-copy-time');
-        $(this).parent('.mdl-cell').find('input.end').val(times[1]).trigger('change');
-        $(this).parent('.mdl-cell').find('input.start').val(times[0]).trigger('change');
+        $(this).parents('.mdl-cell:first').find('input.end').val(times[1]).trigger('change');
+        $(this).parents('.mdl-cell:first').find('input.start').val(times[0]).trigger('change');
       }).on('click', 'button.done-time', function () {
         $('.master-copy-time', papa).removeClass('master-copy-time');
         clearPaste();
