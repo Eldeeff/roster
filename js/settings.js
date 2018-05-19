@@ -22,6 +22,8 @@ var r = {
   ui: {
     TIME_IN: 'arrow_right_alt',
     TIME_OUT: 'arrow_left_alt',
+    BREAK_SHORT: 'local_cafe',
+    BREAK_LONG: 'local_dining',
     TIME_SEPARATOR: '<br>',
     snackbar: $('.mdl-snackbar'),
     menu: $('#menu'),
@@ -31,28 +33,29 @@ var r = {
     loadingSpinner: '<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>',
     input: function (input) {
 
-      var _label = input.data('input') || '';
-      var _type = input.data('type') || 'text';
-      var _class = input.data('class') || '';
-      var _value = input.data('value') || '';
-      var _min = input.data('min') || '';
-      var _max = input.data('max') || '';
-      var _step = input.data('step') || 1;
-      var _required = input.data('required') ? 'required' : '';
-      var _checked = input.data('checked') ? 'checked' : '';
+      this.label = input.data('input') || '';
+      this.labelEncoded = encodeURIComponent(this.label).replace(/%20/g, '_');
+      this.type = input.data('type') || 'text';
+      this.class = input.data('class') || '';
+      this.value = input.data('value') || '';
+      this.min = input.data('min') || '';
+      this.max = input.data('max') || '';
+      this.step = input.data('step') || 1;
+      this.required = input.data('required') ? 'required' : '';
+      this.checked = input.data('checked') ? 'checked' : '';
 
-      switch (_type) {
+      switch (this.type) {
         case 'checkbox':
-          return '<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><input class="mdl-switch__input ' + _class + '"' + _checked + ' type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><span class="mdl-switch__label">' + String(_label) + '</span></label>';
+          `<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="${this.labelEncoded}"><input class="mdl-switch__input ${this.class}"${this.checked} type="${this.type}" value="${this.value}" id="${this.labelEncoded}"><span class="mdl-switch__label">${this.label}</span></label>`;
           break;
         case 'number':
-          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + _class + '" ' + _required + ' min="' + _min + '" max="' + _max + '" type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label></div>';
+          `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="${this.type}" value="${this.value}" id="${this.labelEncoded}"><label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label></div>`;
           break;
         case 'range':
-          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label><input class="mdl-textfield__input ' + _class + '" ' + _required + ' min="' + _min + '" max="' + _max + '" type="number" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"><input class="mdl-slider mdl-js-slider ' + _class + '" ' + _required + ' min="' + _min + '" max="' + _max + '" step="' + _step + '" type="' + _type + '" value="' + _value + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '"></div>';
+          `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label><input class="mdl-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="number" value="${this.value}" id="${this.labelEncoded}"><input class="mdl-slider mdl-js-slider ${this.class}" ${this.required} min="${this.min}" max="${this.max}" step="${this.step}" type="${this.type}" value="${this.value}" id="${this.labelEncoded}"></div>`;
           break;
         default:
-          return '<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ' + _class + '" ' + _required + ' type="' + _type + '" value="' + _value + '" autocomplete="' + encodeURIComponent(_label) + '" id="' + encodeURIComponent(_label).replace(/%20/g, '_') + '" minlength="2"><label class="mdl-textfield__label" for="' + encodeURIComponent(_label).replace(/%20/g, '_') + '">' + String(_label) + '</label></div>';
+          `<div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input ${this.class}" ${this.required} type="${this.type}" value="${this.value}" autocomplete="${encodeURIComponent(this.label)}" id="${this.labelEncoded}" minlength="2"><label class="mdl-textfield__label" for="${this.labelEncoded}">${this.label}</label></div>`;
       }
     },
     updateTitle: function (titleText) {
