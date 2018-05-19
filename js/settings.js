@@ -20,13 +20,15 @@ var r = {
     }]
   },
   ui: {
-    TIME_IN: 'arrow_right_alt',
-    TIME_OUT: 'arrow_left_alt',
-    BREAK_SHORT: 'local_cafe',
-    BREAK_LONG: 'local_dining',
-    CARD_EDIT: 'edit',
-    CARD_DELETE: 'delete',
+    TIME_IN: 'clock-start',
+    TIME_OUT: 'clock-end',
     TIME_SEPARATOR: '<br>',
+    BREAK_SHORT: 'coffee',
+    BREAK_LONG: 'silverware-variant',
+    MEMBER_EDIT: 'account-edit',
+    DELETE: 'delete',
+    MEMBER_ADD: 'account-plus',
+    MEMBER_DELETE: 'account-remove',
     snackbar: $('.mdl-snackbar'),
     menu: $('#menu'),
     menuItem: '<a class="mdl-navigation__link mdl-tabs__tab" href="#"></a>',
@@ -90,10 +92,10 @@ var r = {
       <div class="team-member mdl-card mdl-shadow--2dp" id="${id}">
         <div class="mdl-card__menu">
           <button class="edit mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
-            <i class="material-icons">${r.ui.CARD_EDIT}</i>
+            <i class="material-icons">${r.ui.MEMBER_EDIT}</i>
           </button>
           <button class="remove save-data mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
-            <i class="material-icons">${r.ui.CARD_DELETE}</i>
+            <i class="material-icons">${r.ui.MEMBER_DELETE}</i>
           </button>
         </div>
         <div class="mdl-card__title mdl-card--expand"></div>
@@ -208,7 +210,7 @@ var r = {
           var start = membersRoster ? membersRoster[$(this).text()].start : '',
             finish = membersRoster ? membersRoster[$(this).text()].finish : '';
 
-          var readyTime = r.helper.join([start, finish], r.ui.TIME_SEPARATOR);
+          var readyTime = r.helper.join([`<i class="material-icons">${r.ui.TIME_IN}</i> ${start}`, `<i class="material-icons">${r.ui.TIME_OUT}</i> ${finish}`], r.ui.TIME_SEPARATOR);
           $(this).html(`
           <span class="ready-time">${readyTime}</span>
           <div data-class="time start" data-input="Start" data-value="${start}"></div>
