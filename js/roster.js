@@ -39,7 +39,7 @@ $(window).on('load hashchange', function () {
   $('> section', r.ui.page).removeClass('is-active');
   $('> section' + pageName, r.ui.page).addClass('is-active').find('.page-content').append(r.ui.loadingSpinner).load('pages/' + pageName.split('#')[1] + '.html');
 
-  window.componentHandler.upgradeDom();
+  mdc.autoInit();
 })
 
 $('body').on('submit', function (e) {
@@ -62,8 +62,8 @@ $('body').on('click', '.save-data', function () {
     $('.roster-body').each(function () {
       var id = $(this).attr('id');
       r.settings.Roster[id] = {};
-      $('.mdl-cell:not(.team-member)', $(this)).each(function (i) {
-        var day = $('.roster-header .mdl-cell').eq(i + 1).text();
+      $('.mdc-cell:not(.team-member)', $(this)).each(function (i) {
+        var day = $('.roster-header .mdc-cell').eq(i + 1).text();
         r.settings.Roster[id][day] = {
           start: $('input[type=text]:eq(0)', $(this)).val(),
           finish: $('input[type=text]:eq(1)', $(this)).val()
@@ -186,7 +186,7 @@ $(document).ajaxComplete(function () {
       $('input', $(e)).val($(e).data('value'));
     }
   });
-  var event = new Event('mdl-done');
-  $('body').trigger('mdl-done');
-  window.componentHandler.upgradeDom();
+  var event = new Event('mdc-done');
+  $('body').trigger('mdc-done');
+  mdc.autoInit();
 });

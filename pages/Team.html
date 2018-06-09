@@ -1,13 +1,13 @@
-<div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--12-col">
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary" id="add-card">
+<div class="mdc-grid">
+  <div class="mdc-cell mdc-cell--12-col">
+    <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect mdc-button--primary" id="add-card">
       <i class="material-icons">account-plus</i> Add team member
     </button>
-    <button class="mdl-button mdl-js-button mdl-js-ripple-effect" id="reorder" hidden>
+    <button class="mdc-button mdc-js-button mdc-js-ripple-effect" id="reorder" hidden>
       <i class="material-icons">shuffle</i> Re-order
     </button>
   </div>
-  <div class="mdl-cell mdl-cell--12-col" id="team-cards">
+  <div class="mdc-cell mdc-cell--12-col" id="team-cards">
   </div>
 </div>
 <script>
@@ -29,10 +29,10 @@
     });
 
     // edit team member
-    $('#team-cards .mdl-card button.edit').on('click', function (e) {
+    $('#team-cards .mdc-card button.edit').on('click', function (e) {
       $('.adding').remove();
-      $('#Team .team-member.mdl-card').show();
-      var cardParent = $(this).parents('.mdl-card');
+      $('#Team .team-member.mdc-card').show();
+      var cardParent = $(this).parents('.mdc-card');
       var clickedID = cardParent.attr('id');
 
       setTimeout(function () {
@@ -42,25 +42,25 @@
     })
 
     // remove team member
-    $('#team-cards .mdl-card button.remove').on('mousedown', function (e) {
+    $('#team-cards .mdc-card button.remove').on('mousedown', function (e) {
       $('.adding').remove();
       setTimeout(function () {
-        var confirmRemove = confirm('Are you sure you want to remove "' + $(e.target).closest('.mdl-card').find('.card-name').text() + '"?');
+        var confirmRemove = confirm('Are you sure you want to remove "' + $(e.target).closest('.mdc-card').find('.card-name').text() + '"?');
         if (confirmRemove) {
-          r.helper.remove($('#team-cards .mdl-card').index($(e.target).closest('.mdl-card')), r.settings.Team.members);
-          $('#team-cards .mdl-card button.remove')[0].click();
+          r.helper.remove($('#team-cards .mdc-card').index($(e.target).closest('.mdc-card')), r.settings.Team.members);
+          $('#team-cards .mdc-card button.remove')[0].click();
         };
       }, 1)
     })
 
     // handler for click outside adding team member card
     $('body').on('click', function (e) {
-      if ($('.team-member.adding.mdl-card').length) {
+      if ($('.team-member.adding.mdc-card').length) {
         if ($('#Team #add-card').is(':disabled') && ($(e.target).closest('.adding').length + $(e.target).closest('#Team #add-card:not(:disabled) *').length) !== 1) {
           $('#Team #add-card').prop('disabled', false);
           $('#Team #reorder').prop('disabled', false);
           $('.adding').remove();
-          $('#Team .team-member.mdl-card').show();
+          $('#Team .team-member.mdc-card').show();
         }
       }
     })

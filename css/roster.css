@@ -2,44 +2,44 @@ body {
   background: #fafafa;
 }
 
-.mdl-layout__header {
+.mdc-layout__header {
   background-color: rgba(0, 0, 0, .9);
   color: rgba(255, 255, 255, .9);
 }
 
-.mdl-layout__header .mdl-navigation.mdl-tabs {
+.mdc-layout__header .mdc-navigation.mdc-tabs {
   width: auto;
   display: flex;
 }
 
-.mdl-navigation__link.mdl-tabs__tab {
+.mdc-navigation__link.mdc-tabs__tab {
   height: inherit;
   text-align: inherit;
   text-transform: inherit;
 }
 
-.mdl-layout__header .mdl-navigation .mdl-navigation__link:hover {
+.mdc-layout__header .mdc-navigation .mdc-navigation__link:hover {
   background-color: rgba(255, 255, 255, .05);
 }
 
-.mdl-mini-footer {
+.mdc-mini-footer {
   min-height: fit-content;
 }
 
-.mdl-tabs.is-upgraded .mdl-navigation__link.mdl-tabs__tab.is-active {
+.mdc-tabs.is-upgraded .mdc-navigation__link.mdc-tabs__tab.is-active {
   color: #fff;
 }
 
-.mdl-tabs.is-upgraded .mdl-navigation__link.mdl-tabs__tab.is-active:after {
+.mdc-tabs.is-upgraded .mdc-navigation__link.mdc-tabs__tab.is-active:after {
   height: 100%;
   z-index: -1;
 }
 
-.mdl-layout__content>section {
+.mdc-layout__content>section {
   padding: 40px;
 }
 
-.mdl-card {
+.mdc-card {
   width: 200px;
   min-height: 200px;
   background-position: center;
@@ -50,13 +50,13 @@ body {
   background-color: rgba(0, 0, 0, .4);
 }
 
-.mdl-card .mdl-card__actions.details {
+.mdc-card .mdc-card__actions.details {
   padding: 16px;
   background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .4) 50%);
 }
 
-.mdl-card.template,
-.mdl-card.template .mdl-card__actions.details {
+.mdc-card.template,
+.mdc-card.template .mdc-card__actions.details {
   background: #fff;
   min-height: 200px;
   display: -webkit-box;
@@ -68,18 +68,18 @@ body {
   flex-direction: column;
 }
 
-.mdl-card.template div[data-type='range'] {
+.mdc-card.template div[data-type='range'] {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.mdl-card.template div[data-type='range'] .mdl-textfield__label {
+.mdc-card.template div[data-type='range'] .mdc-textfield__label {
   width: 20%;
   overflow: visible;
 }
 
-.mdl-card.template div[data-type='range'] .mdl-textfield__input {
+.mdc-card.template div[data-type='range'] .mdc-textfield__input {
   width: 20%;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;
@@ -89,7 +89,7 @@ body {
   text-align: center;
 }
 
-.mdl-card.template div[data-type='range'] .mdl-slider__container {
+.mdc-card.template div[data-type='range'] .mdc-slider__container {
   width: 100%;
   margin: 0 -10%;
   display: -webkit-inline-box;
@@ -97,68 +97,68 @@ body {
   display: inline-flex;
 }
 
-.mdl-card__actions.details>span {
+.mdc-card__actions.details>span {
   width: 100%;
   display: inline-block;
   font-size: 14px;
 }
 
-.mdl-card__actions.details>span:first-of-type {
+.mdc-card__actions.details>span:first-of-type {
   font-weight: bold;
   font-size: inherit;
 }
 
-.mdl-card.adding {
+.mdc-card.adding {
   margin-bottom: 11px;
 }
 
-.mdl-card.adding .mdl-card__actions.details {
+.mdc-card.adding .mdc-card__actions.details {
   background: #fff;
 }
 
-.mdl-card.adding .mdl-textfield {
+.mdc-card.adding .mdc-textfield {
   padding: 5px 0;
 }
 
-.adding .mdl-card__actions>div:not(.bottom),
-.template .mdl-card__actions>div:not(.bottom) {
+.adding .mdc-card__actions>div:not(.bottom),
+.template .mdc-card__actions>div:not(.bottom) {
   margin: 0 0 10px;
 }
 
-.mdl-card.adding .mdl-textfield__label {
+.mdc-card.adding .mdc-textfield__label {
   top: 12px;
   bottom: 5px;
 }
 
-.mdl-card.adding .mdl-textfield--floating-label.is-focused .mdl-textfield__label,
-.mdl-card.adding .mdl-textfield--floating-label.is-dirty .mdl-textfield__label,
-.mdl-card.adding .mdl-textfield--floating-label.has-placeholder .mdl-textfield__label {
+.mdc-card.adding .mdc-textfield--floating-label.is-focused .mdc-textfield__label,
+.mdc-card.adding .mdc-textfield--floating-label.is-dirty .mdc-textfield__label,
+.mdc-card.adding .mdc-textfield--floating-label.has-placeholder .mdc-textfield__label {
   top: -5px;
 }
 
-.mdl-card.adding .mdl-textfield__label:after {
+.mdc-card.adding .mdc-textfield__label:after {
   bottom: 0;
 }
 
-.mdl-card.adding .details .bottom {
+.mdc-card.adding .details .bottom {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.mdl-card.adding .details .bottom .upload {
+.mdc-card.adding .details .bottom .upload {
   background-size: cover;
   background-color: rgba(158, 158, 158, .2);
   background-position: center center;
 }
 
-.mdl-card .mdl-card__menu {
+.mdc-card .mdc-card__menu {
   opacity: 0;
   -webkit-transition: opacity .5s;
   transition: opacity .5s;
 }
 
-.mdl-card:hover .mdl-card__menu {
+.mdc-card:hover .mdc-card__menu {
   opacity: 1;
 }
 
@@ -166,7 +166,7 @@ body {
   max-width: 200px;
 }
 
-.roster .mdl-cell {
+.roster .mdc-cell {
   width: calc(100% / 6);
   padding: 10px;
   text-align: center;
@@ -176,16 +176,16 @@ body {
   flex: 1;
 }
 
-.roster.weekends .mdl-cell {
+.roster.weekends .mdc-cell {
   width: calc(100% / 8);
 }
 
-.roster .roster-header .mdl-cell {
+.roster .roster-header .mdc-cell {
   text-align: center;
 }
 
 .roster .team-member,
-.roster .roster-header .mdl-cell:first-of-type {
+.roster .roster-header .mdc-cell:first-of-type {
   -webkit-box-flex: 1.75;
   -ms-flex: 1.75;
   flex: 1.75;
@@ -206,36 +206,36 @@ body {
 
 /* Fix for firefox outline "bug" when timepicker is open */
 
-.roster:not(.ready) .roster-body .mdl-cell {
+.roster:not(.ready) .roster-body .mdc-cell {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, .1);
 }
 
 /* still need the outline for print visibility, and it should perform better */
 
-.roster.ready .roster-body .mdl-cell {
+.roster.ready .roster-body .mdc-cell {
   outline: 1px solid rgba(0, 0, 0, .1);
 }
 
-.roster:not(.ready) .roster-body .mdl-textfield,
-.roster.ready .roster-body .mdl-textfield.is-dirty {
+.roster:not(.ready) .roster-body .mdc-textfield,
+.roster.ready .roster-body .mdc-textfield.is-dirty {
   margin: -10px 0;
   width: 100%;
 }
 
-.roster:not(.ready) .roster-body .mdl-cell:not(.team-member) {
+.roster:not(.ready) .roster-body .mdc-cell:not(.team-member) {
   display: grid;
   grid-template: 'start buttons' 'finish buttons' / 1fr 1fr;
 }
 
-.roster:not(.ready) .roster-body .mdl-cell:not(.team-member) .mdl-textfield:first-of-type {
+.roster:not(.ready) .roster-body .mdc-cell:not(.team-member) .mdc-textfield:first-of-type {
   grid-area: start;
 }
 
-.roster:not(.ready) .roster-body .mdl-cell:not(.team-member) .mdl-textfield:last-of-type {
+.roster:not(.ready) .roster-body .mdc-cell:not(.team-member) .mdc-textfield:last-of-type {
   grid-area: finish;
 }
 
-.roster:not(.ready) .roster-body .mdl-cell:not(.team-member) .buttons {
+.roster:not(.ready) .roster-body .mdc-cell:not(.team-member) .buttons {
   grid-area: buttons;
   display: flex;
   flex-direction: column;
@@ -243,7 +243,7 @@ body {
   align-items: center;
 }
 
-.roster-body .mdl-button {
+.roster-body .mdc-button {
   padding: 0 5px;
   min-width: 0;
   opacity: .15;
@@ -265,36 +265,36 @@ body {
   height: 100%;
 }
 
-.roster-body .team-member .mdl-card__actions.details {
+.roster-body .team-member .mdc-card__actions.details {
   color: #000;
   background: none;
   flex: 10 1;
 }
 
-.roster-body .team-member .mdl-card__actions.details .hours {
+.roster-body .team-member .mdc-card__actions.details .hours {
   font-style: italic;
 }
 
-.roster-body .mdl-cell:hover .mdl-button {
+.roster-body .mdc-cell:hover .mdc-button {
   opacity: 1;
 }
 
-.roster-body .mdl-cell.master-copy-time {
+.roster-body .mdc-cell.master-copy-time {
   background: rgba(160, 195, 255, .25);
   outline: 2px dashed #4285f4;
   z-index: 2;
 }
 
-.roster-body .mdl-cell.master-copy-time .mdl-button,
-.roster-body .mdl-cell .mdl-button.done-time {
+.roster-body .mdc-cell.master-copy-time .mdc-button,
+.roster-body .mdc-cell .mdc-button.done-time {
   display: none;
 }
 
-.roster-body .mdl-cell.master-copy-time .mdl-button.done-time {
+.roster-body .mdc-cell.master-copy-time .mdc-button.done-time {
   display: inline-block;
 }
 
-.roster.ready .roster-body .mdl-cell:not(.team-member) {
+.roster.ready .roster-body .mdc-cell:not(.team-member) {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -306,21 +306,21 @@ body {
 .roster.ready .roster-body .copy-time,
 .roster.ready .roster-body .paste-time,
 .roster.ready .roster-body .done-time,
-.roster.ready .roster-body .mdl-textfield--floating-label,
-.roster.ready .roster-body .mdl-textfield--floating-label input,
-.roster.ready .roster-body .mdl-textfield--floating-label label,
-.roster.ready:not(.weekends) .mdl-cell.weekend,
-.roster.ready .mdl-textfield--floating-label:not(.is-dirty) {
+.roster.ready .roster-body .mdc-textfield--floating-label,
+.roster.ready .roster-body .mdc-textfield--floating-label input,
+.roster.ready .roster-body .mdc-textfield--floating-label label,
+.roster.ready:not(.weekends) .mdc-cell.weekend,
+.roster.ready .mdc-textfield--floating-label:not(.is-dirty) {
   display: none;
 }
 
-.roster:not(.ready) .mdl-cell .paste-time,
-.roster:not(.ready) .mdl-cell .copy-time {
+.roster:not(.ready) .mdc-cell .paste-time,
+.roster:not(.ready) .mdc-cell .copy-time {
   display: none;
 }
 
-.roster:not(.ready) .mdl-cell .mdl-textfield.is-dirty~.buttons .paste-time,
-.roster:not(.ready) .mdl-cell .mdl-textfield.is-dirty~.buttons .copy-time {
+.roster:not(.ready) .mdc-cell .mdc-textfield.is-dirty~.buttons .paste-time,
+.roster:not(.ready) .mdc-cell .mdc-textfield.is-dirty~.buttons .copy-time {
   display: initial;
 }
 
@@ -368,7 +368,7 @@ body {
   cursor: -webkit-grabbing;
 }
 
-.team-member.handle .mdl-card__menu {
+.team-member.handle .mdc-card__menu {
   display: none;
 }
 

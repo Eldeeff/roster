@@ -1,37 +1,37 @@
-<div class="mdl-grid">
-  <div class="mdl-cell mdl-cell--12-col">
-    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary edit-roster">
+<div class="mdc-grid">
+  <div class="mdc-cell mdc-cell--12-col">
+    <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect mdc-button--primary edit-roster">
       <i class="material-icons">edit</i> Edit Hours</button>
-    <button class="mdl-button mdl-js-button mdl-js-ripple-effect print-roster">
+    <button class="mdc-button mdc-js-button mdc-js-ripple-effect print-roster">
       <i class="material-icons">print</i> Print</button>
-    <!-- <button class="mdl-button mdl-js-button mdl-js-ripple-effect email-roster">
+    <!-- <button class="mdc-button mdc-js-button mdc-js-ripple-effect email-roster">
       <i class="material-icons">mail</i> Email</button> -->
   </div>
-  <div class="mdl-cell mdl-cell--12-col header">
-    <div class="mdl-grid mdl-grid--no-spacing">
+  <div class="mdc-cell mdc-cell--12-col header">
+    <div class="mdc-grid mdc-grid--no-spacing">
     </div>
   </div>
-  <div class="mdl-cell mdl-cell--12-col roster ready">
+  <div class="mdc-cell mdc-cell--12-col roster ready">
   </div>
 </div>
 <script>
   $(document).ready(function () {
 
     var papa = $('section#Roster');
-    $('.header .mdl-grid', papa).append(r.ui.rosterHeader(r.settings.Company));
+    $('.header .mdc-grid', papa).append(r.ui.rosterHeader(r.settings.Company));
 
     $('.roster', papa).append(r.ui.rosterGrid(r.settings.Team.members));
 
     setTimeout(function () {
-      $('.roster .mdl-cell input.time', papa).each(function () {
+      $('.roster .mdc-cell input.time', papa).each(function () {
         $(this).timepicker({
-          appendTo: $(this).parents('.mdl-textfield'),
+          appendTo: $(this).parents('.mdc-textfield'),
           minTime: '6:00am',
           maxTime: '8:00pm',
           timeFormat: 'g:i a'
         });
         if ($(this).hasClass('end')) {
-          var startTime = $(this).parents('.mdl-textfield').siblings('.mdl-textfield').find('.time.start');
+          var startTime = $(this).parents('.mdc-textfield').siblings('.mdc-textfield').find('.time.start');
           if (startTime.val() !== '') {
             $(this).timepicker('option', {
               'scrollDefault': (parseInt(startTime.val().split(':')[0]) + parseInt(r.settings.Templates[0].defaultWorkingHours)) +
@@ -43,14 +43,14 @@
         }
       })
 
-      $('.roster .mdl-cell input.time', papa).on('change', function () {
+      $('.roster .mdc-cell input.time', papa).on('change', function () {
         if (this.value !== '') {
-          $(this).parents('.mdl-textfield').addClass('is-dirty');
+          $(this).parents('.mdc-textfield').addClass('is-dirty');
         } else {
           $(this).parents('.is-dirty').removeClass('is-dirty');
         }
         if ($(this).hasClass('start')) {
-          var endTime = $(this).parents('.mdl-textfield').siblings('.mdl-textfield').find('.time.end');
+          var endTime = $(this).parents('.mdc-textfield').siblings('.mdc-textfield').find('.time.end');
           if (this.value !== '') {
             endTime.timepicker('option', {
               'scrollDefault': (parseInt(this.value.split(':')[0]) + parseInt(r.settings.Templates[0].defaultWorkingHours)) +
@@ -71,7 +71,7 @@
           if ($('.master-copy-time', papa).length) {
             this.childNodes[0].textContent = 'content_paste';
             this.childNodes[1].textContent = ' Paste';
-            if ($(this).parents('.mdl-cell:first').hasClass('master-copy-time') === false) {
+            if ($(this).parents('.mdc-cell:first').hasClass('master-copy-time') === false) {
               $(this).show();
             } else {
               $(this).hide();
@@ -89,8 +89,8 @@
         clearPaste();
       }).on('click', 'button.paste-time', function () {
         var times = r.helper.getCopyTime('.master-copy-time');
-        $(this).parents('.mdl-cell:first').find('input.end').val(times[1]).trigger('change');
-        $(this).parents('.mdl-cell:first').find('input.start').val(times[0]).trigger('change');
+        $(this).parents('.mdc-cell:first').find('input.end').val(times[1]).trigger('change');
+        $(this).parents('.mdc-cell:first').find('input.start').val(times[0]).trigger('change');
       }).on('click', 'button.done-time', function () {
         $('.master-copy-time', papa).removeClass('master-copy-time');
         clearPaste();
@@ -140,7 +140,7 @@
     function updateHours() {
       if (r.settings.Templates[0].hours) {
         setTimeout(function () {
-          $('.roster .mdl-cell .is-dirty input.time.end', papa).each(function () {
+          $('.roster .mdc-cell .is-dirty input.time.end', papa).each(function () {
             $(this).timepicker('option', {
               'showDuration': true
             });
@@ -148,7 +148,7 @@
 
           $('.roster .roster-body', papa).each(function () {
             var hours = 0;
-            $('.mdl-cell:not(.team-member)', this).each(function () {
+            $('.mdc-cell:not(.team-member)', this).each(function () {
               var start = $('.start', this).timepicker('getTime', new Date()),
                 end = $('.end', this).timepicker('getTime', new Date());
               if ($('.start', this).val() != '' && $('.end', this).val() != '') {

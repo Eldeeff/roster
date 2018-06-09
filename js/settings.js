@@ -29,12 +29,12 @@ var r = {
     DELETE: 'delete',
     MEMBER_ADD: 'account-plus',
     MEMBER_DELETE: 'account-remove',
-    snackbar: $('.mdl-snackbar'),
+    snackbar: $('.mdc-snackbar'),
     menu: $('#menu'),
-    menuItem: '<a class="mdl-navigation__link mdl-tabs__tab" href="#"></a>',
+    menuItem: '<a class="mdc-navigation__link mdc-tabs__tab" href="#"></a>',
     page: $('#page'),
-    pageTab: '<section class="mdl-layout__tab-panel" id=""><div class="page-content"></div></section>',
-    loadingSpinner: '<div class="mdl-spinner mdl-spinner--single-color mdl-js-spinner is-active"></div>',
+    pageTab: '<section class="mdc-layout__tab-panel" id=""><div class="page-content"></div></section>',
+    loadingSpinner: '<div class="mdc-spinner mdc-spinner--single-color mdc-js-spinner is-active"></div>',
     input: function (input) {
 
       this.label = input.data('input') || '';
@@ -54,31 +54,31 @@ var r = {
       switch (this.type) {
         case 'checkbox':
           element = `
-          <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="${this.labelID}">
-            <input class="mdl-switch__input ${this.class}"${this.checked} type="${this.type}" value="${this.value}" id="${this.labelID}">
-            <span class="mdl-switch__label">${this.label}</span>
+          <label class="mdc-switch mdc-js-switch mdc-js-ripple-effect" for="${this.labelID}">
+            <input class="mdc-switch__input ${this.class}"${this.checked} type="${this.type}" value="${this.value}" id="${this.labelID}">
+            <span class="mdc-switch__label">${this.label}</span>
           </label>`;
           break;
         case 'number':
           element = `
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="${this.type}" value="${this.value}" id="${this.labelID}">
-            <label class="mdl-textfield__label" for="${this.labelID}">${this.label}</label>
+          <div class="mdc-textfield mdc-js-textfield mdc-textfield--floating-label">
+            <input class="mdc-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="${this.type}" value="${this.value}" id="${this.labelID}">
+            <label class="mdc-textfield__label" for="${this.labelID}">${this.label}</label>
           </div>`;
           break;
         case 'range':
           element = `
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <label class="mdl-textfield__label" for="${this.labelID}">${this.label}</label>
-            <input class="mdl-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="number" value="${this.value}" id="${this.labelID}">
-            <input class="mdl-slider mdl-js-slider ${this.class}" ${this.required} min="${this.min}" max="${this.max}" step="${this.step}" type="${this.type}" value="${this.value}" id="${this.labelID}">
+          <div class="mdc-textfield mdc-js-textfield mdc-textfield--floating-label">
+            <label class="mdc-textfield__label" for="${this.labelID}">${this.label}</label>
+            <input class="mdc-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="number" value="${this.value}" id="${this.labelID}">
+            <input class="mdc-slider mdc-js-slider ${this.class}" ${this.required} min="${this.min}" max="${this.max}" step="${this.step}" type="${this.type}" value="${this.value}" id="${this.labelID}">
           </div>`;
           break;
         default:
           element = `
-          <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input ${this.class}" ${this.required} type="${this.type}" value="${this.value}" autocomplete="${this.labelEncoded}" id="${this.labelID}" minlength="2">
-            <label class="mdl-textfield__label" for="${this.labelID}">${this.label}</label>
+          <div class="mdc-textfield mdc-js-textfield mdc-textfield--floating-label">
+            <input class="mdc-textfield__input ${this.class}" ${this.required} type="${this.type}" value="${this.value}" autocomplete="${this.labelEncoded}" id="${this.labelID}" minlength="2">
+            <label class="mdc-textfield__label" for="${this.labelID}">${this.label}</label>
           </div>`;
       }
       return element.replace(/\s{2,}\s/g, '');
@@ -89,17 +89,17 @@ var r = {
     },
     teamMemberCard: function (id, name, title, bg, text) {
       var card = `
-      <div class="team-member mdl-card mdl-shadow--2dp" id="${id}">
-        <div class="mdl-card__menu">
-          <button class="edit mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+      <div class="team-member mdc-card mdc-shadow--2dp" id="${id}">
+        <div class="mdc-card__menu">
+          <button class="edit mdc-button mdc-button--icon mdc-js-button mdc-button--raised mdc-js-ripple-effect mdc-button--primary">
             <i class="material-icons">${r.ui.MEMBER_EDIT}</i>
           </button>
-          <button class="remove save-data mdl-button mdl-button--icon mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--primary">
+          <button class="remove save-data mdc-button mdc-button--icon mdc-js-button mdc-button--raised mdc-js-ripple-effect mdc-button--primary">
             <i class="material-icons">${r.ui.MEMBER_DELETE}</i>
           </button>
         </div>
-        <div class="mdl-card__title mdl-card--expand"></div>
-        <div class="mdl-card__actions details">
+        <div class="mdc-card__title mdc-card--expand"></div>
+        <div class="mdc-card__actions details">
           <span class="card-name">${name}</span>
           <span class="card-title">${title}</span>
         </div>
@@ -143,17 +143,17 @@ var r = {
       $('#Team #reorder').prop('disabled', true);
 
       var card = `
-      <div class="team-member adding mdl-card mdl-shadow--2dp">
+      <div class="team-member adding mdc-card mdc-shadow--2dp">
         <form action="">
-          <div class="mdl-card__actions details">
+          <div class="mdc-card__actions details">
             <div class="card-name" data-input="Name" data-required="true"></div>
             <div class="card-title" data-input="Title" data-required="true"></div>
             <div class="card-email" data-input="Email" data-type="email"></div>
             <div class="bottom">
               <input type="file" hidden disabled/>
-              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect upload"><img src="" hidden>Photo</button>
-              <div class="mdl-layout-spacer"></div>
-              <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save</button>
+              <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect upload"><img src="" hidden>Photo</button>
+              <div class="mdc-layout-spacer"></div>
+              <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect save-data mdc-button--primary" disabled>Save</button>
             </div>
           </div>
         </form>
@@ -164,10 +164,10 @@ var r = {
 
       $('*[data-input]', papa).each(function (i, e) {
         $(e).html(r.ui.input($(e)));
-        window.componentHandler.upgradeDom();
+        mdc.autoInit();
       });
-      $('.mdl-js-textfield', papa).on('change keyup', function () {
-        if ($('.is-invalid', papa).length === 0 && $('.is-dirty [required=true]', papa).length === $('.mdl-js-textfield [required=true]', papa).length) {
+      $('.mdc-js-textfield', papa).on('change keyup', function () {
+        if ($('.is-invalid', papa).length === 0 && $('.is-dirty [required=true]', papa).length === $('.mdc-js-textfield [required=true]', papa).length) {
           $('.save-data', papa).prop('disabled', false);
         } else {
           $('.save-data', papa).prop('disabled', true);
@@ -181,15 +181,15 @@ var r = {
       return papa;
     },
     rosterGrid: function (team) {
-      var rosterRow = '<div class="mdl-grid roster-header mdl-grid--no-spacing">';
-      rosterRow += '<div class="mdl-cell">Team Member</div>';
+      var rosterRow = '<div class="mdc-grid roster-header mdc-grid--no-spacing">';
+      rosterRow += '<div class="mdc-cell">Team Member</div>';
       var weekTemp = '',
         week = r.helper.week;
       for (var day in week) {
         if (week[day] === 'Saturday' || week[day] === 'Sunday') {
-          weekTemp += ('<div class="mdl-cell weekend">' + week[day] + '</div>');
+          weekTemp += ('<div class="mdc-cell weekend">' + week[day] + '</div>');
         } else {
-          weekTemp += ('<div class="mdl-cell">' + week[day] + '</div>');
+          weekTemp += ('<div class="mdc-cell">' + week[day] + '</div>');
         }
       }
       rosterRow += weekTemp + '</div>';
@@ -216,13 +216,13 @@ var r = {
           <div data-class="time start" data-input="Start" data-value="${start}"></div>
           <div data-class="time end" data-input="Finish" data-value="${finish}"></div>
           <div class="buttons">
-            <button class="copy-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1">
+            <button class="copy-time mdc-button mdc-js-button mdc-js-ripple-effect" tabindex="-1">
               <i class="material-icons">content_copy</i> Copy
             </button>
-            <button class="paste-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1">
+            <button class="paste-time mdc-button mdc-js-button mdc-js-ripple-effect" tabindex="-1">
               <i class="material-icons">clear</i> Clear
             </button>
-            <button class="done-time mdl-button mdl-js-button mdl-js-ripple-effect" tabindex="-1">
+            <button class="done-time mdc-button mdc-js-button mdc-js-ripple-effect" tabindex="-1">
               <i class="material-icons">check_circle</i> Done
             </button>
           </div>`.replace(/\s{2,}\s/g, ''));
@@ -230,9 +230,9 @@ var r = {
           cellWeek += this.outerHTML;
         });
         var body = $(`
-          <div class="mdl-grid roster-body mdl-grid--no-spacing" id="${tm.id}">
-            <div class="mdl-cell team-member">
-              <div class="mdl-card__actions details">
+          <div class="mdc-grid roster-body mdc-grid--no-spacing" id="${tm.id}">
+            <div class="mdc-cell team-member">
+              <div class="mdc-card__actions details">
                 <span class="card-name">${tm.name}</span>
               </div>
             </div>
@@ -269,36 +269,36 @@ var r = {
         <h3>${company.name}</h3>
         <h4>${company.slogan}</h4>
       </div>
-      <div class="mdl-layout-spacer"></div>
+      <div class="mdc-layout-spacer"></div>
       <div class="logo">
-        <img class="mdl-logo" src="${company.logo}" height="100">
+        <img class="mdc-logo" src="${company.logo}" height="100">
       </div>`
     },
     templateCard: function (template) {
       return `
-      <div class="template mdl-card mdl-shadow--2dp">
-        <div class="mdl-card__actions details">
+      <div class="template mdc-card mdc-shadow--2dp">
+        <div class="mdc-card__actions details">
           <div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="${template.avatar}"></div>
           <div class="card-title" data-input="Title" data-type="checkbox" data-checked="${template.title}"></div>
           <div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="${template.hours}"></div>
           <div class="card-break" data-input="Break" data-type="checkbox" data-checked="${template.break}"></div>
           <div class="card-working-hours" data-type="range" data-min="1" data-max="12" data-required="true" data-input="Default Working Hours" data-value="${template.defaultWorkingHours}"></div>
-          <div class="mdl-layout-spacer"></div>
+          <div class="mdc-layout-spacer"></div>
           <div class="bottom">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save & Activate</button>
+            <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect save-data mdc-button--primary" disabled>Save & Activate</button>
           </div>
         </div>
       </div>`
     },
     newTemplateCard: `
-    <div class="template adding mdl-card mdl-shadow--2dp">
-      <div class="mdl-card__actions details">
+    <div class="template adding mdc-card mdc-shadow--2dp">
+      <div class="mdc-card__actions details">
         <div class="card-avatar" data-input="Avatar" data-type="checkbox"></div>
         <div class="card-title" data-input="Title" data-type="checkbox"></div>
         <div class="card-hours" data-input="Hours" data-type="checkbox"></div>
-        <div class="mdl-layout-spacer"></div>
+        <div class="mdc-layout-spacer"></div>
         <div class="bottom">
-          <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect save-data mdl-button--primary" disabled>Save</button>
+          <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect save-data mdc-button--primary" disabled>Save</button>
         </div>
       </div>
     </div>`
@@ -376,7 +376,7 @@ var r = {
     },
     setCopyTime: function (e) {
       $('.master-copy-time').removeClass('master-copy-time');
-      $(e).parents('.mdl-cell:first').addClass('master-copy-time');
+      $(e).parents('.mdc-cell:first').addClass('master-copy-time');
     },
     getCopyTime: function (e) {
       var result = [];

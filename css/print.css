@@ -2,14 +2,14 @@
   * {
     overflow: visible;
   }
-  .mdl-grid>.mdl-cell--12-col:not(.roster):not(.header),
-  .mdl-layout__header,
-  .mdl-layout__header-button,
-  .mdl-snackbar {
+  .mdc-grid>.mdc-cell--12-col:not(.roster):not(.header),
+  .mdc-layout__header,
+  .mdc-layout__header-button,
+  .mdc-snackbar {
     display: none;
   }
-  .mdl-layout--fixed-header>.mdl-layout__content,
-  .mdl-layout__content>section {
+  .mdc-layout--fixed-header>.mdc-layout__content,
+  .mdc-layout__content>section {
     margin: 0;
     padding: 0;
     size: A4;
