@@ -1,64 +1,127 @@
 body {
-  background: #fafafa;
+  margin: 0;
 }
 
-.mdc-layout__header {
-  background-color: rgba(0, 0, 0, .9);
-  color: rgba(255, 255, 255, .9);
+:root {
+  --mdc-theme-primary: #304ffe;
+  --mdc-theme-secondary: #304ffe;
+  --mdc-theme-background: rgba(0, 0, 0, .9);
+  --mdc-theme-surface: rgba(255, 255, 255, .9);
 }
 
-.mdc-layout__header .mdc-navigation.mdc-tabs {
-  width: auto;
-  display: flex;
+.mdc-theme--dark,
+.mdc-theme--dark .mdc-button,
+.mdc-theme--dark .mdc-tab {
+  color: var(--mdc-theme-surface);
 }
 
-.mdc-navigation__link.mdc-tabs__tab {
-  height: inherit;
-  text-align: inherit;
-  text-transform: inherit;
+.mdc-button--raised:not(:disabled),
+.mdc-button--unelevated:not(:disabled),
+.mdc-theme--dark .mdc-tab.mdc-tab--active,
+.mdc-theme--dark .mdc-tab:after,
+.mdc-theme--dark .mdc-tab:before,
+.mdc-theme--dark .mdc-button:after,
+.mdc-theme--dark .mdc-button:before {
+  background-color: var(--mdc-theme-primary);
 }
 
-.mdc-layout__header .mdc-navigation .mdc-navigation__link:hover {
-  background-color: rgba(255, 255, 255, .05);
+.mdc-theme--dark .mdc-tab-bar__indicator {
+  background-color: var(--mdc-theme-surface);
+  z-index: 1;
 }
 
-.mdc-mini-footer {
-  min-height: fit-content;
+.mdc-text-field--focused .mdc-floating-label {
+  color: var(--mdc-theme-primary) !important;
 }
 
-.mdc-tabs.is-upgraded .mdc-navigation__link.mdc-tabs__tab.is-active {
-  color: #fff;
-}
-
-.mdc-tabs.is-upgraded .mdc-navigation__link.mdc-tabs__tab.is-active:after {
+.mdc-tab-bar {
+  padding: 0;
   height: 100%;
-  z-index: -1;
 }
 
-.mdc-layout__content>section {
-  padding: 40px;
+.mdc-tab-bar .mdc-tab {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mdc-button:after,
+.mdc-button:before {
+  background-color: var(--mdc-theme-primary);
+}
+
+main {
+  padding-top: 64px;
+}
+
+main .panel {
+  margin: 48px;
+}
+
+.page-content>section {
+  width: 100%;
+  display: inline-block;
 }
 
 .mdc-card {
+  float: left;
+  margin-right: 20px;
+  margin-bottom: 20px;
+}
+
+.team-member.mdc-card {
   width: 200px;
   min-height: 200px;
   background-position: center;
   background-size: cover;
-  float: left;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  background-color: rgba(0, 0, 0, .4);
+  position: relative;
 }
 
-.mdc-card .mdc-card__actions.details {
-  padding: 16px;
+.team-member.mdc-card .mdc-dialog {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.team-member.mdc-card .mdc-dialog .mdc-dialog__surface {
+  min-width: auto;
+  max-width: none;
+  justify-content: space-between;
+}
+
+.mdc-card .details {
+  padding: 0;
+}
+
+.mdc-card .details>* {
+  margin: 1rem;
+}
+
+.team-member.mdc-card .mdc-card__media .mdc-card__media-content {
+  top: auto;
   background: linear-gradient(rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, .4) 50%);
+}
+
+.team-member.mdc-card .mdc-card__media .mdc-card__media-content .mdc-card__actions * {
+  line-height: 1.5rem;
+}
+
+.team-member.mdc-card>.mdc-card__actions {
+  margin-bottom: -52px;
+  z-index: 1;
+  transition: opacity .2s;
+  background: var(--mdc-theme-surface);
+  opacity: 0;
+}
+
+.team-member.mdc-card:hover>.mdc-card__actions {
+  opacity: 1;
 }
 
 .mdc-card.template,
 .mdc-card.template .mdc-card__actions.details {
   background: #fff;
-  min-height: 200px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -66,44 +129,16 @@ body {
   -webkit-box-direction: normal;
   -ms-flex-direction: column;
   flex-direction: column;
-}
-
-.mdc-card.template div[data-type='range'] {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.mdc-card.template div[data-type='range'] .mdc-textfield__label {
-  width: 20%;
-  overflow: visible;
-}
-
-.mdc-card.template div[data-type='range'] .mdc-textfield__input {
-  width: 20%;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
   position: relative;
-  z-index: 2;
-  text-align: center;
 }
 
-.mdc-card.template div[data-type='range'] .mdc-slider__container {
-  width: 100%;
-  margin: 0 -10%;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
-  display: inline-flex;
-}
-
-.mdc-card__actions.details>span {
+.mdc-card__media.details>span {
   width: 100%;
   display: inline-block;
   font-size: 14px;
 }
 
-.mdc-card__actions.details>span:first-of-type {
+.mdc-card__media.details>span:first-of-type {
   font-weight: bold;
   font-size: inherit;
 }
@@ -112,54 +147,18 @@ body {
   margin-bottom: 11px;
 }
 
-.mdc-card.adding .mdc-card__actions.details {
+.mdc-card.adding .mdc-card__media.details {
   background: #fff;
 }
 
-.mdc-card.adding .mdc-textfield {
-  padding: 5px 0;
+.mdc-card.adding .mdc-text-field {
+  margin-top: 0;
 }
 
-.adding .mdc-card__actions>div:not(.bottom),
-.template .mdc-card__actions>div:not(.bottom) {
-  margin: 0 0 10px;
-}
-
-.mdc-card.adding .mdc-textfield__label {
-  top: 12px;
-  bottom: 5px;
-}
-
-.mdc-card.adding .mdc-textfield--floating-label.is-focused .mdc-textfield__label,
-.mdc-card.adding .mdc-textfield--floating-label.is-dirty .mdc-textfield__label,
-.mdc-card.adding .mdc-textfield--floating-label.has-placeholder .mdc-textfield__label {
-  top: -5px;
-}
-
-.mdc-card.adding .mdc-textfield__label:after {
-  bottom: 0;
-}
-
-.mdc-card.adding .details .bottom {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-
-.mdc-card.adding .details .bottom .upload {
+.mdc-card.adding .upload[style*='background-image: url("data:image/png'] {
   background-size: cover;
   background-color: rgba(158, 158, 158, .2);
   background-position: center center;
-}
-
-.mdc-card .mdc-card__menu {
-  opacity: 0;
-  -webkit-transition: opacity .5s;
-  transition: opacity .5s;
-}
-
-.mdc-card:hover .mdc-card__menu {
-  opacity: 1;
 }
 
 #Company_Logo {
@@ -202,6 +201,18 @@ body {
   align-items: center;
   text-align: left;
   border: 0;
+}
+
+.team-member.mdc-card .details>* {
+  margin: 0;
+}
+
+.team-member.mdc-card .details {
+  margin: .5rem 1rem;
+}
+
+.team-member.mdc-card .mdc-card__media-content .mdc-card__actions {
+  display: block;
 }
 
 /* Fix for firefox outline "bug" when timepicker is open */
@@ -265,13 +276,13 @@ body {
   height: 100%;
 }
 
-.roster-body .team-member .mdc-card__actions.details {
+.roster-body .team-member .mdc-card__media.details {
   color: #000;
   background: none;
   flex: 10 1;
 }
 
-.roster-body .team-member .mdc-card__actions.details .hours {
+.roster-body .team-member .mdc-card__media.details .hours {
   font-style: italic;
 }
 
@@ -347,29 +358,12 @@ body {
   color: rgba(0, 0, 0, 0.06);
 }
 
-.team-member.handle {
+.team-member .handle {
   cursor: -webkit-grab;
 }
 
-.team-member.handle:before {
-  content: attr(data-id);
-  font-size: 100px;
-  line-height: 200px;
-  background: rgba(255, 255, 255, 0.2);
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-  text-align: center;
-}
-
-.team-member.handle.sortable-chosen {
+.team-member .handle.sortable-chosen {
   cursor: -webkit-grabbing;
-}
-
-.team-member.handle .mdc-card__menu {
-  display: none;
 }
 
 .team-member.sortable-ghost {
@@ -380,4 +374,43 @@ body {
   max-height: 15em;
   width: 100%;
   text-align: left;
+}
+
+section.panel {
+  display: none;
+}
+
+section.panel.active {
+  display: block;
+}
+
+.mdc-icon-button {
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.mdc-switch--label {
+  margin-left: 1rem;
+  cursor: pointer;
+}
+
+.mdc-slider {
+  height: 28px;
+}
+
+.mdc-slider__thumb-container {
+  top: 4px;
+}
+
+.mdc-button.mdc-button--outlined {
+  border-color: inherit !important;
+}
+
+*[hidden] {
+  display: none;
+}
+
+.mdc-card__action-buttons[hidden]+.mdc-card__action-icons,
+.mdc-card__action-icons[hidden]+.mdc-card__action-buttons {
+  margin: 0
 }
