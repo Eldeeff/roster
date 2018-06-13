@@ -1,29 +1,47 @@
-<div class="mdc-grid mdc-grid-vertical">
-
-  <div class="mdc-cell mdc-cell--12-col">
-    <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect save-data mdc-button--primary">
-      Save
-    </button>
+<section>
+  <div class="mdc-card mdc-theme--primary">
+    <div class="mdc-card__actions">
+      <div class="mdc-card__action-buttons">
+        <button class="mdc-button mdc-card__action-button save-data mdc-button--unelevated" disabled>
+          Save company details
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="mdc-cell mdc-cell--12-col" data-input="Company Name">
+</section>
+<section>
+  <div class="" data-input="Company Name"></div>
+  <div class="" data-input="Company Slogan"></div>
+  <p>Company Logo</p>
+  <div class="mdc-card">
+    <div class="mdc-card__primary-action">
+      <input type="file" hidden>
+      <img src="" id="Company_Logo" class="upload" hidden>
+    </div>
+    <div class="mdc-card__actions">
+      <div class="mdc-card__action-buttons" hidden>
+        <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon remove">
+          delete
+        </button>
+      </div>
+      <div class="mdc-card__action-icons">
+        <button class="mdc-button mdc-card__action mdc-card__action--button mdc-button--raised upload">
+          <i class="material-icons mdc-button__icon">image</i> Upload
+        </button>
+      </div>
+    </div>
   </div>
-  <div class="mdc-cell mdc-cell--12-col" data-input="Company Slogan">
-  </div>
-  <div class="mdc-cell mdc-cell--12-col">
-    <input type="file" hidden>
-    <img src="" id="Company_Logo" hidden>
-    <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect upload">
-      Upload Company Logo
-    </button>
-  </div>
-</div>
+</section>
 <script>
   $(document).ready(function () {
     // load company
     $('body').on('mdc-done', function () {
       $('#Company_Name').val(r.settings.Company.name);
       $('#Company_Slogan').val(r.settings.Company.slogan);
-      $('#Company_Logo').attr('src', r.settings.Company.logo).removeAttr('hidden');
+      if (r.settings.Company.logo) {
+        $('#Company_Logo').attr('src', r.settings.Company.logo).removeProp('hidden');
+        $('.mdc-card__action-buttons').removeProp('hidden');
+      }
     });
   });
 </script>

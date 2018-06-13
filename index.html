@@ -9,36 +9,37 @@
   <link rel="stylesheet" href="min/styles.min.css">
 </head>
 
-<body class="">
-  <div class="mdc-layout mdc-js-layout mdc-layout--fixed-header">
-    <div class="mdc-layout__header">
-      <div class="mdc-layout__header-row">
-        <nav class="mdc-navigation mdc-tabs mdc-js-tabs mdc-js-ripple-effect" id="menu">
-          <div id="Roster"></div>
-          <div id="Company"></div>
-          <div id="Team"></div>
-          <div id="Templates"></div>
-        </nav>
-        <div class="mdc-layout-spacer"></div>
-        <div class="mdc-mini-footer__left-section">
-          <ul class="mdc-mini-footer__link-list">
-            <li>
-              <a href="https://lukeflego.com/">by Luke Flego</a>
-            </li>
-            <li>
-              <a href="https://github.com/LukeFlego/Roster">View on GitHub</a>
-            </li>
-          </ul>
-        </div>
-      </div>
+<body class="mdc-typography">
+  <header class="mdc-top-app-bar mdc-top-app-bar--fixed mdc-elevation--z5 mdc-theme--dark">
+    <div class="mdc-top-app-bar__row mdc-theme--background">
+      <nav class="mdc-top-app-bar__section mdc-top-app-bar__section--align-start mdc-tab-bar" id="menu" data-mdc-auto-init="MDCTabBar">
+        <span class="mdc-tab-bar__indicator"></span>
+      </nav>
+      <section class="mdc-top-app-bar__section mdc-top-app-bar__section--align-end">
+        <a class="mdc-button" href="https://lukeflego.com/">by Luke Flego</a>
+        <a class="mdc-button" href="https://github.com/LukeFlego/Roster">View on GitHub</a>
+      </section>
     </div>
-    <main class="mdc-layout__content" id="page">
-    </main>
-  </div>
-  <div class="mdc-snackbar mdc-js-snackbar">
+  </header>
+  <main class="mdc-panels" id="page">
+  </main>
+  <div class="mdc-snackbar" aria-live="assertive" aria-atomic="true" aria-hidden="true">
     <div class="mdc-snackbar__text"></div>
-    <button type="button" class="mdc-snackbar__action"></button>
+    <div class="mdc-snackbar__action-wrapper">
+      <button type="button" class="mdc-snackbar__action-button"></button>
+    </div>
   </div>
+  <aside class="mdc-dialog" role="alertdialog" hidden>
+    <div class="mdc-dialog__surface mdc-theme--dark">
+      <section class="mdc-dialog__body mdc-theme--dark">
+      </section>
+      <footer class="mdc-dialog__footer">
+        <button type="button" class="mdc-button mdc-dialog__footer__button mdc-dialog__footer__button--accept">Yes</button>
+        <button type="button" class="mdc-button mdc-button--raised mdc-dialog__footer__button mdc-dialog__footer__button--cancel">No</button>
+      </footer>
+    </div>
+    <div class="mdc-dialog__backdrop"></div>
+  </aside>
   <script src="min/scripts.min.js"></script>
 </body>
 

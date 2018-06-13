@@ -1,18 +1,19 @@
-<div class="mdc-grid">
-
-  <div class="mdc-cell mdc-cell--12-col" id="templates-cards">
-    <h2>Activate Templates</h2>
-    <p>More options to come soon</p>
+<section class="">
+  <div class="mdc-card mdc-theme--primary">
+    <div class="details">
+      <h2>Activate Templates</h2>
+      <p>More options to come soon</p>
+    </div>
   </div>
+</section>
 
-  <div class="mdc-cell mdc-cell--12-col">
-    <!--
-    <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect mdc-button--primary" disabled id="add-card">
-      Add template
-    </button>
+<section id="templates-cards">
+  <!--
+  <button class="mdc-button mdc-js-button mdc-button--raised mdc-js-ripple-effect mdc-button--primary" disabled id="add-card">
+    Add template
+  </button>
 -->
-  </div>
-</div>
+</section>
 <script>
   $(document).ready(function () {
     // load templates
@@ -30,20 +31,8 @@
       });
 
 
-      $('.mdc-card.template div[data-type="range"] input').on('input keyup mouseup', function () {
-        var _value = this.value;
-        var papa = $(this).parents('div[data-type="range"]');
-        if (_value < papa.data('min') || _value > papa.data('max')) papa.find('.mdc-textfield').removeClass('is-invalid');
-        if (_value < papa.data('min')) _value = papa.data('min');
-        if (_value > papa.data('max')) _value = papa.data('max');
-        papa.find('input').each(function () {
-          if ($(this).hasClass('mdc-slider')) {
-            this.MaterialSlider.change(_value);
-            if (papa.find('.mdc-textfield.is-invalid')) papa.find('.mdc-textfield').removeClass('is-invalid');
-          } else {
-            this.value = _value;
-          }
-        })
+      $('.mdc-card.template .mdc-slider').on('MDCSlider:change', function () {
+        $('.template .save-data').prop('disabled', false);
       });
     }, 0)
 
