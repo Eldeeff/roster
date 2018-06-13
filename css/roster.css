@@ -165,26 +165,18 @@ main .panel {
   max-width: 200px;
 }
 
-.roster .mdc-cell {
-  width: calc(100% / 6);
+.roster .mdc-layout-grid__inner {
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-gap: 0;
+}
+
+.roster .roster-header .mdc-layout-grid__cell {
+  text-align: center;
   padding: 10px;
-  text-align: center;
-  position: relative;
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-}
-
-.roster.weekends .mdc-cell {
-  width: calc(100% / 8);
-}
-
-.roster .roster-header .mdc-cell {
-  text-align: center;
 }
 
 .roster .team-member,
-.roster .roster-header .mdc-cell:first-of-type {
+.roster .roster-header .mdc-layout-grid__cell:first-of-type {
   -webkit-box-flex: 1.75;
   -ms-flex: 1.75;
   flex: 1.75;
@@ -217,13 +209,13 @@ main .panel {
 
 /* Fix for firefox outline "bug" when timepicker is open */
 
-.roster:not(.ready) .roster-body .mdc-cell {
+.roster:not(.ready) .roster-body .mdc-layout-grid__cell {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, .1);
 }
 
 /* still need the outline for print visibility, and it should perform better */
 
-.roster.ready .roster-body .mdc-cell {
+.roster.ready .roster-body .mdc-layout-grid__cell {
   outline: 1px solid rgba(0, 0, 0, .1);
 }
 
@@ -233,20 +225,20 @@ main .panel {
   width: 100%;
 }
 
-.roster:not(.ready) .roster-body .mdc-cell:not(.team-member) {
+.roster:not(.ready) .roster-body .mdc-layout-grid__cell:not(.team-member) {
   display: grid;
   grid-template: 'start buttons' 'finish buttons' / 1fr 1fr;
 }
 
-.roster:not(.ready) .roster-body .mdc-cell:not(.team-member) .mdc-textfield:first-of-type {
+.roster:not(.ready) .roster-body .mdc-layout-grid__cell:not(.team-member) .mdc-textfield:first-of-type {
   grid-area: start;
 }
 
-.roster:not(.ready) .roster-body .mdc-cell:not(.team-member) .mdc-textfield:last-of-type {
+.roster:not(.ready) .roster-body .mdc-layout-grid__cell:not(.team-member) .mdc-textfield:last-of-type {
   grid-area: finish;
 }
 
-.roster:not(.ready) .roster-body .mdc-cell:not(.team-member) .buttons {
+.roster:not(.ready) .roster-body .mdc-layout-grid__cell:not(.team-member) .buttons {
   grid-area: buttons;
   display: flex;
   flex-direction: column;
@@ -286,26 +278,26 @@ main .panel {
   font-style: italic;
 }
 
-.roster-body .mdc-cell:hover .mdc-button {
+.roster-body .mdc-layout-grid__cell:hover .mdc-button {
   opacity: 1;
 }
 
-.roster-body .mdc-cell.master-copy-time {
+.roster-body .mdc-layout-grid__cell.master-copy-time {
   background: rgba(160, 195, 255, .25);
   outline: 2px dashed #4285f4;
   z-index: 2;
 }
 
-.roster-body .mdc-cell.master-copy-time .mdc-button,
-.roster-body .mdc-cell .mdc-button.done-time {
+.roster-body .mdc-layout-grid__cell.master-copy-time .mdc-button,
+.roster-body .mdc-layout-grid__cell .mdc-button.done-time {
   display: none;
 }
 
-.roster-body .mdc-cell.master-copy-time .mdc-button.done-time {
+.roster-body .mdc-layout-grid__cell.master-copy-time .mdc-button.done-time {
   display: inline-block;
 }
 
-.roster.ready .roster-body .mdc-cell:not(.team-member) {
+.roster.ready .roster-body .mdc-layout-grid__cell:not(.team-member) {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -320,18 +312,18 @@ main .panel {
 .roster.ready .roster-body .mdc-textfield--floating-label,
 .roster.ready .roster-body .mdc-textfield--floating-label input,
 .roster.ready .roster-body .mdc-textfield--floating-label label,
-.roster.ready:not(.weekends) .mdc-cell.weekend,
+.roster.ready:not(.weekends) .mdc-layout-grid__cell.weekend,
 .roster.ready .mdc-textfield--floating-label:not(.is-dirty) {
   display: none;
 }
 
-.roster:not(.ready) .mdc-cell .paste-time,
-.roster:not(.ready) .mdc-cell .copy-time {
+.roster:not(.ready) .mdc-layout-grid__cell .paste-time,
+.roster:not(.ready) .mdc-layout-grid__cell .copy-time {
   display: none;
 }
 
-.roster:not(.ready) .mdc-cell .mdc-textfield.is-dirty~.buttons .paste-time,
-.roster:not(.ready) .mdc-cell .mdc-textfield.is-dirty~.buttons .copy-time {
+.roster:not(.ready) .mdc-layout-grid__cell .mdc-textfield.is-dirty~.buttons .paste-time,
+.roster:not(.ready) .mdc-layout-grid__cell .mdc-textfield.is-dirty~.buttons .copy-time {
   display: initial;
 }
 

@@ -214,6 +214,39 @@ function init() {
   });
 }
 
+$('button.export').on('click', function () {
+  var filename = 'Roster - ' + r.settings.Company.name + '.json';
+  var blob = new Blob([JSON.stringify(r.settings, null, 2)], {
+    type: 'application/json',
+    name: filename
+  });
+  var href = window.URL.createObjectURL(blob);
+  $('<a>').attr({
+    'href': href,
+    'download': filename
+  })[0].click();
+  console.log(href);
+});
+$('input#import').on('change', function () {
+  var reader = new FileReader();
+
+  reader.onload = function (e) {
+    var newSettings = JSON.parse(e.target.result);
+    if (newSettings.Roster != undefined) {
+      r.settings = newSettings;
+      $('body').trigger('roster:save');
+    } else {
+      r.helper.toast('Invalid file');
+    }
+  }
+
+  if (this.files[0].type === 'application/json') {
+    reader.readAsText(this.files[0]);
+  } else {
+    r.helper.toast('Wrong file type - Needs to be .json');
+  }
+})
+
 
 $(document).on('MDCAutoInit:End', function () {
   $('*[data-mdc-auto-init]').removeAttr('data-mdc-auto-init');

@@ -208,15 +208,15 @@ var r = {
       return papa;
     },
     rosterGrid: function (team) {
-      var rosterRow = '<div class="mdc-layout-grid roster-header mdc-layout-grid--no-spacing">';
-      rosterRow += '<div class="mdc-layout-grid__cell">Team Member</div>';
+      var rosterRow = '<div class="mdc-layout-grid__inner mdc-list-item roster-header">';
+      rosterRow += '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">Team Member</div>';
       var weekTemp = '',
         week = r.helper.week;
       for (var day in week) {
         if (week[day] === 'Saturday' || week[day] === 'Sunday') {
-          weekTemp += ('<div class="mdc-layout-grid__cell weekend">' + week[day] + '</div>');
+          weekTemp += ('<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1 weekend">' + week[day] + '</div>');
         } else {
-          weekTemp += ('<div class="mdc-layout-grid__cell">' + week[day] + '</div>');
+          weekTemp += ('<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">' + week[day] + '</div>');
         }
       }
       rosterRow += weekTemp + '</div>';
@@ -257,8 +257,8 @@ var r = {
           cellWeek += this.outerHTML;
         });
         var body = $(`
-          <div class="mdc-layout-grid roster-body mdc-layout-grid--no-spacing" id="${tm.id}">
-            <div class="mdc-layout-grid__cell team-member">
+          <div class="mdc-layout-grid__inner mdc-list-item mdc-card roster-body" id="${tm.id}">
+            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1 team-member">
               <div class="mdc-card__actions details">
                 <span class="card-name">${tm.name}</span>
               </div>
