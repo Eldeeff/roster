@@ -320,7 +320,7 @@ var r = {
             <div class="mdc-layout-grid__cell mdc-list mdc-list--avatar-list mdc-list--non-interactive mdc-layout-grid__cell--span-1 team-member">
               <div class="mdc-list-item">
                 <div class="mdc-list-item__text details">
-                  <span class="card-name">${tm.name}</span>
+                  <span class="mdc-list-item__text card-name">${tm.name}</span>
                 </div>
               </div>
             </div>
@@ -352,15 +352,24 @@ var r = {
       return rosterRow;
     },
     rosterHeader: function (company) {
-      return `
-      <div class="company">
-        <h3>${company.name}</h3>
-        <h4>${company.slogan}</h4>
-      </div>
-      <div class="mdc-layout-spacer"></div>
-      <div class="logo">
-        <img class="mdc-logo" src="${company.logo}" height="100">
-      </div>`
+      let html = '';
+      if (company) {
+        html += `<div class="mdc-card__action-buttons company">`;
+        if (company.name) {
+          html += `<h3>${company.name}</h3>`;
+        }
+        if (company.slogan) {
+          html += `<h4>${company.slogan}</h4>`;
+        }
+        html += `</div>`;
+        if (company.logo) {
+          html += `
+          <div class="mdc-card__action-icons logo">
+            <img class="mdc-logo" src="${company.logo}" height="100">
+          </div>`;
+        }
+      }
+      return html;
     },
     templateCard: function (template) {
       return `

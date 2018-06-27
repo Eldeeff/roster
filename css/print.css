@@ -1,20 +1,70 @@
 @media print {
   * {
-    overflow: visible;
+    box-sizing: border-box;
   }
   .mdc-grid>.mdc-cell--12-col:not(.roster):not(.header),
-  .mdc-layout__header,
-  .mdc-layout__header-button,
+  .mdc-top-app-bar,
+  .page-buttons,
   .mdc-snackbar {
     display: none;
   }
-  .mdc-layout--fixed-header>.mdc-layout__content,
-  .mdc-layout__content>section {
-    margin: 0;
+  main,
+  main .panel {
     padding: 0;
+    margin: 0;
+  }
+  .roster.scrolling,
+  .roster.scrolling .roster-header {
+    padding: 0;
+    top: auto;
+    position: relative;
+  }
+  html {
+    font-size: 14px;
+  }
+  main .panel .page-content {
     size: A4;
   }
-  .ready-time:after {
+  main .panel .page-content section {
+    float: left;
+    page-break-inside: auto;
+  }
+  .mdc-logo {
+    max-height: 5vh;
+  }
+  .mdc-list--avatar-list .mdc-list-item {
+    display: inline-block;
+    width: 100%;
+  }
+  .mdc-list--avatar-list .mdc-list-item__graphic {
+    max-height: 1.3rem;
+    max-width: 1.3rem;
+    float: left;
+    margin-right: .4rem;
+  }
+  .mdc-list--avatar-list .mdc-list-item__text {
+    overflow: visible;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .mdc-list--avatar-list .mdc-list-item__text span {
+    overflow: hidden;
+  }
+  .mdc-card {
+    margin-right: 10px;
+    margin-bottom: 10px;
+  }
+  .roster.ready .roster-body {
+    display: inline-grid;
+    width: 100%;
+    padding: 0;
+  }
+  .roster.ready .roster-body .mdc-layout-grid__cell {
+    border: 1px solid rgba(0, 0, 0, .1);
+    height: 100%;
+    margin: -1px 0 0 -1px;
+  }
+  /* .ready-time:after {
     color: rgba(0, 0, 0, .06) !important;
   }
   #Roster .header {
@@ -25,5 +75,5 @@
   }
   #Roster .roster {
     max-height: 85vh;
-  }
+  } */
 }

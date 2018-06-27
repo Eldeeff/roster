@@ -1,24 +1,30 @@
 <section>
-  <div class="mdc-layout-grid">
-    <button class="mdc-button mdc-button--raised mdc-button--primary edit-roster">
-      <i class="material-icons mdc-button__icon pencil"></i> Edit Hours</button>
-    <button class="mdc-button print-roster">
-      <i class="material-icons mdc-button__icon">printer</i> Print</button>
-    <!-- <button class="mdc-button email-roster">
+  <div class="mdc-card mdc-theme--primary page-buttons">
+    <div class="mdc-card__actions">
+      <div class="mdc-card__action-buttons">
+        <button class="mdc-button mdc-card__action-button mdc-button--unelevated edit-roster">
+          <i class="material-icons mdc-button__icon pencil"></i> Edit Hours</button>
+        <button class="mdc-button mdc-card__action-button print-roster">
+          <i class="material-icons mdc-button__icon">printer</i> Print</button>
+        <!-- <button class="mdc-button email-roster">
       <i class="material-icons">mail</i> Email</button> -->
-  </div>
-  <div class="mdc-layout-grid header">
-    <div class="mdc-layout-grid__inner mdc-grid--no-spacing">
+      </div>
     </div>
   </div>
-  <div class="mdc-layout-grid mdc-list mdc-list--avatar-list roster ready">
+  <div class="mdc-card header">
+    <div class="mdc-card__actions">
+    </div>
+  </div>
+</section>
+<section>
+  <div class="mdc-layout-grid mdc-list roster ready">
   </div>
 </section>
 <script>
   $(document).ready(function () {
 
     var papa = $('section#Roster');
-    $('.header .mdc-layout-grid__inner', papa).append(r.ui.rosterHeader(r.settings.Company));
+    $('.mdc-card.header .mdc-card__actions', papa).append(r.ui.rosterHeader(r.settings.Company));
 
     $('.roster', papa).append(r.ui.rosterGrid(r.settings.Team.members));
 

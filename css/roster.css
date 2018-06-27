@@ -74,6 +74,18 @@ main .panel {
   margin-bottom: 20px;
 }
 
+.mdc-card.header {
+  float: right;
+}
+
+.mdc-card.header .mdc-card__actions {
+  align-items: flex-start;
+}
+
+.mdc-card.header .mdc-card__actions .company * {
+  margin: 0;
+}
+
 .team-member.mdc-card {
   width: 200px;
   min-height: 200px;
@@ -443,6 +455,11 @@ section.panel.active {
 .mdc-card__action-buttons[hidden]+.mdc-card__action-icons,
 .mdc-card__action-icons[hidden]+.mdc-card__action-buttons {
   margin: 0
+}
+
+.mdc-chip {
+  height: 2rem;
+  padding: 0.7rem;
 }
 
 .ready-time .mdc-chip {
