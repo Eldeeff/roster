@@ -1,9 +1,9 @@
 <section>
   <div class="mdc-layout-grid">
     <button class="mdc-button mdc-button--raised mdc-button--primary edit-roster">
-      <i class="material-icons">edit</i> Edit Hours</button>
+      <i class="material-icons mdc-button__icon pencil"></i> Edit Hours</button>
     <button class="mdc-button print-roster">
-      <i class="material-icons">print</i> Print</button>
+      <i class="material-icons mdc-button__icon">printer</i> Print</button>
     <!-- <button class="mdc-button email-roster">
       <i class="material-icons">mail</i> Email</button> -->
   </div>
@@ -11,27 +11,27 @@
     <div class="mdc-layout-grid__inner mdc-grid--no-spacing">
     </div>
   </div>
-  <div class="mdc-layout-grid mdc-list roster ready">
+  <div class="mdc-layout-grid mdc-list mdc-list--avatar-list roster ready">
   </div>
 </section>
 <script>
   $(document).ready(function () {
 
     var papa = $('section#Roster');
-    $('.header .mdc-grid', papa).append(r.ui.rosterHeader(r.settings.Company));
+    $('.header .mdc-layout-grid__inner', papa).append(r.ui.rosterHeader(r.settings.Company));
 
     $('.roster', papa).append(r.ui.rosterGrid(r.settings.Team.members));
 
     setTimeout(function () {
-      $('.roster .mdc-cell input.time', papa).each(function () {
+      $('.roster .mdc-layout-grid__cell input.time', papa).each(function () {
         $(this).timepicker({
-          appendTo: $(this).parents('.mdc-textfield'),
+          appendTo: $(this).parents('.mdc-text-field'),
           minTime: '6:00am',
           maxTime: '8:00pm',
           timeFormat: 'g:i a'
         });
         if ($(this).hasClass('end')) {
-          var startTime = $(this).parents('.mdc-textfield').siblings('.mdc-textfield').find('.time.start');
+          var startTime = $(this).parents('.mdc-text-field').siblings('.mdc-text-field').find('.time.start');
           if (startTime.val() !== '') {
             $(this).timepicker('option', {
               'scrollDefault': (parseInt(startTime.val().split(':')[0]) + parseInt(r.settings.Templates[0].defaultWorkingHours)) +
@@ -43,14 +43,14 @@
         }
       })
 
-      $('.roster .mdc-cell input.time', papa).on('change', function () {
+      $('.roster .mdc-layout-grid__cell input.time', papa).on('change', function () {
         if (this.value !== '') {
-          $(this).parents('.mdc-textfield').addClass('is-dirty');
+          $(this).parents('.mdc-text-field').addClass('is-dirty');
         } else {
           $(this).parents('.is-dirty').removeClass('is-dirty');
         }
         if ($(this).hasClass('start')) {
-          var endTime = $(this).parents('.mdc-textfield').siblings('.mdc-textfield').find('.time.end');
+          var endTime = $(this).parents('.mdc-text-field').siblings('.mdc-text-field').find('.time.end');
           if (this.value !== '') {
             endTime.timepicker('option', {
               'scrollDefault': (parseInt(this.value.split(':')[0]) + parseInt(r.settings.Templates[0].defaultWorkingHours)) +
@@ -69,16 +69,16 @@
       function clearPaste() {
         $('button.paste-time').each(function () {
           if ($('.master-copy-time', papa).length) {
-            this.childNodes[0].textContent = 'content_paste';
-            this.childNodes[1].textContent = ' Paste';
-            if ($(this).parents('.mdc-cell:first').hasClass('master-copy-time') === false) {
+            this.childNodes[0].textContent = r.ui.constants.HOURS_PASTE.icon;
+            this.childNodes[1].textContent = r.ui.constants.HOURS_PASTE.text;
+            if ($(this).parents('.mdc-layout-grid__cell:first').hasClass('master-copy-time') === false) {
               $(this).show();
             } else {
               $(this).hide();
             }
           } else {
-            this.childNodes[0].textContent = 'clear';
-            this.childNodes[1].textContent = ' Clear';
+            this.childNodes[0].textContent = r.ui.constants.HOURS_CLEAR.icon;
+            this.childNodes[1].textContent = r.ui.constants.HOURS_CLEAR.text;
             $(this).removeAttr('style');
           }
         })
@@ -89,8 +89,8 @@
         clearPaste();
       }).on('click', 'button.paste-time', function () {
         var times = r.helper.getCopyTime('.master-copy-time');
-        $(this).parents('.mdc-cell:first').find('input.end').val(times[1]).trigger('change');
-        $(this).parents('.mdc-cell:first').find('input.start').val(times[0]).trigger('change');
+        $(this).parents('.mdc-layout-grid__cell:first').find('input.end').val(times[1]).trigger('change');
+        $(this).parents('.mdc-layout-grid__cell:first').find('input.start').val(times[0]).trigger('change');
       }).on('click', 'button.done-time', function () {
         $('.master-copy-time', papa).removeClass('master-copy-time');
         clearPaste();
@@ -100,7 +100,7 @@
       $('.edit-roster', papa).click(function () {
 
         function edit(e) {
-          e.childNodes[2].textContent = " Save Hours";
+          e.childNodes[2].textContent = "Save Hours";
           $(e).removeClass('save-data');
           $('.roster', papa).removeClass('ready');
         };
@@ -108,12 +108,12 @@
         function save(e) {
           $('.master-copy-time', papa).removeClass('master-copy-time');
 
-          e.childNodes[2].textContent = " Edit Hours";
-          $(e).addClass('save-data');
+          e.childNodes[2].textContent = "Edit Hours";
           $('.roster', papa).addClass('ready');
+          $(e).addClass('save-data');
         };
-        $(this).text().trim() === 'edit Edit Hours' ? edit(this) : save(this);
-        fitTeamImage();
+        console.log($(this).text().trim());
+        $(this).text().trim() === 'Edit Hours' ? edit(this) : save(this);
         checkForWeekends();
       });
     }, 0)
@@ -138,59 +138,61 @@
     }
 
     function updateHours() {
-      if (r.settings.Templates[0].hours) {
-        setTimeout(function () {
-          $('.roster .mdc-cell .is-dirty input.time.end', papa).each(function () {
+      setTimeout(function () {
+        if (r.settings.Templates[0].hours) {
+          $('.roster .mdc-layout-grid__cell .is-dirty input.time.end', papa).each(function () {
             $(this).timepicker('option', {
               'showDuration': true
             });
           });
+        }
 
-          $('.roster .roster-body', papa).each(function () {
-            var hours = 0;
-            $('.mdc-cell:not(.team-member)', this).each(function () {
-              var start = $('.start', this).timepicker('getTime', new Date()),
-                end = $('.end', this).timepicker('getTime', new Date());
-              if ($('.start', this).val() != '' && $('.end', this).val() != '') {
-                var day = (Date.parse(end) - Date.parse(start)) / 1000 / 60 / 60;
-                if (day >= r.settings.Templates[0].defaultWorkingHours && r.settings.Templates[0].break) {
-                  day = day - .5;
-                }
-                hours += day;
+        $('.roster .roster-body', papa).each(function () {
+          var hours = 0;
+          $('.mdc-layout-grid__cell:not(.team-member)', this).each(function () {
+
+            $('.ready-time .break', this).remove();
+
+            var start = $('.start', this).timepicker('getTime', new Date()),
+              end = $('.end', this).timepicker('getTime', new Date());
+            if ($('.start', this).val() != '' && $('.end', this).val() != '') {
+              var day = (Date.parse(end) - Date.parse(start)) / 1000 / 60 / 60;
+              if (day >= r.settings.Templates[0].defaultWorkingHours && r.settings.Templates[0].break) {
+                day = day - .5;
+                $('.ready-time', this).append(`<div class="mdc-chip break mdc-elevation--z1"><i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_SHORT.icon}</i> &nbsp;&nbsp;&nbsp; <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_LONG.icon}</i></div>`);
+              } else {
+                $('.ready-time', this).append(`<div class="mdc-chip break mdc-elevation--z1"><i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_SHORT.icon}</i></div>`);
               }
-            });
-            if (hours > 0) {
-              $('.team-member .details .hours', this).prop('hidden', false).text(hours + ' hours');
-            } else {
-              $('.team-member .details .hours', this).prop('hidden', true).text();
+              hours += day;
             }
           });
+          if (hours > 0 && r.settings.Templates[0].hours) {
+            $('.team-member .details .hours', this).prop('hidden', false).text(hours + ' hours');
+          } else {
+            $('.team-member .details .hours', this).prop('hidden', true).text();
+          }
+        });
 
-        }, 0)
-      }
+      }, 0)
     }
 
-    function fitTeamImage() {
-      if (r.settings.Templates[0].avatar) {
-        setTimeout(function () {
-          $('.roster-body .team-member img').each(function () {
-            var thisRatio = $(this).height() / $(this).width(),
-              parentRatio = $(this).parents('.avatar').height() / $(this).parents('.avatar').width();
-            if (thisRatio <= parentRatio) {
-              $(this).addClass('fit-height');
-            } else {
-              $(this).removeClass('fit-height');
-            }
-          })
-        }, 0)
-      }
-    }
 
-    $(window).resize(function () {
-      fitTeamImage();
+    var header = $('.roster-header'),
+      headerTop = header.offset().top;
+
+    $(window).scroll(function () {
+      var topBar = $('.mdc-top-app-bar'),
+        viewportTop = headerTop - (window.scrollY + topBar.height());
+      if (viewportTop < 0) {
+        header.addClass('mdc-elevation--z2');
+        $('.roster', papa).addClass('scrolling');
+      } else {
+        header.removeClass('mdc-elevation--z2');
+        $('.roster', papa).removeClass('scrolling');
+      }
+
     });
 
-    fitTeamImage();
     checkForWeekends();
     updateHours();
   })

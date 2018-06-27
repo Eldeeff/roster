@@ -23,7 +23,7 @@
 
     setTimeout(function () {
       $('.mdc-card.template .is-upgraded').on('change keyup', function () {
-        if ($('.mdc-card.template .is-invalid').length === 0 && $('.mdc-card.template [required=true] .is-dirty').length === $('.mdc-card.template [required=true] .mdc-js-textfield').length) {
+        if ($('.mdc-card.template .is-invalid').length === 0 && $('.mdc-card.template [required=true] .is-dirty').length === $('.mdc-card.template [required=true] .mdc-text-field').length) {
           $('.template .save-data').prop('disabled', false);
         } else {
           $('.template .save-data').prop('disabled', true);

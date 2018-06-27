@@ -20,22 +20,78 @@ var r = {
     }]
   },
   ui: {
-    TIME_IN: 'clock-start',
-    TIME_OUT: 'clock-end',
-    TIME_SEPARATOR: '<br>',
-    BREAK_SHORT: 'coffee',
-    BREAK_LONG: 'silverware-variant',
-    MEMBER_EDIT: 'account-edit',
-    DELETE: 'delete',
-    MEMBER_ADD: 'account-plus',
-    MEMBER_DELETE: 'account-remove',
-    REORDER_HANDLE: 'drag',
+    constants: {
+      HOURS_COPY: {
+        icon: 'content-copy',
+        text: 'Copy'
+      },
+      HOURS_PASTE: {
+        icon: 'content-paste',
+        text: 'Paste'
+      },
+      HOURS_CLEAR: {
+        icon: 'close',
+        text: 'Clear'
+      },
+      HOURS_DONE: {
+        icon: 'check-circle',
+        text: 'Done'
+      },
+      TIME_IN: {
+        icon: 'clock-in',
+        text: 'In'
+      },
+      TIME_OUT: {
+        icon: 'clock-out',
+        text: 'Out'
+      },
+      BREAK_SHORT: {
+        icon: 'coffee',
+        text: '15m'
+      },
+      BREAK_LONG: {
+        icon: 'silverware-variant',
+        text: '30m'
+      },
+      MEMBER_EDIT: {
+        icon: 'account-edit',
+        text: 'Edit'
+      },
+      DELETE: {
+        icon: 'delete',
+        text: 'Remove'
+      },
+      MEMBER_ADD: {
+        icon: 'account-plus',
+        text: 'Add'
+      },
+      MEMBER_DELETE: {
+        icon: 'account-remove',
+        text: 'Remove'
+      },
+      REORDER_HANDLE: {
+        icon: 'drag',
+        text: 'Re-order'
+      },
+      PLUS: {
+        icon: 'plus',
+        text: 'Add'
+      },
+      IMAGE: {
+        icon: 'image',
+        text: 'Image'
+      },
+      COLOR: {
+        icon: 'format-color-fill',
+        text: 'Colour'
+      }
+    },
     snackbar: new mdc.snackbar.MDCSnackbar($('.mdc-snackbar')[0]),
     menu: $('#menu'),
     menuItem: '<a class="mdc-tab" href="#"></a>',
     page: $('#page'),
     pageTab: '<section class="panel" id=""><div class="page-content"></div></section>',
-    loadingSpinner: '<div class="mdc-spinner mdc-spinner--single-color mdc-js-spinner is-active"></div>',
+    loadingSpinner: '<div class="mdc-spinner mdc-spinner--single-color is-active"></div>',
     activeTabClass: 'mdc-tab--active',
     activePanelClass: 'active',
     input: function (input) {
@@ -70,7 +126,7 @@ var r = {
           element = `
           <div class="mdc-textfield mdc-js-textfield mdc-textfield--floating-label">
             <input class="mdc-textfield__input ${this.class}" ${this.required} min="${this.min}" max="${this.max}" type="${this.type}" value="${this.value}" id="${this.labelID}">
-            <label class="mdc-textfield__label" for="${this.labelID}">${this.label}</label>
+            <label class="mdc-textfield__label">${this.label}</label>
           </div>`;
           break;
         case 'range':
@@ -97,7 +153,7 @@ var r = {
           element = `
           <div class="mdc-text-field" data-mdc-auto-init="MDCTextField">
             <input class="mdc-text-field__input ${this.class}" ${this.required} type="${this.type}" value="${this.value}" autocomplete="${this.labelEncoded}" id="${this.labelID}" minlength="2">
-            <label class="mdc-floating-label" for="${this.labelID}">${this.label}</label>
+            <label class="mdc-floating-label">${this.label}</label>
             <div class="mdc-line-ripple"></div>
           </div>`;
       }
@@ -112,11 +168,11 @@ var r = {
       <div class="mdc-card team-member" id="${id}">
         <div class="mdc-card__actions">
           <div class="mdc-card__action-buttons">
-            <button class="mdc-icon-button edit material-icons mdc-card__action mdc-card__action--icon">${r.ui.MEMBER_EDIT}</button>
-            <button class="mdc-icon-button remove material-icons mdc-card__action mdc-card__action--icon">${r.ui.MEMBER_DELETE}</button>
+            <button class="mdc-icon-button edit material-icons mdc-card__action mdc-card__action--icon">${r.ui.constants.MEMBER_EDIT.icon}</button>
+            <button class="mdc-icon-button remove material-icons mdc-card__action mdc-card__action--icon">${r.ui.constants.MEMBER_DELETE.icon}</button>
           </div>
           <div class="mdc-card__action-icons">
-            <button class="mdc-icon-button handle material-icons mdc-card__action mdc-card__action--icon">${r.ui.REORDER_HANDLE}</button>
+            <button class="mdc-icon-button handle material-icons mdc-card__action mdc-card__action--icon">${r.ui.constants.REORDER_HANDLE.icon}</button>
           </div>
         </div>
         <div class="mdc-card__media mdc-card__media--square">
@@ -176,11 +232,11 @@ var r = {
           <div class="mdc-card__actions">
             <div class="mdc-card__action-buttons">
               <input type="file" hidden disabled/>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon colour">format-color-fill</button>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon upload">image</button>
+              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon colour">${r.ui.constants.COLOUR.icon}</button>
+              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon upload">${r.ui.constants.IMAGE.icon}</button>
             </div>
             <div class="mdc-card__action-icons">
-              <button class="mdc-icon-button mdc-theme--on-primary material-icons mdc-card__action mdc-card__action--icon mdc-button--raised save-data" disabled>plus</button>
+            <button class="mdc-icon-button mdc-theme--on-primary material-icons mdc-card__action mdc-card__action--icon mdc-button--raised save-data" disabled>${r.ui.constants.MEMBER_ADD.icon}</button>
             </div>
           </div>
         </form>
@@ -194,7 +250,7 @@ var r = {
       });
       init();
       $('.mdc-text-field', papa).on('change keyup', function () {
-        if ($('.is-invalid', papa).length === 0 && $('.is-dirty [required=true]', papa).length === $('.mdc-js-textfield [required=true]', papa).length) {
+        if ($('.is-invalid', papa).length === 0 && $('.is-dirty [required=true]', papa).length === $('.mdc-text-field [required=true]', papa).length) {
           $('.save-data', papa).prop('disabled', false);
         } else {
           $('.save-data', papa).prop('disabled', true);
@@ -208,7 +264,7 @@ var r = {
       return papa;
     },
     rosterGrid: function (team) {
-      var rosterRow = '<div class="mdc-layout-grid__inner mdc-list-item roster-header">';
+      var rosterRow = '<div class="mdc-layout-grid__inner mdc-list-item roster-header mdc-elevation-transition">';
       rosterRow += '<div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1">Team Member</div>';
       var weekTemp = '',
         week = r.helper.week;
@@ -237,40 +293,45 @@ var r = {
           var start = membersRoster ? membersRoster[$(this).text()].start : '',
             finish = membersRoster ? membersRoster[$(this).text()].finish : '';
 
-          var readyTime = r.helper.join([`<i class="material-icons">${r.ui.TIME_IN}</i> ${start}`, `<i class="material-icons">${r.ui.TIME_OUT}</i> ${finish}`], r.ui.TIME_SEPARATOR);
+          var startChip = start != '' ? `<div class="mdc-chip mdc-elevation--z1"><i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.TIME_IN.icon}</i><div class="mdc-chip__text">${start}</div></div>` : '',
+            finishChip = finish != '' ? `<div class="mdc-chip mdc-elevation--z1"><i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.TIME_OUT.icon}</i><div class="mdc-chip__text">${finish}</div></div>` : '';
+
+          var readyTime = startChip + finishChip;
           $(this).html(`
-          <span class="ready-time">${readyTime}</span>
+          <span class="mdc-chip-set ready-time">${readyTime}</span>
           <div data-class="time start" data-input="Start" data-value="${start}"></div>
           <div data-class="time end" data-input="Finish" data-value="${finish}"></div>
           <div class="buttons">
             <button class="copy-time mdc-button" tabindex="-1">
-              <i class="material-icons">content_copy</i> Copy
+              <i class="material-icons mdc-button__icon">${r.ui.constants.HOURS_COPY.icon}</i>${r.ui.constants.HOURS_COPY.text}
             </button>
             <button class="paste-time mdc-button" tabindex="-1">
-              <i class="material-icons">clear</i> Clear
+              <i class="material-icons mdc-button__icon">${r.ui.constants.HOURS_CLEAR.icon}</i>${r.ui.constants.HOURS_CLEAR.text}
             </button>
             <button class="done-time mdc-button" tabindex="-1">
-              <i class="material-icons">check_circle</i> Done
+              <i class="material-icons mdc-button__icon">${r.ui.constants.HOURS_DONE.icon}</i>${r.ui.constants.HOURS_DONE.text}
             </button>
           </div>`.replace(/\s{2,}\s/g, ''));
 
           cellWeek += this.outerHTML;
         });
         var body = $(`
-          <div class="mdc-layout-grid__inner mdc-list-item mdc-card roster-body" id="${tm.id}">
-            <div class="mdc-layout-grid__cell mdc-layout-grid__cell--span-1 team-member">
-              <div class="mdc-card__actions details">
-                <span class="card-name">${tm.name}</span>
+          <div class="mdc-layout-grid__inner mdc-list-item roster-body" id="${tm.id}">
+            <div class="mdc-layout-grid__cell mdc-list mdc-list--avatar-list mdc-list--non-interactive mdc-layout-grid__cell--span-1 team-member">
+              <div class="mdc-list-item">
+                <div class="mdc-list-item__text details">
+                  <span class="card-name">${tm.name}</span>
+                </div>
               </div>
             </div>
             ${cellWeek}
           </div>`);
 
         if (r.settings.Templates[0].title) {
-          $('.team-member .details', body).append('<span class="card-title">' + tm.title + '</span>');
+          $('.team-member .details', body).append('<span class="mdc-list-item__secondary-text card-title">' + tm.title + '</span>');
         }
         if (r.settings.Templates[0].hours) {
-          $('.team-member .details', body).append('<span class="hours" hidden></span>');
+          $('.team-member .details', body).append('<span class="mdc-list-item__secondary-text hours" hidden></span>');
         }
         if (r.settings.Templates[0].avatar) {
           if (tm.bg.match(/(#......)/)) {
@@ -281,9 +342,9 @@ var r = {
             ctx.fillStyle = tm.bg;
             ctx.fillRect(0, 0, c.width, c.height);
             colourImage = c.toDataURL();
-            $('.team-member', body).prepend('<div class="avatar"><img src="' + colourImage + '"></div>');
+            $('.team-member .mdc-list-item', body).prepend('<div class="mdc-list-item__graphic mdc-elevation--z1"><img src="' + colourImage + '"></div>');
           } else {
-            $('.team-member', body).prepend('<div class="avatar"><img src="' + tm.bg.split('url("')[1].split('")')[0] + '"></div>');
+            $('.team-member .mdc-list-item', body).prepend('<div class="mdc-list-item__graphic mdc-elevation--z1"><img src="' + tm.bg.split('url("')[1].split('")')[0] + '"></div>');
           }
         }
         rosterRow += body[0].outerHTML;
