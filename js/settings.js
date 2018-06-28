@@ -81,7 +81,7 @@ var r = {
         icon: 'image',
         text: 'Image'
       },
-      COLOR: {
+      COLOUR: {
         icon: 'format-color-fill',
         text: 'Colour'
       }
@@ -232,8 +232,8 @@ var r = {
           <div class="mdc-card__actions">
             <div class="mdc-card__action-buttons">
               <input type="file" hidden disabled/>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon colour">${r.ui.constants.COLOUR.icon}</button>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon upload">${r.ui.constants.IMAGE.icon}</button>
+              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary colour">${r.ui.constants.COLOUR.icon}</button>
+              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary upload">${r.ui.constants.IMAGE.icon}</button>
             </div>
             <div class="mdc-card__action-icons">
             <button class="mdc-icon-button mdc-theme--on-primary material-icons mdc-card__action mdc-card__action--icon mdc-button--raised save-data" disabled>${r.ui.constants.MEMBER_ADD.icon}</button>
