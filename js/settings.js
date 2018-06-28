@@ -472,17 +472,6 @@ var r = {
         return obj[inside] == what;
       })
     },
-    setCopyTime: function (e) {
-      $('.master-copy-time').removeClass('master-copy-time');
-      $(e).parents('.mdc-layout-grid__cell:first').addClass('master-copy-time');
-    },
-    getCopyTime: function (e) {
-      var result = [];
-      $('input.time', e).each(function () {
-        result.push($(this).val());
-      })
-      return result;
-    },
     toast: function (message, timeout) {
       var timeout = timeout || 2750;
       r.ui.snackbar.show({

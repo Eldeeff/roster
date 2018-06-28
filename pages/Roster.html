@@ -28,6 +28,20 @@
 
     $('.roster', papa).append(r.ui.rosterGrid(r.settings.Team.members));
 
+
+    function setCopyTime(e) {
+      $('.master-copy-time').removeClass('master-copy-time');
+      $(e).parents('.mdc-layout-grid__cell:first').addClass('master-copy-time');
+    }
+
+    function getCopyTime(e) {
+      var result = [];
+      $('input.time', e).each(function () {
+        result.push($(this).val());
+      })
+      return result;
+    }
+
     setTimeout(function () {
       $('.roster .mdc-layout-grid__cell input.time', papa).each(function () {
         $(this).timepicker({
@@ -91,10 +105,10 @@
       }
 
       $(papa).on('click', 'button.copy-time', function () {
-        r.helper.setCopyTime(this);
+        setCopyTime(this);
         clearPaste();
       }).on('click', 'button.paste-time', function () {
-        var times = r.helper.getCopyTime('.master-copy-time');
+        var times = getCopyTime('.master-copy-time');
         $(this).parents('.mdc-layout-grid__cell:first').find('input.end').val(times[1]).trigger('change');
         $(this).parents('.mdc-layout-grid__cell:first').find('input.start').val(times[0]).trigger('change');
       }).on('click', 'button.done-time', function () {
