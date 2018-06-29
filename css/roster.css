@@ -237,7 +237,7 @@ main .panel {
 }
 
 .mdc-card.adding .mdc-text-field,
-.mdc-card.adding button:not([style*='background-']) {
+.mdc-card.adding .mdc-card__action-buttons button:not([style*='background-']) {
   transition: opacity .1s .1s;
   opacity: 1;
 }
@@ -249,7 +249,7 @@ main .panel {
 }
 
 .mdc-card.adding:not(.open) .mdc-text-field,
-.mdc-card.adding:not(.open) button:not([style*='background-']) {
+.mdc-card.adding:not(.open) .mdc-card__action-buttons button:not([style*='background-']) {
   opacity: 0;
 }
 
@@ -261,22 +261,16 @@ main .panel {
   margin-top: 0;
 }
 
-.mdc-card.adding .upload[style*='background-image: url("data:image/png'] {
-  background-size: cover;
-  background-color: rgba(158, 158, 158, .2);
-  background-position: center center;
-}
-
-.mdc-card.adding button[style*='background-'] {
+.mdc-card.adding .mdc-card__action-buttons button[style*='background-'] {
   overflow: visible;
 }
 
-.mdc-card.adding button[style*='background-']:focus,
-.mdc-card.adding button[style*='background-']:hover {
+.mdc-card.adding .mdc-card__action-buttons button[style*='background-']:focus,
+.mdc-card.adding .mdc-card__action-buttons button[style*='background-']:hover {
   overflow: hidden;
 }
 
-.mdc-card.adding button[style*='background-']:after {
+.mdc-card.adding .mdc-card__action-buttons button[style*='background-']:after {
   opacity: 1;
   height: 100%;
   width: 100%;
@@ -289,19 +283,29 @@ main .panel {
   background-color: inherit;
 }
 
-.mdc-card.adding:not(.open) button[style*='background-'] {
+.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*='background-'] {
   overflow: visible;
 }
 
-.mdc-card.adding:not(.open) button[style*='background-']:after {
+.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*='background-']:after {
   opacity: 0;
   height: 1100%;
   width: 1100%;
   transition: width .25s, height .25s, opacity .16s .1s;
 }
 
-.mdc-card.adding:not(.open) .upload[style*='background-image: url("data:image/png'] {
-  transform: scale(5);
+.mdc-card.adding .mdc-card__action-buttons button[style*='background-image: url('] {
+  background-size: cover;
+  background-color: rgba(158, 158, 158, .2);
+  background-position: center center;
+  transition: width .3s, height .3s, transform .3s, border-radius .3s;
+}
+
+.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*='background-image: url('] {
+  transform: translate(-8px, -185px);
+  height: 200px;
+  width: 200px;
+  border-radius: inherit;
 }
 
 #Company_Logo {

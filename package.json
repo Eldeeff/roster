@@ -14,7 +14,7 @@
     "js/settings.js",
     "js/roster.js"
   ],
-  "version": "1.6.1a",
+  "version": "0.2.1a",
   "description": "Roster app made simple and free",
   "main": "index.js",
   "scripts": {
@@ -24,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Eldeeff/Roster.git"
+    "url": "git+https://github.com/LukeFlego/Roster.git"
   },
   "keywords": [
     "roster",
@@ -34,9 +34,9 @@
   "author": "Luke Flego",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Eldeeff/Roster/issues"
+    "url": "https://github.com/LukeFlego/Roster/issues"
   },
-  "homepage": "https://github.com/Eldeeff/Roster#readme",
+  "homepage": "https://github.com/LukeFlego/Roster#readme",
   "dependencies": {
     "jquery": "^3.3.1",
     "material-components-web": "^0.36.0",
@@ -46,7 +46,7 @@
     "timepicker": "^1.11.12"
   },
   "devDependencies": {
-    "copyfiles": "^2.0.0",
-    "minify": "^3.0.3"
+    "uglifycss": "^0.0.29",
+    "uglify-es": "^3.3.9"
   }
 }
