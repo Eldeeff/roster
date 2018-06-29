@@ -64,8 +64,6 @@ $('body').on('change keyup', 'input,textarea,select', function () {
 });
 
 $('body').on('click', '.save-data', function () {
-  var btn = $(this);
-  btn.prop('disabled', true);
   save();
 });
 $('body').on('roster:save', function () {
@@ -73,67 +71,70 @@ $('body').on('roster:save', function () {
 });
 
 function save() {
-  var saveType = 'details',
-    parent = $('section.panel.active');
+  setTimeout(() => {
 
-  if ($(parent).attr('id') === 'Roster') {
-    $('.roster-body').each(function () {
-      var id = $(this).attr('id');
-      r.settings.Roster[id] = {};
-      $('.mdc-cell:not(.team-member)', $(this)).each(function (i) {
-        var day = $('.roster-header .mdc-cell').eq(i + 1).text();
-        r.settings.Roster[id][day] = {
-          start: $('input[type=text]:eq(0)', $(this)).val(),
-          finish: $('input[type=text]:eq(1)', $(this)).val()
-        };
-      })
-    })
-  }
+    var saveType = 'details',
+      parent = $('section.panel.active');
 
-  if ($(parent).attr('id') === 'Company') {
-    r.settings.Company.name = $('#Company_Name').val();
-    r.settings.Company.slogan = $('#Company_Slogan').val();
-    r.settings.Company.logo = $('#Company_Logo').attr('src');
-  }
-
-  if ($(parent).attr('id') === 'Team') {
-    saveType = 'member details';
-    if ($('.team-member.adding:not([id])').length === 1) {
-      // ADD NEW
-      var member = {
-        name: $('.team-member.adding #Name').val(),
-        email: $('.team-member.adding #Email').val(),
-        title: $('.team-member.adding #Title').val(),
-        bg: $('.team-member.adding .upload').css('background-image')
-      }
-      r.helper.addMember(member);
-    } else if ($('.team-member.adding[id]').length === 1) {
-      // EDIT EXISTING
-      r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'), $('.team-member.adding').data('id'));
-    } else if ($('.team-member[data-id]').length > 0) {
-      // EDIT ALL EXISTING
-      saveType = 'member order';
-      $('.team-member[id]').each(function () {
-        r.helper.reorderMember($(this).attr('id'), $(this).data('id'));
+    if ($(parent).attr('id') === 'Roster') {
+      $('.roster-body').each(function () {
+        var id = $(this).attr('id');
+        r.settings.Roster[id] = {};
+        $('.mdc-cell:not(.team-member)', $(this)).each(function (i) {
+          var day = $('.roster-header .mdc-cell').eq(i + 1).text();
+          r.settings.Roster[id][day] = {
+            start: $('input[type=text]:eq(0)', $(this)).val(),
+            finish: $('input[type=text]:eq(1)', $(this)).val()
+          };
+        })
       })
     }
-  }
 
-  if ($(parent).attr('id') === 'Templates') {
-    r.settings.Templates = [{
-      'avatar': $('#Templates .template .card-avatar input[type=checkbox]').prop('checked'),
-      'title': $('#Templates .template .card-title input[type=checkbox]').prop('checked'),
-      'hours': $('#Templates .template .card-hours input[type=checkbox]').prop('checked'),
-      'break': $('#Templates .template .card-break input[type=checkbox]').prop('checked'),
-      'defaultWorkingHours': Number($('#Templates .template .card-working-hours .mdc-slider').attr('aria-valuenow'))
-    }];
-  }
+    if ($(parent).attr('id') === 'Company') {
+      r.settings.Company.name = $('#Company_Name').val();
+      r.settings.Company.slogan = $('#Company_Slogan').val();
+      r.settings.Company.logo = $('#Company_Logo').attr('src');
+    }
 
-  r.helper.set('settings', r.settings);
+    if ($(parent).attr('id') === 'Team') {
+      saveType = 'member details';
+      if ($('.team-member.adding:not([id])').length === 1) {
+        // ADD NEW
+        var member = {
+          name: $('.team-member.adding #Name').val(),
+          email: $('.team-member.adding #Email').val(),
+          title: $('.team-member.adding #Title').val(),
+          bg: $('.team-member.adding .upload').css('background-image')
+        }
+        r.helper.addMember(member);
+      } else if ($('.team-member.adding[id]').length === 1) {
+        // EDIT EXISTING
+        r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'), $('.team-member.adding').data('id'));
+      } else if ($('.team-member[data-id]').length > 0) {
+        // EDIT ALL EXISTING
+        saveType = 'member order';
+        $('.team-member[id]').each(function () {
+          r.helper.reorderMember($(this).attr('id'), $(this).data('id'));
+        })
+      }
+    }
 
-  r.helper.toast('Saved ' + $(parent).attr('id') + ' ' + saveType);
+    if ($(parent).attr('id') === 'Templates') {
+      r.settings.Templates = [{
+        'avatar': $('#Templates .template .card-avatar input[type=checkbox]').prop('checked'),
+        'title': $('#Templates .template .card-title input[type=checkbox]').prop('checked'),
+        'hours': $('#Templates .template .card-hours input[type=checkbox]').prop('checked'),
+        'break': $('#Templates .template .card-break input[type=checkbox]').prop('checked'),
+        'defaultWorkingHours': Number($('#Templates .template .card-working-hours .mdc-slider').attr('aria-valuenow'))
+      }];
+    }
 
-  $('section.panel.active').find('.page-content').html('').append(r.ui.loadingSpinner).load('pages/' + $('section.panel.active').attr('id') + '.html');
+    r.helper.set('settings', r.settings);
+
+    r.helper.toast('Saved ' + $(parent).attr('id') + ' ' + saveType);
+
+    $('section.panel.active').find('.page-content').html('').append(r.ui.loadingSpinner).load('pages/' + $('section.panel.active').attr('id') + '.html');
+  }, 5);
 }
 
 

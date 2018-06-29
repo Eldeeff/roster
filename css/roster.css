@@ -210,20 +210,47 @@ main .panel {
   font-size: inherit;
 }
 
+.mdc-card .card-name,
+.mdc-card .card-title {
+  transition: transform .2s, font-size .2s, line-height .2s, letter-spacing .2s, color .2s;
+}
+
+.mdc-card.editing .card-name,
+.mdc-card.editing .card-title {
+  transform: translateY(-112px);
+  font-size: 1rem;
+  line-height: 1.75rem;
+  letter-spacing: .00937em;
+  color: rgba(0, 0, 0, .87);
+}
+
+.mdc-card.editing .card-title {
+  transform: translateY(-80px);
+}
+
 .mdc-card.adding {
   background: #fff;
   z-index: 3;
-  transition: all .3s;
-  opacity: 1;
+  transition: max-height .3s .2s, background .05s .2s;
   max-height: 250px;
+  overflow: hidden;
+}
+
+.mdc-card.adding .mdc-text-field,
+.mdc-card.adding button:not([style*='background-']) {
+  transition: opacity .1s .1s;
+  opacity: 1;
 }
 
 .mdc-card.adding:not(.open) {
-  transform: translate(-68px, -74px) scale(0.24);
-  border-radius: 50%;
   max-height: 200px;
+  background: none;
+  transition: max-height .1s .05s, background .025s .1s;
+}
+
+.mdc-card.adding:not(.open) .mdc-text-field,
+.mdc-card.adding:not(.open) button:not([style*='background-']) {
   opacity: 0;
-  overflow: hidden;
 }
 
 .mdc-card.adding .mdc-card__media.details {
@@ -238,6 +265,43 @@ main .panel {
   background-size: cover;
   background-color: rgba(158, 158, 158, .2);
   background-position: center center;
+}
+
+.mdc-card.adding button[style*='background-'] {
+  overflow: visible;
+}
+
+.mdc-card.adding button[style*='background-']:focus,
+.mdc-card.adding button[style*='background-']:hover {
+  overflow: hidden;
+}
+
+.mdc-card.adding button[style*='background-']:after {
+  opacity: 1;
+  height: 100%;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  transform: scale(1) translate(-50%, -50%);
+  z-index: -1;
+  opacity: 1;
+  transition: width .3s ease .2s, height .3s ease .2s, opacity .1s .1s;
+  background-color: inherit;
+}
+
+.mdc-card.adding:not(.open) button[style*='background-'] {
+  overflow: visible;
+}
+
+.mdc-card.adding:not(.open) button[style*='background-']:after {
+  opacity: 0;
+  height: 1100%;
+  width: 1100%;
+  transition: width .25s, height .25s, opacity .16s .1s;
+}
+
+.mdc-card.adding:not(.open) .upload[style*='background-image: url("data:image/png'] {
+  transform: scale(5);
 }
 
 #Company_Logo {
@@ -333,6 +397,8 @@ main .panel {
 
 .team-member.mdc-card .details {
   margin: .5rem 1rem;
+  z-index: 1;
+  position: relative;
 }
 
 .team-member.mdc-card .mdc-card__media-content .mdc-card__actions {

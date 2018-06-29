@@ -195,12 +195,10 @@ var r = {
       return card;
     },
     editTeamMember: function (id) {
-      var papa = this.newTeamMemberCard();
-
       var findTeamMember = r.helper.find(id, 'id', r.settings.Team.members);
-
       if (findTeamMember) {
         var member = findTeamMember;
+        var papa = this.newTeamMemberCard();
 
         $(papa).attr('id', member.id);
         $(papa).find('#Name').parent()[0].MDCTextField.value = member.name;
@@ -208,20 +206,25 @@ var r = {
         $(papa).find('#Email').parent()[0].MDCTextField.value = member.email;
         if (member.bg.indexOf('url(') === 0) {
           $(papa).find('.upload').css('background-image', member.bg).text('');
+        } else {
+          var palette = {
+            colour: member.bg,
+            text: member.text
+          }
+          r.helper.setPalette($(papa).find('button.colour'), palette);
         }
+
+        return papa;
       } else {
         $('#Team #add-card').prop('disabled', false);
         $('#Team #reorder').prop('disabled', false);
         $('.adding').remove();
         r.helper.toast('Selected member not found :(');
       }
-      return papa;
     },
     newTeamMemberCard: function () {
       $('#Team #add-card').prop('disabled', true);
       $('#Team #reorder').prop('disabled', true);
-
-      var palette = r.helper.randomPalette();
 
       var card = `
       <div class="team-member adding mdc-card">
@@ -234,8 +237,8 @@ var r = {
           <div class="mdc-card__actions">
             <div class="mdc-card__action-buttons">
               <input type="file" hidden disabled/>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary colour" type="button">${r.ui.constants.COLOUR.icon}</button>
               <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary upload" type="button">${r.ui.constants.IMAGE.icon}</button>
+              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon colour" type="button">${r.ui.constants.COLOUR.icon}</button>
             </div>
             <div class="mdc-card__action-icons">
             <button class="mdc-icon-button mdc-theme--on-primary material-icons mdc-card__action mdc-card__action--icon mdc-button--raised save-data" disabled>${r.ui.constants.MEMBER_ADD.icon}</button>
@@ -255,6 +258,11 @@ var r = {
         // && $('.is-dirty [required=true]', papa).length === $('.mdc-text-field [required=true]', papa).length
         var isValid = $('form', papa).get(0).checkValidity();
         $('.save-data', papa).prop('disabled', !isValid);
+      });
+      papa.transitionOrder = [];
+      $(papa).one('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend', function (e) {
+        console.log('on', e.originalEvent.propertyName);
+        papa.transitionOrder.push(e.originalEvent.propertyName);
       });
 
       setTimeout(function () {
@@ -500,11 +508,10 @@ var r = {
       return p[c][v];
     },
     setPalette: function (element, palette) {
+      var newPalette = palette || r.helper.randomPalette();
       $(element).css({
-        'background-color': palette.colour
-      });
-      $('>*:first-child', element).css({
-        'color': palette.text
+        'background-color': newPalette.colour,
+        'color': newPalette.text
       });
     }
   }
