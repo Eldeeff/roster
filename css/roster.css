@@ -212,44 +212,52 @@ main .panel {
 
 .mdc-card .card-name,
 .mdc-card .card-title {
-  transition: transform .2s, font-size .2s, line-height .2s, letter-spacing .2s, color .2s;
+  transition: transform .3s, font-size .3s, line-height .3s, letter-spacing .3s;
 }
 
 .mdc-card.editing .card-name,
 .mdc-card.editing .card-title {
-  transform: translateY(-112px);
+  transform: translateY(18px);
   font-size: 1rem;
   line-height: 1.75rem;
   letter-spacing: .00937em;
-  color: rgba(0, 0, 0, .87);
+}
+
+.mdc-card .mdc-card__media .mdc-card__media-content {
+  min-height: 68px;
+  transition: min-height .3s ease;
+}
+
+.mdc-card.editing .mdc-card__media .mdc-card__media-content {
+  min-height: 200px;
 }
 
 .mdc-card.editing .card-title {
-  transform: translateY(-80px);
+  transform: translateY(50px);
 }
 
 .mdc-card.adding {
   background: #fff;
   z-index: 3;
-  transition: max-height .3s .2s, background .05s .2s;
+  transition: max-height .4s .3s, background .1s .3s;
   max-height: 250px;
   overflow: hidden;
 }
 
 .mdc-card.adding .mdc-text-field,
-.mdc-card.adding .mdc-card__action-buttons button:not([style*='background-']) {
-  transition: opacity .1s .1s;
+.mdc-card.adding .mdc-card__action-buttons button:not([style*="background-"]) {
+  transition: opacity .2s .2s;
   opacity: 1;
 }
 
 .mdc-card.adding:not(.open) {
   max-height: 200px;
   background: none;
-  transition: max-height .1s .05s, background .025s .1s;
+  transition: max-height .2s .1s, background .05s .2s;
 }
 
 .mdc-card.adding:not(.open) .mdc-text-field,
-.mdc-card.adding:not(.open) .mdc-card__action-buttons button:not([style*='background-']) {
+.mdc-card.adding:not(.open) .mdc-card__action-buttons button:not([style*="background-"]) {
   opacity: 0;
 }
 
@@ -261,16 +269,16 @@ main .panel {
   margin-top: 0;
 }
 
-.mdc-card.adding .mdc-card__action-buttons button[style*='background-'] {
+.mdc-card.adding .mdc-card__action-buttons button[style*="background-"] {
   overflow: visible;
 }
 
-.mdc-card.adding .mdc-card__action-buttons button[style*='background-']:focus,
-.mdc-card.adding .mdc-card__action-buttons button[style*='background-']:hover {
+.mdc-card.adding .mdc-card__action-buttons button[style*="background-"]:focus,
+.mdc-card.adding .mdc-card__action-buttons button[style*="background-"]:hover {
   overflow: hidden;
 }
 
-.mdc-card.adding .mdc-card__action-buttons button[style*='background-']:after {
+.mdc-card.adding .mdc-card__action-buttons button[style*="background-"]:after {
   opacity: 1;
   height: 100%;
   width: 100%;
@@ -279,33 +287,37 @@ main .panel {
   transform: scale(1) translate(-50%, -50%);
   z-index: -1;
   opacity: 1;
-  transition: width .3s ease .2s, height .3s ease .2s, opacity .1s .1s;
+  transition: width .4s ease .3s, height .4s ease .3s, opacity .2s .2s;
   background-color: inherit;
 }
 
-.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*='background-'] {
+.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*="background-"] {
   overflow: visible;
 }
 
-.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*='background-']:after {
+.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*="background-"]:after {
   opacity: 0;
   height: 1100%;
   width: 1100%;
-  transition: width .25s, height .25s, opacity .16s .1s;
+  transition: width .35s, height .35s, opacity .26s .2s;
 }
 
-.mdc-card.adding .mdc-card__action-buttons button[style*='background-image: url('] {
+.mdc-card.adding .mdc-card__action-buttons button[style*="background-image:"] {
   background-size: cover;
   background-color: rgba(158, 158, 158, .2);
   background-position: center center;
-  transition: width .3s, height .3s, transform .3s, border-radius .3s;
+  transition: width .35s ease .35s, height .35s ease .35s, transform .35s ease .35s, border-radius .4s ease .3s, opacity .2s .2s;
+  overflow: hidden;
+  opacity: 1;
 }
 
-.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*='background-image: url('] {
-  transform: translate(-8px, -185px);
+.mdc-card.adding:not(.open) .mdc-card__action-buttons button[style*="background-image:"] {
+  transform: translate(-8px, -186px);
   height: 200px;
   width: 200px;
   border-radius: inherit;
+  opacity: 0;
+  transition: width .3s, height .3s, transform .3s, border-radius .3s, opacity .15s .2s;
 }
 
 #Company_Logo {
