@@ -168,8 +168,8 @@ var r = {
       <div class="mdc-card team-member" id="${id}">
         <div class="mdc-card__actions">
           <div class="mdc-card__action-buttons">
-            <button class="mdc-icon-button edit material-icons mdc-card__action mdc-card__action--icon">${r.ui.constants.MEMBER_EDIT.icon}</button>
-            <button class="mdc-icon-button remove material-icons mdc-card__action mdc-card__action--icon">${r.ui.constants.MEMBER_DELETE.icon}</button>
+            <button class="mdc-icon-button edit material-icons mdc-card__action mdc-card__action--icon" type="button">${r.ui.constants.MEMBER_EDIT.icon}</button>
+            <button class="mdc-icon-button remove material-icons mdc-card__action mdc-card__action--icon" type="button">${r.ui.constants.MEMBER_DELETE.icon}</button>
           </div>
           <div class="mdc-card__action-icons">
             <button class="mdc-icon-button handle material-icons mdc-card__action mdc-card__action--icon">${r.ui.constants.REORDER_HANDLE.icon}</button>
@@ -221,6 +221,8 @@ var r = {
       $('#Team #add-card').prop('disabled', true);
       $('#Team #reorder').prop('disabled', true);
 
+      var palette = r.helper.randomPalette();
+
       var card = `
       <div class="team-member adding mdc-card">
         <form action="">
@@ -232,8 +234,8 @@ var r = {
           <div class="mdc-card__actions">
             <div class="mdc-card__action-buttons">
               <input type="file" hidden disabled/>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary colour">${r.ui.constants.COLOUR.icon}</button>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary upload">${r.ui.constants.IMAGE.icon}</button>
+              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary colour" type="button">${r.ui.constants.COLOUR.icon}</button>
+              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary upload" type="button">${r.ui.constants.IMAGE.icon}</button>
             </div>
             <div class="mdc-card__action-icons">
             <button class="mdc-icon-button mdc-theme--on-primary material-icons mdc-card__action mdc-card__action--icon mdc-button--raised save-data" disabled>${r.ui.constants.MEMBER_ADD.icon}</button>
@@ -250,11 +252,9 @@ var r = {
       });
       init();
       $('.mdc-text-field', papa).on('change keyup', function () {
-        if ($('.is-invalid', papa).length === 0 && $('.is-dirty [required=true]', papa).length === $('.mdc-text-field [required=true]', papa).length) {
-          $('.save-data', papa).prop('disabled', false);
-        } else {
-          $('.save-data', papa).prop('disabled', true);
-        }
+        // && $('.is-dirty [required=true]', papa).length === $('.mdc-text-field [required=true]', papa).length
+        var isValid = $('form', papa).get(0).checkValidity();
+        $('.save-data', papa).prop('disabled', !isValid);
       });
 
       setTimeout(function () {
@@ -302,13 +302,13 @@ var r = {
           <div data-class="time start" data-input="Start" data-value="${start}"></div>
           <div data-class="time end" data-input="Finish" data-value="${finish}"></div>
           <div class="buttons">
-            <button class="copy-time mdc-button" tabindex="-1">
+            <button class="copy-time mdc-button" tabindex="-1" type="button">
               <i class="material-icons mdc-button__icon">${r.ui.constants.HOURS_COPY.icon}</i>${r.ui.constants.HOURS_COPY.text}
             </button>
-            <button class="paste-time mdc-button" tabindex="-1">
+            <button class="paste-time mdc-button" tabindex="-1" type="button">
               <i class="material-icons mdc-button__icon">${r.ui.constants.HOURS_CLEAR.icon}</i>${r.ui.constants.HOURS_CLEAR.text}
             </button>
-            <button class="done-time mdc-button" tabindex="-1">
+            <button class="done-time mdc-button" tabindex="-1" type="button">
               <i class="material-icons mdc-button__icon">${r.ui.constants.HOURS_DONE.icon}</i>${r.ui.constants.HOURS_DONE.text}
             </button>
           </div>`.replace(/\s{2,}\s/g, ''));
@@ -354,7 +354,13 @@ var r = {
     rosterHeader: function (company) {
       let html = '';
       if (company) {
-        html += `<div class="mdc-card__action-buttons company">`;
+        if (company.logo) {
+          html += `
+          <div class="mdc-card__action-buttons logo">
+            <img class="mdc-logo" src="${company.logo}" height="100">
+          </div>`;
+        }
+        html += `<div class="mdc-card__action-icons company">`;
         if (company.name) {
           html += `<h3>${company.name}</h3>`;
         }
@@ -362,12 +368,6 @@ var r = {
           html += `<h4>${company.slogan}</h4>`;
         }
         html += `</div>`;
-        if (company.logo) {
-          html += `
-          <div class="mdc-card__action-icons logo">
-            <img class="mdc-logo" src="${company.logo}" height="100">
-          </div>`;
-        }
       }
       return html;
     },
@@ -406,47 +406,48 @@ var r = {
   },
   helper: {
     week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    addMember: function (name, email, title, bg, id, order) {
-      var id = id || undefined;
-      if (id) {
-        var memberIndex = r.settings.Team.members.indexOf(r.helper.find(id, 'id', r.settings.Team.members));
+    addMember: function (member) {
+      var member = member || {};
+      member.id = member.id || undefined;
+      if (member.id) {
+        var memberIndex = r.settings.Team.members.indexOf(r.helper.find(member.id, 'id', r.settings.Team.members));
         this.remove(memberIndex, r.settings.Team.members);
       } else {
-        id = (Date.now()).toString();
+        member.id = (Date.now()).toString();
       }
 
-      var text = "#ffffff";
-      if (bg === 'none') {
+      member.text = "#ffffff";
+      if (member.bg === 'none') {
         var palette = r.helper.randomPalette();
-        bg = palette.colour;
-        text = palette.text;
+        member.bg = palette.colour;
+        member.text = palette.text;
       }
       r.settings.Team.members.push({
-        'id': id,
-        'order': order || r.settings.Team.members.length + 1,
-        'name': name,
-        'title': title,
-        'email': email,
-        'bg': bg || '',
-        'text': text || ''
+        'id': member.id,
+        'order': member.order || r.settings.Team.members.length + 1,
+        'name': member.name,
+        'title': member.title,
+        'email': member.email,
+        'bg': member.bg || '',
+        'text': member.text || ''
       });
     },
-    editMember: function (id, name, email, title, bg, order) {
-      var memberIndex = r.settings.Team.members.indexOf(r.helper.find(id, 'id', r.settings.Team.members));
-      var text = "#ffffff";
-      if (bg === 'none') {
+    editMember: function (member) {
+      var memberIndex = r.settings.Team.members.indexOf(r.helper.find(member.id, 'id', r.settings.Team.members));
+      member.text = "#ffffff";
+      if (member.bg === 'none') {
         var palette = r.helper.randomPalette();
-        bg = palette.colour;
-        text = palette.text;
+        member.bg = palette.colour;
+        member.text = palette.text;
       }
       r.settings.Team.members[memberIndex] = {
-        'id': id,
-        'order': order || r.settings.Team.members.length + 1,
-        'name': name,
-        'title': title,
-        'email': email,
-        'bg': bg || '',
-        'text': text || ''
+        'id': member.id,
+        'order': member.order || r.settings.Team.members.length + 1,
+        'name': member.name,
+        'title': member.title,
+        'email': member.email,
+        'bg': member.bg || '',
+        'text': member.text || ''
       }
     },
     reorderMember: function (id, order) {
@@ -493,9 +494,17 @@ var r = {
     },
     randomPalette: function () {
       var p = r.ui.palette;
-      var c = Object.keys(p)[Math.floor(Math.random() * Object.keys(p).length)];
-      var v = Object.keys(p[c])[Math.floor(Math.random() * Object.keys(p[c]).length)];
+      var c = r.o(p)[Math.floor(Math.random() * r.o(p).length)];
+      var v = r.o(p[c])[Math.floor(Math.random() * r.o(p[c]).length)];
       return p[c][v];
+    },
+    setPalette: function (element, palette) {
+      $(element).css({
+        'background-color': palette.colour
+      });
+      $('>*:first-child', element).css({
+        'color': palette.text
+      });
     }
   }
 }

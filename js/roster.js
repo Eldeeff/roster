@@ -47,6 +47,7 @@ $(window).on('load hashchange', function (e) {
 })
 
 $('body').on('submit', function (e) {
+  console.log(e);
   if ($(e.target).find('.save-data:not(:disabled)').length) {
     $(e.target).find('.save-data:not(:disabled)').click();
   } else {
@@ -55,11 +56,11 @@ $('body').on('submit', function (e) {
   }
 });
 
-$('body').on('change keydown', 'input,textarea,select', function () {
+$('body').on('change keyup', 'input,textarea,select', function () {
   var input = $(this),
     parent = input.parents('section.panel');
 
-  $('.save-data:first:disabled', parent).removeProp('disabled');
+  $('.page-buttons .save-data:first:disabled', parent).removeProp('disabled');
 });
 
 $('body').on('click', '.save-data', function () {
@@ -99,7 +100,13 @@ function save() {
     saveType = 'member details';
     if ($('.team-member.adding:not([id])').length === 1) {
       // ADD NEW
-      r.helper.addMember($('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'));
+      var member = {
+        name: $('.team-member.adding #Name').val(),
+        email: $('.team-member.adding #Email').val(),
+        title: $('.team-member.adding #Title').val(),
+        bg: $('.team-member.adding .upload').css('background-image')
+      }
+      r.helper.addMember(member);
     } else if ($('.team-member.adding[id]').length === 1) {
       // EDIT EXISTING
       r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'), $('.team-member.adding').data('id'));

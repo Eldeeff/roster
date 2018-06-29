@@ -9,9 +9,7 @@
     </div>
   </div>
 </section>
-<section>
-  <div class="" id="team-cards">
-  </div>
+<section id="team-cards">
 </section>
 <script>
   $(document).ready(function () {
@@ -28,31 +26,39 @@
     });
 
     // add team member
-    $('#Team #add-card').click(function () {
-      setTimeout(function () {
-        $('#team-cards').append(r.ui.newTeamMemberCard());
-      }, 1)
+    $('#Team #add-card').on('click', function () {
+      $('#team-cards').append(r.ui.newTeamMemberCard());
     });
 
+    // close adding card
+    function closeAdding() {
+      var adding = $('.adding:not(.closing)');
+      if (adding.length > 0) {
+        adding.addClass('closing');
+        adding.on('webkitAnimationEnd oAnimationEnd msAnimationEnd animationend', function (e) {
+          $(this).prev('.mdc-card.editing').removeClass('editing');
+          $(this).remove();
+        })
+      }
+    }
+
     // edit team member
-    $('#team-cards .mdc-card button.edit').on('click', function (e) {
-      $('.adding').remove();
-      $('#Team .team-member.mdc-card').show();
+    $('#team-cards .mdc-card button.edit').on('mousedown', function (e) {
+
       var cardParent = $(this).parents('.mdc-card');
       var clickedID = cardParent.attr('id');
+      closeAdding();
 
-      setTimeout(function () {
-        cardParent.hide();
-        cardParent.after(r.ui.editTeamMember(clickedID));
-      }, 1)
+      cardParent.addClass('editing');
+      cardParent.after(r.ui.editTeamMember(clickedID));
     })
 
     // remove team member
-    $('#team-cards .mdc-card button.remove').on('click', function (e) {
-      $('.adding').remove();
+    $('#team-cards .mdc-card button.remove').on('mousedown', function (e) {
 
       var dialog = new mdc.dialog.MDCDialog($('.mdc-dialog', $(e.target).closest('.mdc-card'))[0]);
       dialog.show();
+      closeAdding();
 
       dialog.listen('MDCDialog:accept', function () {
         r.helper.remove($('#team-cards .mdc-card').index($(e.target).closest('.mdc-card')), r.settings.Team.members);
@@ -61,30 +67,27 @@
     })
 
     // handler for click outside adding team member card
-    $('body').on('click', function (e) {
+    $('body').on('mouseup', function (e) {
       if ($('.team-member.adding.mdc-card').length > 0) {
-        if ($('#Team #add-card').is(':disabled') && ($(e.target).closest('.adding').length + $(e.target).closest('#Team #add-card:not(:disabled) *').length) !== 1) {
+        if ($('#Team #add-card:disabled').length > 0 && ($(e.target).closest('.adding').length + $(e.target).closest('#Team #add-card:enabled *').length) !== 1) {
           $('#Team #add-card').prop('disabled', false);
-          $('.adding').remove();
-          $('#Team .team-member.mdc-card').show();
+          closeAdding();
         }
       }
     })
 
     // sortable 
-    setTimeout(function () {
-      Sortable.create($('#team-cards')[0], {
-        animation: 150, //ms, animation speed moving items when sorting, `0` — without animation 
-        handle: '.handle', //Restricts sort start click/touch to the specified element 
-        draggable: '.team-member',
-        group: "team",
-        onSort: function (e) {
-          $('#team-cards .team-member').each(function () {
-            $(this).attr('data-id', $(this).index() + 1);
-          });
-          $('body').trigger('roster:save');
-        }
-      });
-    }, 1)
+    Sortable.create($('#team-cards')[0], {
+      animation: 150, //ms, animation speed moving items when sorting, `0` — without animation 
+      handle: '.handle', //Restricts sort start click/touch to the specified element 
+      draggable: '.team-member',
+      group: "team",
+      onSort: function (e) {
+        $('#team-cards .team-member').each(function () {
+          $(this).attr('data-id', $(this).index() + 1);
+        });
+        $('body').trigger('roster:save');
+      }
+    });
   });
 </script>
