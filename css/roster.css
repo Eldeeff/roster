@@ -9,6 +9,7 @@ body {
   margin: 0;
   display: inline-block;
   min-height: 100vh;
+  width: 100%;
 }
 
 .mdc-theme--dark,
@@ -114,6 +115,7 @@ main .panel {
 
 .mdc-card.header {
   float: right;
+  margin-right: 0;
 }
 
 .mdc-card.header .mdc-card__actions {

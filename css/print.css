@@ -8,6 +8,9 @@
   .mdc-snackbar {
     display: none;
   }
+  body {
+    padding: 5px;
+  }
   main,
   main .panel {
     padding: 0;
