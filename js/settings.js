@@ -245,7 +245,7 @@ var r = {
       </div>`;
       var papa = $(card);
 
-      $('body').append(papa);
+      $('body').prepend(papa);
 
       $('*[data-input]', papa).each(function (i, e) {
         $(e).html(r.ui.input($(e)));
@@ -259,6 +259,7 @@ var r = {
 
       setTimeout(function () {
         $('input:first', papa).focus();
+        $(papa).addClass('open');
       }, 1);
 
       return papa;

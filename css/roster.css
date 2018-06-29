@@ -1,5 +1,3 @@
-html {}
-
 :root {
   --mdc-theme-primary: #304ffe;
   --mdc-theme-secondary: #304ffe;
@@ -9,6 +7,8 @@ html {}
 
 body {
   margin: 0;
+  display: inline-block;
+  min-height: 100vh;
 }
 
 .mdc-theme--dark,
@@ -36,6 +36,14 @@ body {
   color: var(--mdc-theme-primary) !important;
 }
 
+.mdc-text-field__input {
+  width: 100%;
+}
+
+.panel section>*:not(.mdc-layout-grid):not(.mdc-card) .mdc-text-field__input {
+  min-width: 20vw;
+}
+
 .mdc-text-field .mdc-floating-label {
   pointer-events: none;
 }
@@ -60,7 +68,6 @@ body {
 main {
   padding-top: 64px;
   box-sizing: border-box;
-  min-height: 100vh;
 }
 
 main .panel {
@@ -69,17 +76,19 @@ main .panel {
 
 .page-content>section {
   width: 100%;
-  display: inline-block;
+  display: block;
+  clear: both;
 }
 
 .page-content>[id$=-cards] {
   display: inline-flex;
   flex-flow: wrap;
   align-items: flex-start;
+  margin-bottom: -20px;
 }
 
 .mdc-card {
-  float: left;
+  width: fit-content;
   margin-right: 20px;
   margin-bottom: 20px;
 }
@@ -88,8 +97,19 @@ main .panel {
   float: none;
 }
 
+.mdc-card .mdc-card__actions.details .card-name,
+.mdc-card .mdc-card__actions.details .card-title,
+.mdc-card section {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
 .mdc-card.editing {
   margin-right: -200px;
+}
+
+.mdc-card.page-buttons {
+  float: left;
 }
 
 .mdc-card.header {
@@ -127,6 +147,12 @@ main .panel {
   min-width: auto;
   max-width: none;
   justify-content: space-between;
+}
+
+.team-member.mdc-card .mdc-dialog:not(.mdc-dialog--open) .mdc-dialog__surface {
+  transform: translate(-20px, -74px) scale(0.28);
+  border-radius: 50%;
+  height: calc(100% - 30px);
 }
 
 .mdc-card .details {
@@ -182,60 +208,20 @@ main .panel {
   font-size: inherit;
 }
 
-@keyframes slideIn {
-  0% {
-    opacity: 0;
-    max-height: 200px;
-    overflow: hidden;
-  }
-  30% {
-    opacity: 1;
-    max-height: 200px;
-    overflow: hidden;
-  }
-  99% {
-    opacity: 1;
-    max-height: 250px;
-    overflow: hidden;
-  }
-  100% {
-    opacity: 1;
-    max-height: none;
-    overflow: unset;
-  }
-}
-
-@keyframes slideOut {
-  100% {
-    opacity: 0;
-    max-height: 200px;
-    overflow: hidden;
-  }
-  70% {
-    opacity: 1;
-    max-height: 200px;
-    overflow: hidden;
-  }
-  1% {
-    opacity: 1;
-    max-height: 250px;
-    overflow: hidden;
-  }
-  0% {
-    opacity: 1;
-    max-height: none;
-    overflow: unset;
-  }
-}
-
 .mdc-card.adding {
   background: #fff;
   z-index: 3;
-  animation: slideIn .5s ease forwards;
+  transition: all .3s;
+  opacity: 1;
+  max-height: 250px;
 }
 
-.mdc-card.adding.closing {
-  animation: slideOut .5s ease forwards;
+.mdc-card.adding:not(.open) {
+  transform: translate(-68px, -74px) scale(0.24);
+  border-radius: 50%;
+  max-height: 200px;
+  opacity: 0;
+  overflow: hidden;
 }
 
 .mdc-card.adding .mdc-card__media.details {
@@ -361,12 +347,6 @@ main .panel {
 
 .roster.ready .roster-body .mdc-layout-grid__cell {
   /* outline: 1px solid rgba(0, 0, 0, .1); */
-}
-
-.roster:not(.ready) .roster-body .mdc-text-field,
-.roster.ready .roster-body .mdc-text-field.is-dirty {
-  margin: 0;
-  width: 100%;
 }
 
 .roster:not(.ready) .roster-body .mdc-layout-grid__cell:not(.team-member) {
@@ -549,4 +529,50 @@ section.panel.active {
 
 .ready-time .mdc-chip.break .mdc-chip__icon {
   margin: -4px;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    max-height: 200px;
+    overflow: hidden;
+  }
+  30% {
+    opacity: 1;
+    max-height: 200px;
+    overflow: hidden;
+  }
+  99% {
+    opacity: 1;
+    max-height: 250px;
+    overflow: hidden;
+  }
+  100% {
+    opacity: 1;
+    max-height: none;
+    overflow: unset;
+  }
+}
+
+@keyframes slideOut {
+  100% {
+    opacity: 0;
+    max-height: 200px;
+    overflow: hidden;
+  }
+  70% {
+    opacity: 1;
+    max-height: 200px;
+    overflow: hidden;
+  }
+  1% {
+    opacity: 1;
+    max-height: 250px;
+    overflow: hidden;
+  }
+  0% {
+    opacity: 1;
+    max-height: none;
+    overflow: unset;
+  }
 }

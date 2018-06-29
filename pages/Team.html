@@ -32,33 +32,35 @@
 
     // close adding card
     function closeAdding() {
-      var adding = $('.adding:not(.closing)');
-      if (adding.length > 0) {
-        adding.addClass('closing');
-        adding.on('webkitAnimationEnd oAnimationEnd msAnimationEnd animationend', function (e) {
-          $(this).prev('.mdc-card.editing').removeClass('editing');
-          $(this).remove();
-        })
-      }
+      setTimeout(function () {
+        var adding = $('.adding.open');
+        if (adding.length > 0) {
+          adding.on('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend', function (e) {
+            $(this).prev('.mdc-card.editing').removeClass('editing');
+            $(this).remove();
+          });
+          adding.removeClass('open');
+        }
+      }, 1);
     }
 
     // edit team member
-    $('#team-cards .mdc-card button.edit').on('mousedown', function (e) {
+    $('#team-cards .mdc-card button.edit').on('click', function (e) {
+      closeAdding();
 
       var cardParent = $(this).parents('.mdc-card');
       var clickedID = cardParent.attr('id');
-      closeAdding();
 
       cardParent.addClass('editing');
       cardParent.after(r.ui.editTeamMember(clickedID));
     })
 
     // remove team member
-    $('#team-cards .mdc-card button.remove').on('mousedown', function (e) {
+    $('#team-cards .mdc-card button.remove').on('click', function (e) {
+      closeAdding();
 
       var dialog = new mdc.dialog.MDCDialog($('.mdc-dialog', $(e.target).closest('.mdc-card'))[0]);
       dialog.show();
-      closeAdding();
 
       dialog.listen('MDCDialog:accept', function () {
         r.helper.remove($('#team-cards .mdc-card').index($(e.target).closest('.mdc-card')), r.settings.Team.members);
@@ -67,9 +69,10 @@
     })
 
     // handler for click outside adding team member card
-    $('body').on('mouseup', function (e) {
+    $('body').on('mousedown', function (e) {
       if ($('.team-member.adding.mdc-card').length > 0) {
-        if ($('#Team #add-card:disabled').length > 0 && ($(e.target).closest('.adding').length + $(e.target).closest('#Team #add-card:enabled *').length) !== 1) {
+        console.log($('#Team #add-card:disabled').length + $(e.target).closest('.mdc-card.adding').length);
+        if ($('#Team #add-card:disabled').length + $(e.target).closest('.mdc-card.adding').length == 1) {
           $('#Team #add-card').prop('disabled', false);
           closeAdding();
         }
