@@ -18,7 +18,6 @@
   "description": "Roster app made simple and free",
   "main": "index.js",
   "scripts": {
-    "start": "http-server && nodemon",
     "mincss": "uglifycss %npm_package_css_0% %npm_package_css_1% %npm_package_css_2% %npm_package_css_3% %npm_package_css_4% --output min/styles.min.css",
     "minjs": "uglifyjs %npm_package_js_0% %npm_package_js_1% %npm_package_js_2% %npm_package_js_3% %npm_package_js_4% -o min/scripts.min.js"
   },
@@ -46,6 +45,8 @@
     "timepicker": "^1.11.12"
   },
   "devDependencies": {
+    "nodemon": "^1.17.5",
+    "reload": "^2.3.0",
     "uglifycss": "^0.0.29",
     "uglify-es": "^3.3.9"
   }
