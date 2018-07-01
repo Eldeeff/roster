@@ -14,7 +14,7 @@
     "js/settings.js",
     "js/roster.js"
   ],
-  "version": "0.2.1a",
+  "version": "0.2.3a",
   "description": "Roster app made simple and free",
   "main": "index.js",
   "scripts": {

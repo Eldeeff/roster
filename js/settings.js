@@ -187,10 +187,7 @@ var r = {
 
       card = $(card);
 
-      $('.mdc-card__media', card).css('background', 'center/cover ' + bg).find('.mdc-card__media-content').css({
-        'color': text,
-        'background': bg.match(/#([0-9a-f]{3}){1,2}/gi) ? 'none' : undefined
-      });
+      $('.mdc-card__media', card).css('background', 'center/cover ' + bg).find('.mdc-card__media-content').css('color', text);
 
       return card;
     },
@@ -205,7 +202,7 @@ var r = {
         $(papa).find('#Title').parent()[0].MDCTextField.value = member.title;
         $(papa).find('#Email').parent()[0].MDCTextField.value = member.email;
         if (member.bg.indexOf('url(') === 0) {
-          $(papa).find('.upload').css('background-image', member.bg).text('');
+          $(papa).find('.image').css('background-image', member.bg).text('');
         } else {
           var palette = {
             colour: member.bg,
@@ -236,9 +233,8 @@ var r = {
           </div>
           <div class="mdc-card__actions">
             <div class="mdc-card__action-buttons">
-              <input type="file" hidden disabled/>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary upload" type="button">${r.ui.constants.IMAGE.icon}</button>
-              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon colour" type="button">${r.ui.constants.COLOUR.icon}</button>
+              <input type="file" accept="image/*" class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary ${r.ui.constants.IMAGE.icon}"/>
+              <button class="mdc-icon-button material-icons mdc-card__action mdc-card__action--icon mdc-theme--primary colour" type="button">${r.ui.constants.COLOUR.icon}</button>
             </div>
             <div class="mdc-card__action-icons">
             <button class="mdc-icon-button mdc-theme--on-primary material-icons mdc-card__action mdc-card__action--icon mdc-button--raised save-data" disabled>${r.ui.constants.MEMBER_ADD.icon}</button>
@@ -254,16 +250,6 @@ var r = {
         $(e).html(r.ui.input($(e)));
       });
       init();
-      $('.mdc-text-field', papa).on('change keyup', function () {
-        // && $('.is-dirty [required=true]', papa).length === $('.mdc-text-field [required=true]', papa).length
-        var isValid = $('form', papa).get(0).checkValidity();
-        $('.save-data', papa).prop('disabled', !isValid);
-      });
-      papa.transitionOrder = [];
-      $(papa).one('webkitTransitionEnd oTransitionEnd msTransitionEnd transitionend', function (e) {
-        console.log('on', e.originalEvent.propertyName);
-        papa.transitionOrder.push(e.originalEvent.propertyName);
-      });
 
       setTimeout(function () {
         $('input:first', papa).focus();
@@ -383,18 +369,20 @@ var r = {
     templateCard: function (template) {
       return `
       <div class="template mdc-card">
-        <div class="details">
-          <div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="${template.avatar}"></div>
-          <div class="card-title" data-input="Title" data-type="checkbox" data-checked="${template.title}"></div>
-          <div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="${template.hours}"></div>
-          <div class="card-break" data-input="Break" data-type="checkbox" data-checked="${template.break}"></div>
-          <div class="card-working-hours" data-type="range" data-min="1" data-max="12" data-required="true" data-input="Default Working Hours" data-value="${template.defaultWorkingHours}"></div>
-        </div>
-        <div class="mdc-card__actions">
-          <div class="mdc-card__action-icons">
-            <button class="mdc-button mdc-card__action-button mdc-button--raised save-data" disabled>Save & Activate</button>
+        <form action="">
+          <div class="details">
+            <div class="card-avatar" data-input="Avatar" data-type="checkbox" data-checked="${template.avatar}"></div>
+            <div class="card-title" data-input="Title" data-type="checkbox" data-checked="${template.title}"></div>
+            <div class="card-hours" data-input="Hours" data-type="checkbox" data-checked="${template.hours}"></div>
+            <div class="card-break" data-input="Break" data-type="checkbox" data-checked="${template.break}"></div>
+            <div class="card-working-hours" data-type="range" data-min="1" data-max="12" data-required="true" data-input="Default Working Hours" data-value="${template.defaultWorkingHours}"></div>
           </div>
-        </div>
+          <div class="mdc-card__actions">
+            <div class="mdc-card__action-icons">
+              <button class="mdc-button mdc-card__action-button mdc-button--raised save-data" disabled>Save & Activate</button>
+            </div>
+          </div>
+        </form>
       </div>`
     },
     newTemplateCard: `
@@ -425,38 +413,27 @@ var r = {
         member.id = (Date.now()).toString();
       }
 
-      member.text = "#ffffff";
-      if (member.bg === 'none') {
-        var palette = r.helper.randomPalette();
-        member.bg = palette.colour;
-        member.text = palette.text;
-      }
       r.settings.Team.members.push({
         'id': member.id,
         'order': member.order || r.settings.Team.members.length + 1,
         'name': member.name,
         'title': member.title,
         'email': member.email,
-        'bg': member.bg || '',
-        'text': member.text || ''
+        'bg': member.bg,
+        'text': member.text
       });
     },
     editMember: function (member) {
       var memberIndex = r.settings.Team.members.indexOf(r.helper.find(member.id, 'id', r.settings.Team.members));
-      member.text = "#ffffff";
-      if (member.bg === 'none') {
-        var palette = r.helper.randomPalette();
-        member.bg = palette.colour;
-        member.text = palette.text;
-      }
+
       r.settings.Team.members[memberIndex] = {
         'id': member.id,
         'order': member.order || r.settings.Team.members.length + 1,
         'name': member.name,
         'title': member.title,
         'email': member.email,
-        'bg': member.bg || '',
-        'text': member.text || ''
+        'bg': member.bg,
+        'text': member.text
       }
     },
     reorderMember: function (id, order) {
@@ -509,10 +486,17 @@ var r = {
     },
     setPalette: function (element, palette) {
       var newPalette = palette || r.helper.randomPalette();
-      $(element).css({
+      $(element).attr('class', (i, c) => {
+        return c.replace(/(^|\s)mdc-theme--\S+/g, '');
+      }).css({
         'background-color': newPalette.colour,
         'color': newPalette.text
       });
+    },
+    dialog: function (message) {
+      var dialogClone = $('body > .mdc-dialog').clone().removeProp('hidden');
+      $('.mdc-dialog__body', dialogClone).text(message);
+      return dialogClone;
     }
   }
 }
