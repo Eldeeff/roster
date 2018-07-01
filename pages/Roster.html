@@ -34,11 +34,21 @@
       $(e).parents('.mdc-layout-grid__cell:first').addClass('master-copy-time');
     }
 
-    function getCopyTime(e) {
+    $('body').on('keydown', function (e) {
+      if (e.key === 'Escape' && $('.master-copy-time')) {
+        $('.master-copy-time button.done-time').click();
+      }
+    })
+
+    function getCopyTime() {
       var result = [];
-      $('input.time', e).each(function () {
-        result.push($(this).val());
-      })
+      if ($('.master-copy-time')) {
+        $('.master-copy-time input.time').each(function () {
+          result.push($(this).val());
+        });
+      } else {
+        result = ['', ''];
+      }
       return result;
     }
 
@@ -80,7 +90,9 @@
             });
           }
           if (endTime.val() === '' && this.value !== '') {
-            endTime.focus();
+            setTimeout(() => {
+              endTime.focus();
+            }, 1);
           }
         }
         updateHours();
@@ -108,9 +120,9 @@
         setCopyTime(this);
         clearPaste();
       }).on('click', 'button.paste-time', function () {
-        var times = getCopyTime('.master-copy-time');
-        $(this).parents('.mdc-layout-grid__cell:first').find('input.end').val(times[1]).trigger('change');
-        $(this).parents('.mdc-layout-grid__cell:first').find('input.start').val(times[0]).trigger('change');
+        var times = getCopyTime();
+        $(this).parents('.mdc-layout-grid__cell:first').find('input.end').parent().get(0).MDCTextField.value = times[1];
+        $(this).parents('.mdc-layout-grid__cell:first').find('input.start').parent().get(0).MDCTextField.value = times[0];
       }).on('click', 'button.done-time', function () {
         $('.master-copy-time', papa).removeClass('master-copy-time');
         clearPaste();
@@ -132,7 +144,7 @@
           $('.roster', papa).addClass('ready');
           $(e).addClass('save-data');
         };
-        console.log($(this).text().trim());
+
         $(this).text().trim() === 'Edit Hours' ? edit(this) : save(this);
         checkForWeekends();
       });
@@ -177,11 +189,13 @@
               end = $('.end', this).timepicker('getTime', new Date());
             if ($('.start', this).val() != '' && $('.end', this).val() != '') {
               var day = (Date.parse(end) - Date.parse(start)) / 1000 / 60 / 60;
-              if (day >= r.settings.Templates[0].defaultWorkingHours && r.settings.Templates[0].break) {
-                day = day - .5;
-                $('.ready-time', this).append(`<div class="mdc-chip break mdc-elevation--z1"><i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_SHORT.icon}</i> &nbsp;&nbsp;&nbsp; <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_LONG.icon}</i></div>`);
-              } else {
-                $('.ready-time', this).append(`<div class="mdc-chip break mdc-elevation--z1"><i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_SHORT.icon}</i></div>`);
+              if (r.settings.Templates[0].break) {
+                if (day >= r.settings.Templates[0].defaultWorkingHours) {
+                  day = day - .5;
+                  $('.ready-time', this).append(`<div class="mdc-chip break mdc-elevation--z1"><i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_SHORT.icon}</i> &nbsp;&nbsp;&nbsp; <i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_LONG.icon}</i></div>`);
+                } else {
+                  $('.ready-time', this).append(`<div class="mdc-chip break mdc-elevation--z1"><i class="material-icons mdc-chip__icon mdc-chip__icon--leading">${r.ui.constants.BREAK_SHORT.icon}</i></div>`);
+                }
               }
               hours += day;
             }

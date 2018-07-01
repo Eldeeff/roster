@@ -36,34 +36,34 @@
       });
     }, 0)
 
-    // add templates member
-    $('#Templates #add-card').click(function () {
-      setTimeout(function () {
-        $('#Templates #add-card').prop('disabled', true);
+    // // add templates member
+    // $('#Templates #add-card').click(function () {
+    //   setTimeout(function () {
+    //     $('#Templates #add-card').prop('disabled', true);
 
-        $('#templates-cards').append($(r.ui.newTemplateCard));
+    //     $('#templates-cards').append($(r.ui.newTemplateCard));
 
-        $('.mdc-card.adding *[data-input]').each(function (i, e) {
-          $(e).html(r.ui.input($(e)));
-          window.componentHandler.upgradeDom();
-        });
-      }, 1)
-    });
-    // remove templates member
-    $('#templates-cards .mdc-card button.remove').on('mousedown', function (e) {
-      var confirmRemove = confirm('Are you sure you want to remove ' + $(e.target).closest('.mdc-card').find('.card-name').text() + '?');
-      if (confirmRemove) {
-        r.helper.remove($('#templates-cards .mdc-card').index($(e.target).closest('.mdc-card')), r.settings.Templates);
-        $('#templates-cards .mdc-card button.remove')[0].click();
-      };
-    })
+    //     $('.mdc-card.adding *[data-input]').each(function (i, e) {
+    //       $(e).html(r.ui.input($(e)));
+    //       window.componentHandler.upgradeDom();
+    //     });
+    //   }, 1)
+    // });
+    // // remove templates member
+    // $('#templates-cards .mdc-card button.remove').on('mousedown', function (e) {
+    //   var confirmRemove = confirm('Are you sure you want to remove ' + $(e.target).closest('.mdc-card').find('.card-name').text() + '?');
+    //   if (confirmRemove) {
+    //     r.helper.remove($('#templates-cards .mdc-card').index($(e.target).closest('.mdc-card')), r.settings.Templates);
+    //     $('#templates-cards .mdc-card button.remove')[0].click();
+    //   };
+    // })
 
-    // handler for click outside adding templates member card
-    $('body').on('click', function (e) {
-      if (($(e.target).closest('.adding').length + $(e.target).closest('#Templates #add-card:not(:disabled) *').length) !== 1) {
-        $('#Templates #add-card').prop('disabled', false);
-        $('.adding').remove();
-      }
-    })
+    // // handler for click outside adding templates member card
+    // $('body').on('click', function (e) {
+    //   if (($(e.target).closest('.adding').length + $(e.target).closest('#Templates #add-card:not(:disabled) *').length) !== 1) {
+    //     $('#Templates #add-card').prop('disabled', false);
+    //     $('.adding').remove();
+    //   }
+    // })
   });
 </script>

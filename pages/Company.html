@@ -13,9 +13,9 @@
   <div class="" data-input="Company Name"></div>
   <div class="" data-input="Company Slogan"></div>
   <p>Company Logo</p>
-  <div class="mdc-card">
+  <div class="mdc-card logo">
     <div class="mdc-card__primary-action">
-      <input type="file" hidden>
+      <input type="file" class="image" hidden>
       <img src="" id="Company_Logo" class="upload" hidden>
     </div>
     <div class="mdc-card__actions">
@@ -35,13 +35,25 @@
 <script>
   $(document).ready(function () {
     // load company
-    $('body').on('mdc-done', function () {
-      $('#Company_Name').val(r.settings.Company.name);
-      $('#Company_Slogan').val(r.settings.Company.slogan);
-      if (r.settings.Company.logo) {
-        $('#Company_Logo').attr('src', r.settings.Company.logo).removeProp('hidden');
-        $('.mdc-card__action-buttons').removeProp('hidden');
-      }
+
+    $('#Company_Name').val(r.settings.Company.name);
+    $('#Company_Slogan').val(r.settings.Company.slogan);
+    if (r.settings.Company.logo) {
+      $('#Company_Logo').attr('src', r.settings.Company.logo).removeProp('hidden');
+      $('.mdc-card__action-buttons').removeProp('hidden');
+    }
+    var logoCard = $('.mdc-card.logo');
+    logoCard.append(r.helper.dialog(`Are you sure you want to remove the company logo?`));
+    var dialog = new mdc.dialog.MDCDialog($('.mdc-dialog', logoCard)[0]);
+
+    dialog.listen('MDCDialog:accept', function () {
+      remove.parent().prop('hidden', true);
+      $('#Company_Logo', logoCard).attr('src', '').prop('hidden', true);
+      $('body').trigger('roster:save');
+    });
+
+    $('.remove', logoCard).on('click', function () {
+      dialog.show();
     });
   });
 </script>
