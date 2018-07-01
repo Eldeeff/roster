@@ -47,20 +47,14 @@ $(window).on('load hashchange', function (e) {
 })
 
 $('body').on('submit', function (e) {
-  console.log(e);
-  if ($(e.target).find('.save-data:not(:disabled)').length) {
-    $(e.target).find('.save-data:not(:disabled)').click();
-  } else {
-    var form = $(e.target);
-    form.find(':not(.is-dirty) > input:not(:disabled)').focus();
-  }
+  e.preventDefault();
 });
 
-$('body').on('change keyup', 'input,textarea,select', function () {
-  var input = $(this),
-    parent = input.parents('section.panel');
-
-  $('.page-buttons .save-data:first:disabled', parent).removeProp('disabled');
+$('body').on('change keyup', 'input,textarea,select', function (e) {
+  var input = $(e.target),
+    papa = input.parents('section.panel'),
+    form = input.parents('form').get(0);
+  $('.save-data:first', papa).prop('disabled', !form.checkValidity());
 });
 
 $('body').on('click', '.save-data', function () {
@@ -71,145 +65,134 @@ $('body').on('roster:save', function () {
 });
 
 function save() {
-  setTimeout(() => {
+  $('body').trigger('mousedown');
 
-    var saveType = 'details',
-      parent = $('section.panel.active');
+  var saveType = 'details',
+    papa = $('section.panel.active');
 
-    if ($(parent).attr('id') === 'Roster') {
-      $('.roster-body').each(function () {
-        var id = $(this).attr('id');
-        r.settings.Roster[id] = {};
-        $('.mdc-cell:not(.team-member)', $(this)).each(function (i) {
-          var day = $('.roster-header .mdc-cell').eq(i + 1).text();
-          r.settings.Roster[id][day] = {
-            start: $('input[type=text]:eq(0)', $(this)).val(),
-            finish: $('input[type=text]:eq(1)', $(this)).val()
-          };
-        })
+  if ($(papa).attr('id') === 'Roster') {
+    $('.roster-body').each(function () {
+      var id = $(this).attr('id');
+      r.settings.Roster[id] = {};
+      $('.mdc-cell:not(.team-member)', $(this)).each(function (i) {
+        var day = $('.roster-header .mdc-cell').eq(i + 1).text();
+        r.settings.Roster[id][day] = {
+          start: $('input[type=text]:eq(0)', $(this)).val(),
+          finish: $('input[type=text]:eq(1)', $(this)).val()
+        };
+      })
+    })
+  }
+
+  if ($(papa).attr('id') === 'Company') {
+    r.settings.Company.name = $('#Company_Name').val();
+    r.settings.Company.slogan = $('#Company_Slogan').val();
+    r.settings.Company.logo = $('#Company_Logo').attr('src');
+  }
+
+  if ($(papa).attr('id') === 'Team') {
+    saveType = 'member details';
+
+    var member = {
+      name: $('.team-member.adding #Name').val(),
+      email: $('.team-member.adding #Email').val(),
+      title: $('.team-member.adding #Title').val(),
+      bg: $('.team-member.adding .image[style*="background-image: url"]').css('background-image') || $('.team-member.adding .colour:not(.mdc-theme--primary)').css('background-color'),
+      text: $('.team-member.adding .colour:not(.mdc-theme--primary)').css('color') || '#ffffff'
+    }
+    if ($('.team-member.adding:not([id])').length === 1) {
+      // ADD NEW        
+      saveType = 'member';
+      r.helper.addMember(member);
+    } else if ($('.team-member.adding[id]').length === 1) {
+      member.id = $('.team-member.adding[id]').attr('id');
+      // EDIT EXISTING
+      r.helper.editMember(member);
+    } else if ($('.team-member[data-id]').length > 0) {
+      // EDIT ALL EXISTING
+      saveType = 'member order';
+      $('.team-member[id]').each(function () {
+        r.helper.reorderMember($(this).attr('id'), $(this).data('id'));
       })
     }
+  }
 
-    if ($(parent).attr('id') === 'Company') {
-      r.settings.Company.name = $('#Company_Name').val();
-      r.settings.Company.slogan = $('#Company_Slogan').val();
-      r.settings.Company.logo = $('#Company_Logo').attr('src');
-    }
+  if ($(papa).attr('id') === 'Templates') {
+    r.settings.Templates = [{
+      'avatar': $('#Templates .template .card-avatar input[type=checkbox]').prop('checked'),
+      'title': $('#Templates .template .card-title input[type=checkbox]').prop('checked'),
+      'hours': $('#Templates .template .card-hours input[type=checkbox]').prop('checked'),
+      'break': $('#Templates .template .card-break input[type=checkbox]').prop('checked'),
+      'defaultWorkingHours': Number($('#Templates .template .card-working-hours .mdc-slider').attr('aria-valuenow'))
+    }];
+  }
 
-    if ($(parent).attr('id') === 'Team') {
-      saveType = 'member details';
-      if ($('.team-member.adding:not([id])').length === 1) {
-        // ADD NEW
-        var member = {
-          name: $('.team-member.adding #Name').val(),
-          email: $('.team-member.adding #Email').val(),
-          title: $('.team-member.adding #Title').val(),
-          bg: $('.team-member.adding .upload').css('background-image')
-        }
-        r.helper.addMember(member);
-      } else if ($('.team-member.adding[id]').length === 1) {
-        // EDIT EXISTING
-        r.helper.editMember($('.team-member.adding').attr('id'), $('.team-member.adding #Name').val(), $('.team-member.adding #Email').val(), $('.team-member.adding #Title').val(), $('.team-member.adding .upload').css('background-image'), $('.team-member.adding').data('id'));
-      } else if ($('.team-member[data-id]').length > 0) {
-        // EDIT ALL EXISTING
-        saveType = 'member order';
-        $('.team-member[id]').each(function () {
-          r.helper.reorderMember($(this).attr('id'), $(this).data('id'));
-        })
-      }
-    }
+  r.helper.set('settings', r.settings);
 
-    if ($(parent).attr('id') === 'Templates') {
-      r.settings.Templates = [{
-        'avatar': $('#Templates .template .card-avatar input[type=checkbox]').prop('checked'),
-        'title': $('#Templates .template .card-title input[type=checkbox]').prop('checked'),
-        'hours': $('#Templates .template .card-hours input[type=checkbox]').prop('checked'),
-        'break': $('#Templates .template .card-break input[type=checkbox]').prop('checked'),
-        'defaultWorkingHours': Number($('#Templates .template .card-working-hours .mdc-slider').attr('aria-valuenow'))
-      }];
-    }
+  r.helper.toast('Saved ' + $(papa).attr('id') + ' ' + saveType);
 
-    r.helper.set('settings', r.settings);
-
-    r.helper.toast('Saved ' + $(parent).attr('id') + ' ' + saveType);
-
-    $('section.panel.active').find('.page-content').html('').append(r.ui.loadingSpinner).load('pages/' + $('section.panel.active').attr('id') + '.html');
-  }, 5);
+  // $('section.panel.active').find('.page-content').html('').append(r.ui.loadingSpinner).load('pages/' + $('section.panel.active').attr('id') + '.html');
 }
 
 
-$('body').on('click', '.upload', function (e) {
+$('body').on('click', '.upload:not(input[type=file])', function (e) {
+  var papa = $(this).parents('.mdc-card:first'),
+    inputFile = $('input[type=file]', papa);
+  inputFile.click();
+});
+$('body').on('change', 'input[type=file].image', function () {
   var $this = $(this),
     papa = $this.parents('.mdc-card:first'),
-    inputFile = $('input[type=file]', papa);
-  if ($(this).is(':focus') || $(e.target).parents('.upload').is(':focus') || $(this).is(':hover') || $(e.target).parents('.upload').is(':hover')) {
-    inputFile.removeProp('disabled');
-    $('.save-data', papa).prop('disabled', true);
-  }
-  inputFile.off().click();
-  inputFile.on('change', function () {
-    var reader = new FileReader();
+    reader = new FileReader();
 
-    reader.onload = function (e) {
+  reader.onload = function (e) {
 
-      var img = document.createElement('img');
-      img.src = e.target.result;
+    var img = document.createElement('img');
+    img.src = e.target.result;
 
-      var section = $this.parents('section.panel').attr('id');
+    var section = $this.parents('section.panel').attr('id');
 
-      setTimeout(function () {
-        var c = document.createElement('canvas');
-        var ctx = c.getContext('2d');
-        var canvasSize = 200;
-        var ratio = 1;
+    setTimeout(function () {
+      var c = document.createElement('canvas');
+      var ctx = c.getContext('2d');
+      var canvasSize = 200;
+      var ratio = 1;
 
-        if (section === 'Company') {
-          // RESIZE
-          var maxWH = Math.max(img.width, img.height);
-          if (maxWH > canvasSize) {
-            ratio = canvasSize / maxWH;
-          }
-          c.width = img.width * ratio;
-          c.height = img.height * ratio;
-          ctx.drawImage(img, 0, 0, c.width, c.height);
-          finalImg = c.toDataURL();
-
-          $('#Company_Logo', papa).attr('src', finalImg).removeProp('hidden');
-          $('.remove', papa).parent().removeProp('hidden');
-
-          $('.save-data:first', $('#' + section)).removeProp('disabled');
-        } else if (section === 'Team') {
-          // CROP
-          var minWH = Math.min(img.width, img.height);
-          if (minWH > canvasSize) {
-            ratio = canvasSize / minWH;
-          }
-          c.width = minWH * ratio;
-          c.height = minWH * ratio;
-          var cImgW = img.width * ratio;
-          var cImgH = img.height * ratio;
-          ctx.drawImage(img, c.width / 2 - cImgW / 2, c.height / 2 - cImgH / 2, cImgW, cImgH);
-
-          finalImg = c.toDataURL();
-          $this.text('').css('background-image', 'url(' + finalImg + ')');
+      if (section === 'Company') {
+        // RESIZE
+        var maxWH = Math.max(img.width, img.height);
+        if (maxWH > canvasSize) {
+          ratio = canvasSize / maxWH;
         }
+        c.width = img.width * ratio;
+        c.height = img.height * ratio;
+        ctx.drawImage(img, 0, 0, c.width, c.height);
+        finalImg = c.toDataURL();
 
-      }, 1)
-    }
-    reader.readAsDataURL(this.files[0]);
-    $('.save-data', papa).removeProp('disabled');
-  });
-});
+        $('#Company_Logo', papa).attr('src', finalImg).removeProp('hidden');
+        $('.remove', papa).parent().removeProp('hidden');
 
-$('body').on('click', '#Company .remove', function () {
-  var $this = $(this),
-    papa = $this.parents('.mdc-card:first');
+        $('.save-data:first', $('#' + section)).removeProp('disabled');
+      } else if (section === 'Team') {
+        // CROP
+        var minWH = Math.min(img.width, img.height);
+        if (minWH > canvasSize) {
+          ratio = canvasSize / minWH;
+        }
+        c.width = minWH * ratio;
+        c.height = minWH * ratio;
+        var cImgW = img.width * ratio;
+        var cImgH = img.height * ratio;
+        ctx.drawImage(img, c.width / 2 - cImgW / 2, c.height / 2 - cImgH / 2, cImgW, cImgH);
 
-  var section = $this.parents('section.panel').attr('id');
+        finalImg = c.toDataURL();
+        $this.text('').css('background-image', 'url(' + finalImg + ')');
+      }
 
-  $(this).parent().prop('hidden', true);
-  $('#Company_Logo', papa).attr('src', '').prop('hidden', true);
-  $('.save-data:first', $('#' + section)).removeProp('disabled');
+    }, 1)
+  }
+  reader.readAsDataURL(this.files[0]);
+  $('.save-data', papa).removeProp('disabled');
 });
 
 function init() {
@@ -233,7 +216,6 @@ $('button.export').on('click', function () {
     'href': href,
     'download': filename
   })[0].click();
-  console.log(href);
 });
 $('input#import').on('change', function () {
   var reader = new FileReader();
@@ -260,7 +242,7 @@ $(document).on('MDCAutoInit:End', function () {
   $('*[data-mdc-auto-init]').removeAttr('data-mdc-auto-init');
 })
 
-// MDI Upgrade and create inputs
+// create inputs
 $(document).ajaxComplete(function () {
   $('*[data-input]').each(function (i, e) {
     if ($(e).parents('.roster').length) {
@@ -272,7 +254,5 @@ $(document).ajaxComplete(function () {
       $('input', $(e)).val($(e).data('value'));
     }
   });
-  var event = new Event('mdc-done');
-  $('body').trigger('mdc-done');
   init();
 });
