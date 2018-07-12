@@ -9,7 +9,10 @@ var r = {
       'logo': ''
     },
     Team: {
-      members: []
+      members: [],
+      settings: {
+        sortby: 'order'
+      }
     },
     Templates: [{
       'avatar': true,

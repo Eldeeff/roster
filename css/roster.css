@@ -1,8 +1,11 @@
 :root {
-  --mdc-theme-primary: #304ffe;
-  --mdc-theme-secondary: #304ffe;
-  --mdc-theme-background: #011065;
-  --mdc-theme-surface: #ffffff;
+  --rgb-primary: 48, 79, 254;
+  --rgb-dark: 1, 16, 101;
+  --mdc-theme-primary: rgb(var(--rgb-primary));
+  --mdc-theme-secondary: rgb(var(--rgb-primary));
+  --mdc-theme-dark: rgb(var(--rgb-dark));
+  --mdc-a1: .04;
+  --mdc-a2: .12;
 }
 
 body {
@@ -10,15 +13,19 @@ body {
   min-height: 100vh;
 }
 
+.mdc-button--raised:not(:disabled),
+.mdc-button--unelevated:not(:disabled) {
+  background-color: var(--mdc-theme-primary);
+}
+
 .mdc-theme--dark,
 .mdc-theme--dark .mdc-button,
-.mdc-theme--dark .mdc-tab {
-  color: var(--mdc-theme-surface);
+.mdc-theme--dark .mdc-tab--active {
+  color: var(--mdc-theme-primary);
 }
 
 .mdc-button--raised:not(:disabled),
 .mdc-button--unelevated:not(:disabled),
-.mdc-theme--dark .mdc-tab.mdc-tab--active,
 .mdc-theme--dark .mdc-tab:after,
 .mdc-theme--dark .mdc-tab:before,
 .mdc-theme--dark .mdc-button:after,
@@ -27,8 +34,8 @@ body {
 }
 
 .mdc-theme--dark .mdc-tab-bar__indicator {
-  background-color: var(--mdc-theme-surface);
   z-index: 1;
+  background-color: var(--mdc-theme-primary);
 }
 
 .mdc-text-field--focused .mdc-floating-label {
@@ -60,7 +67,9 @@ body {
 }
 
 .mdc-button:after,
-.mdc-button:before {
+.mdc-button:before,
+.mdc-icon-button:after,
+.mdc-icon-button:before {
   background-color: var(--mdc-theme-primary);
 }
 
@@ -136,6 +145,36 @@ main .panel {
   min-height: 200px;
   background-position: center;
   background-size: cover;
+}
+
+.team-member.mdc-card.hasPalette {
+  overflow: visible;
+}
+
+#team-cards .team-member.mdc-card:focus-within:before,
+#team-cards.sorting .team-member.mdc-card:before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  bottom: -10px;
+  left: -10px;
+}
+
+.team-member.mdc-card.chosen {
+  transform: translateZ(0);
+}
+
+.team-member .handle {
+  cursor: -webkit-grab;
+}
+
+.team-member.chosen .handle {
+  cursor: -webkit-grabbing;
+}
+
+.team-member.ghost {
+  opacity: .2;
 }
 
 .team-member.mdc-card .mdc-card__media,
@@ -294,10 +333,10 @@ main .panel {
   overflow: visible;
 }
 
-.mdc-card.adding .mdc-card__action-buttons .mdc-card__action[style*="background-"]:focus,
-.mdc-card.adding .mdc-card__action-buttons .mdc-card__action[style*="background-"]:hover {
+.mdc-card.adding:not(.hasPalette) .mdc-card__action-buttons .mdc-card__action[style*="background-"]:focus,
+.mdc-card.adding:not(.hasPalette) .mdc-card__action-buttons .mdc-card__action[style*="background-"]:hover {
   overflow: hidden;
-  filter: brightness(calc(1 - .12));
+  filter: brightness(calc(1 - var(--mdc-a2)));
 }
 
 .mdc-card.adding .mdc-card__action-buttons .mdc-card__action[style*="background-"]:before {
@@ -313,8 +352,17 @@ main .panel {
   box-sizing: border-box;
 }
 
+.mdc-card.adding .mdc-card__action-buttons .mdc-card__action[style*="background-color"]:hover:before {
+  visibility: hidden;
+}
+
 .mdc-card.adding:not(.open) .mdc-card__action-buttons .mdc-card__action[style*="background-"] {
   overflow: visible;
+}
+
+.mdc-card.adding.hasPalette .mdc-card__action-buttons .mdc-card__action.colour {
+  overflow: visible;
+  z-index: 5;
 }
 
 .mdc-card.adding:not(.open) .mdc-card__action-buttons .mdc-card__action[style*="background-"]:before {
@@ -327,27 +375,45 @@ main .panel {
 .mdc-card.adding .mdc-card__action-buttons .mdc-card__action.image {
   background-position: -100%;
   background-repeat: no-repeat;
-  opacity: 1;
 }
 
 .mdc-card.adding .mdc-card__action-buttons .mdc-card__action.image:before {
   background-size: cover;
   opacity: 1;
-  transition: width .35s ease .35s, height .35s ease .35s, transform .35s ease-in .2s, border-radius .3s ease .2s, opacity .2s .2s;
+  transition: width .35s ease .35s, height .35s ease .35s, transform .35s ease .35s, border-radius .3s ease .2s, opacity .2s .2s;
 }
 
 .mdc-card.adding .mdc-card__action-buttons .mdc-card__action[style*="background-image:"]:before {
   transform: translate(0);
   top: 0;
   left: 0;
+  opacity: 1;
 }
 
 .mdc-card.adding:not(.open) .mdc-card__action-buttons .mdc-card__action[style*="background-image:"]:before {
   height: 200px;
   width: 200px;
-  transform: translate(-32px, -210px);
+  transform: translate(-8px, -187px);
   border-radius: 0;
   transition: width .3s, height .3s, transform .3s, border-radius .3s, opacity .15s .2s;
+}
+
+.mdc-menu#colour-picker .mdc-list {
+  padding: 8px;
+  line-height: 0;
+  white-space: normal;
+  text-align: left;
+  /* mdc-chip width + margin * columns + mdc-list padding */
+  width: calc(((1.1rem + (1px * 2)) * 14) + calc(8px * 2));
+  cursor: default;
+}
+
+.mdc-menu#colour-picker .mdc-chip {
+  width: 1.1rem;
+  height: 1.1rem;
+  margin: 1px;
+  padding: 0;
+  display: inline-block;
 }
 
 #Company_Logo {
@@ -568,18 +634,6 @@ main .panel {
   color: rgba(0, 0, 0, 0.06);
 }
 
-.team-member .handle {
-  cursor: -webkit-grab;
-}
-
-.team-member .handle.sortable-chosen {
-  cursor: -webkit-grabbing;
-}
-
-.team-member.sortable-ghost {
-  opacity: .2;
-}
-
 .ui-timepicker-wrapper {
   max-height: 15em;
   width: 100%;
@@ -600,12 +654,15 @@ section.panel.active {
   border-radius: 50%;
 }
 
+.mdc-icon-button:hover:before {
+  box-shadow: inset 0 0 200px var(--mdc-theme-primary);
+  opacity: var(--mdc-a1);
+}
+
 .mdc-icon-button:focus:before,
 .mdc-icon-button:hover:before {
-  box-shadow: inset 0 0 200px rgba(0, 0, 0, .04);
   height: 100%;
   width: 100%;
-  opacity: .12;
 }
 
 input[type=file].mdc-icon-button,
@@ -634,12 +691,18 @@ input[type=file].mdc-button:before {
 }
 
 input[type=file].mdc-icon-button:focus:before,
-input[type=file].mdc-button:focus:before,
+input[type=file].mdc-button:focus:before {
+  opacity: 1;
+  background-color: rgba(var(--rgb-primary), var(--mdc-a2));
+  filter: brightness(calc(1 - var(--mdc-a2)));
+}
+
 input[type=file].mdc-icon-button:hover:before,
 input[type=file].mdc-button:hover:before {
   opacity: 1;
-  background-color: rgba(0, 0, 0, .12);
-  filter: brightness(calc(1 - .12));
+  box-shadow: none;
+  background-color: rgba(var(--rgb-primary), var(--mdc-a1));
+  filter: brightness(calc(1 - var(--mdc-a1)));
 }
 
 .mdc-switch--label {

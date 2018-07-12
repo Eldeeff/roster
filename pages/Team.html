@@ -5,6 +5,28 @@
         <button class="mdc-button mdc-button--unelevated mdc-card__action-button" id="add-card">
           <i class="material-icons mdc-button__icon">account-plus</i> Add team member
         </button>
+        <div class="mdc-menu-anchor sortby">
+          <button class="mdc-button mdc-card__action-button">
+            <i class="material-icons mdc-button__icon">filter</i> Sort:&nbsp;
+            <span>Custom</span>
+          </button>
+          <div class="mdc-menu" tabindex="-1" data-mdc-auto-init="MDCMenu">
+            <ul class="mdc-menu__items mdc-list" role="menu" aria-hidden="true">
+              <li class="mdc-list-item" role="menuitem" tabindex="0" aria-disabled="true">
+                Sort by:
+              </li>
+              <li class="mdc-list-item" role="menuitem" tabindex="0" data-sort="name">
+                Name
+              </li>
+              <li class="mdc-list-item" role="menuitem" tabindex="0" data-sort="title">
+                Title
+              </li>
+              <li class="mdc-list-item" role="menuitem" tabindex="0" data-sort="order">
+                Custom
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -13,23 +35,54 @@
 </section>
 <script>
   $(document).ready(function () {
-    // load team
-    $(r.settings.Team.members).each(function (i, member) {
-      $('#team-cards')
-        .append(
-          $(r.ui.teamMemberCard(member.id, member.name, member.title, member.bg, member.text)
-            .append(r.helper.dialog(`Are you sure you want to remove ${member.name}?`))
-          )
-        );
-      if (i < 1) {
-        $('#team-cards .handle').hide();
+    function sortTeam(by) {
+      r.settings.Team.members.sort(function (a, b) {
+        if (typeof a[by] === 'string' && typeof b[by] === 'string') {
+          return a[by].localeCompare(b[by]);
+        } else if (typeof a[by] === 'number' && typeof b[by] === 'number') {
+          return a[by] > b[by];
+        }
+      });
+      $('.mdc-menu-anchor.sortby > button span').text($('.mdc-menu-anchor.sortby .mdc-list-item[data-sort=' + by + ']').text());
+      $('#team-cards').html('');
+      $(r.settings.Team.members).each(function (i, member) {
+        $('#team-cards')
+          .append(
+            $(r.ui.teamMemberCard(member.id, member.name, member.title, member.bg, member.text)
+              .append(r.helper.dialog(`Are you sure you want to remove ${member.name}?`))
+            )
+          );
+      });
+
+      // NEED TO UPDATE HANDLES BETTTERERERERETETEERRRRR
+      toggleHandles();
+    }
+
+    function toggleHandles() {
+      var cond = (r.settings.Team.members.length > 1 && r.settings.Team.settings.sortby == 'order');
+      if (cond) {
+        $('#team-cards .handle').show();
       } else {
-        $('#team-cards .handle:hidden').show();
+        $('#team-cards .handle').hide();
       }
+    }
+
+    // load team
+    sortTeam(r.settings.Team.settings.sortby);
+
+    $('.mdc-menu-anchor.sortby > button').on('click', function () {
+      var menu = $(this).next('.mdc-menu').get(0).MDCMenu;
+      menu.open = !menu.open;
+    });
+    $('.mdc-menu-anchor.sortby .mdc-list-item[data-sort]').on('click', function () {
+      sortTeam($(this).data('sort'));
+      r.settings.Team.settings.sortby = $(this).data('sort');
+      $('body').trigger('roster:save');
+      toggleHandles();
     });
 
     // add team member
-    $('#Team').on('click', '#add-card', function () {
+    $('#Team #add-card').on('click', function () {
       var newCard = r.ui.newTeamMemberCard();
       $('#team-cards').append(newCard);
       r.helper.setPalette($(newCard).find('button.colour'));
@@ -37,23 +90,23 @@
 
     $('#team-cards').on('click', '.mdc-card button.save-data', function (e) {
       setTimeout(() => {
-        var lastMember = $(e.target).parents('.mdc-card').prev('.mdc-card');
+        var newMember = $(e.target).parents('.mdc-card');
         var member = r.settings.Team.members[r.settings.Team.members.length - 1];
 
         var editing = $('#team-cards .mdc-card.editing');
         if (editing.length > 0) {
-          lastMember = editing.prev('.mdc-card');
           member = r.settings.Team.members[r.settings.Team.members.indexOf(r.helper.find(editing.attr('id'), 'id', r.settings.Team.members))];
           editing.remove();
         }
 
-        $(lastMember)
-          .after(
+        $(newMember)
+          .before(
             $(r.ui.teamMemberCard(member.id, member.name, member.title, member.bg, member.text)
               .append(r.helper.dialog(`Are you sure you want to remove ${member.name}?`))
               .addClass('editing')
             )
           );
+        toggleHandles();
       }, 0)
     })
 
@@ -84,9 +137,39 @@
           memberCard.remove();
           r.helper.remove(index, r.settings.Team.members);
           $('body').trigger('roster:save');
+          toggleHandles();
         }, 250)
       });
     })
+
+    $('#team-cards').on('click', '.mdc-card button.colour:not(.mdc-menu-anchor)', function (e) {
+      var colourPicker = $(e.target),
+        parentCard = colourPicker.parents('.mdc-card');
+      if ($('#colour-picker', colourPicker).length < 1) {
+        colourPicker.addClass('mdc-menu-anchor');
+        colourPicker.append(r.ui.newPalette());
+        var menu = new mdc.menu.MDCMenu($('#colour-picker', colourPicker).get(0));
+        parentCard.addClass('hasPalette');
+        menu.open = true;
+
+        colourPicker.on('click', function (e) {
+          menu.open = !menu.open;
+          parentCard.addClass('hasPalette');
+        });
+        menu.listen('MDCMenu:selected', function (e) {
+          var palette = {
+            colour: $(e.detail.item).css('background-color'),
+            text: $(e.detail.item).css('color')
+          }
+          r.helper.setPalette(colourPicker, palette);
+          $('#Team .hasPalette').removeClass('hasPalette');
+          $('input', parentCard).trigger('change');
+        });
+        menu.listen('MDCMenu:cancel', function (e) {
+          parentCard.removeClass('hasPalette');
+        });
+      }
+    });
 
     // handler for click outside adding team member card
     $('body').on('mousedown keydown', function (e) {
@@ -103,6 +186,7 @@
           $('#Team #add-card').prop('disabled', false);
           // close adding card
           var adding = $('.adding.open');
+          console.log('yep');
           if (adding.length > 0) {
             adding.removeClass('open');
             setTimeout(function () {
@@ -116,17 +200,27 @@
     })
 
     // sortable 
-    Sortable.create($('#team-cards')[0], {
-      animation: 150, //ms, animation speed moving items when sorting, `0` — without animation 
-      handle: '.handle', //Restricts sort start click/touch to the specified element 
+    Sortable.create($('#team-cards').get(0), {
+      animation: 150,
+      group: 'team',
       draggable: '.team-member',
-      group: "team",
+      handle: '.handle',
+      ghostClass: 'ghost',
+      chosenClass: 'chosen',
+      dragClass: 'drag',
       onSort: function (e) {
         $('#team-cards .team-member').each(function () {
-          $(this).attr('data-id', $(this).index() + 1);
+          index = $(this).index() + 1;
+          $(this).attr('data-id', index);
         });
         $('body').trigger('roster:save');
-      }
+      },
+      onStart: function (e) {
+        $(e.target).addClass('sorting');
+      },
+      onEnd: function (e) {
+        $(e.target).removeClass('sorting');
+      },
     });
   });
 </script>

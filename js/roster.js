@@ -57,7 +57,8 @@ $('body').on('change keyup', 'input,textarea,select', function (e) {
   $('.save-data:first', papa).prop('disabled', !form.checkValidity());
 });
 
-$('body').on('click', '.save-data', function () {
+$('body').on('click', '.save-data', function (e) {
+  $(e.target).prop('disabled', true);
   save();
 });
 $('body').on('roster:save', function () {
@@ -112,8 +113,17 @@ function save() {
       // EDIT ALL EXISTING
       saveType = 'member order';
       $('.team-member[id]').each(function () {
+        console.log($('.card-name', this).text(), $(this).data('id'));
         r.helper.reorderMember($(this).attr('id'), $(this).data('id'));
       })
+    }
+
+    var cond = ($('#team-cards .team-member:not(.adding)').length < 1 + r.settings.Team.settings.sortby != 'order');
+    console.log(cond);
+    if (cond) {
+      $('#team-cards .handle').hide();
+    } else {
+      $('#team-cards .handle:hidden').show();
     }
   }
 
